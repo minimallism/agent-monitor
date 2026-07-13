@@ -4,12 +4,6 @@
   "exportData": "导出数据",
   "acrossSessions": "跨所有追踪的会话",
   "basedOnUsage": "基于每模型 Token 使用量",
-  "tabby": {
-    "title": "Tabby 伙伴",
-    "description": "一只浮动的猫，会对你的实时会话做出反应。",
-    "enable": "显示 Tabby",
-    "enableDesc": "在整个仪表板的角落显示伙伴（按 ⌘B 打开）"
-  },
   "pricing": {
     "title": "模型定价",
     "description": "每百万 Token 的费率（美元）。在模式中使用 % 作为通配符。部分模型有限时优惠费率（以紫色显示）；在截止日期当天及之前的用量按该费率计费，之后按标准费率计费。",

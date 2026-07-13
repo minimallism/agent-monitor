@@ -122,7 +122,7 @@ export function useWebSocket(onMessage: MessageHandler) {
   // back: tab refocus, regained network, or page becoming visible again. This
   // cancels any pending backoff timer and resets the attempt counter so we
   // don't sit out a long delay - e.g. after the dashboard server restarts, the
-  // socket (and the Tabby eyes) recover the moment you look at the tab.
+  // socket recovers the moment you look at the tab.
   useEffect(() => {
     const reconnectNow = () => {
       if (!mountedRef.current) return;

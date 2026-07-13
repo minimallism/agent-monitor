@@ -928,11 +928,11 @@ export function Run() {
       });
   }, [searchParams, setSearchParams, handle, attachToRun, t]);
 
-  // Prefill the prompt box from `?prompt=<text>` (e.g. Tabby's Ask handoff).
+  // Prefill the prompt box from `?prompt=<text>` query parameter.
   // Apply once, then strip the param so a later refresh doesn't overwrite edits
-  // the user has since made to the prompt. When `?autostart=1` is also present
-  // (Tabby's "ask" path), arm a pending flag so the run fires automatically
-  // once preflight is ready - see the autostart effect below.
+  // the user has since made to the prompt. When `?autostart=1` is also present,
+  // arm a pending flag so the run fires automatically once preflight is ready
+  // - see the autostart effect below.
   const promptPrefilledRef = useRef(false);
   const pendingAutostartRef = useRef(false);
   useEffect(() => {

@@ -4,12 +4,6 @@
   "exportData": "Export Data",
   "acrossSessions": "Across all tracked sessions",
   "basedOnUsage": "Based on per-model token usage",
-  "tabby": {
-    "title": "Tabby companion",
-    "description": "A floating cat that reacts to your live sessions.",
-    "enable": "Show Tabby",
-    "enableDesc": "Display the corner companion across the dashboard (⌘B to open)"
-  },
   "pricing": {
     "title": "Model Pricing",
     "description": "Rates per million tokens (USD). Use % as wildcard in patterns. Some models have a time-limited introductory rate (shown in violet); usage on or before its cutoff date is billed at that rate, and usage after it at the standard rate.",
