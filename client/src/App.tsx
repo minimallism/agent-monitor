@@ -29,7 +29,7 @@ export default function App() {
     eventBus.publish(msg);
   }, []);
 
-  const { connected } = useWebSocket(onMessage);
+  useWebSocket(onMessage);
   useNotifications();
 
   return (
@@ -37,7 +37,7 @@ export default function App() {
       <SplashScreen />
       <BrowserRouter>
         <Routes>
-          <Route element={<Layout wsConnected={connected} />}>
+          <Route element={<Layout />}>
             <Route index element={<Dashboard />} />
             <Route path="kanban" element={<KanbanBoard />} />
             <Route path="sessions" element={<Sessions />} />

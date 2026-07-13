@@ -110,7 +110,7 @@ fs.mkdirSync(DB_DIR, { recursive: true });
 
 // One-time, non-destructive migration into the shared location. Earlier builds
 // kept the database per-host: the repo-local `data/` dir for `npm start`/`dev`,
- If the canonical DB doesn't exist yet, seed it from
+//  If the canonical DB doesn't exist yet, seed it from
 // the richest legacy copy found so existing users keep all their history. The
 // source files are never modified or deleted, and an existing canonical DB is
 // never overwritten — so this is safe to run on every startup.
