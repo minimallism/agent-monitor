@@ -25,7 +25,7 @@ function loadOrCreateVapidKeys() {
 const vapidKeys = loadOrCreateVapidKeys();
 
 webpush.setVapidDetails(
-  "https://github.com/hoangsonww/Claude-Code-Agent-Monitor",
+  "https://github.com/minimallism/agent-monitor",
   vapidKeys.publicKey,
   vapidKeys.privateKey
 );
@@ -94,9 +94,9 @@ async function sendPushToAll(db, title, body) {
   const payload = JSON.stringify({
     title,
     body,
-    icon: "https://raw.githubusercontent.com/hoangsonww/Claude-Code-Agent-Monitor/main/client/public/favicon.ico",
+    icon: "/favicon.ico",
     badge:
-      "https://raw.githubusercontent.com/hoangsonww/Claude-Code-Agent-Monitor/main/client/public/favicon.ico",
+      "/favicon.ico",
     silent: false,
     sound: "default",
   });
