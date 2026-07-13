@@ -1,7 +1,7 @@
 /**
  * @file Sessions.tsx
  * @description Displays a list of all recorded sessions with filtering, searching, and pagination features. Sessions are updated in real-time based on events received from the event bus.
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 
 import { useEffect, useState, useCallback, useSyncExternalStore } from "react";

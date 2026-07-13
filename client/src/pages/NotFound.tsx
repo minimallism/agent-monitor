@@ -1,7 +1,7 @@
 /**
  * @file NotFound.tsx
  * @description Displays a user-friendly 404 Not Found page with navigation options to return to the dashboard or go back to the previous page.
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 
 import { useNavigate } from "react-router-dom";

@@ -10,7 +10,7 @@
  * journal; expanding an agent lazily fetches its full transcript (the journal
  * only carries server-truncated previews) and renders the complete prompt and
  * result, falling back to the teaser when the transcript is pruned/unavailable.
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";

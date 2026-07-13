@@ -9,7 +9,7 @@
  * The goal is "good enough to scan", not full lexical correctness - we accept the
  * occasional mis-tokenization in favour of small bundle size and zero deps.
  *
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 
 /** Syntax category assigned to a {@link Token}. Not every tokenizer emits

@@ -1,7 +1,7 @@
 /**
  * @file Sidebar.tsx
  * @description Defines the Sidebar component that provides navigation links to different sections of the application, and includes a toggle button for collapsing or expanding the sidebar. The component uses React Router's NavLink for navigation and Lucide icons for visual representation. The collapsed state of the sidebar is stored in localStorage to persist user preferences across sessions.
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";

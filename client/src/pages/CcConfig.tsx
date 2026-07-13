@@ -6,7 +6,7 @@
  * low-risk text-file surfaces (skills, agents, commands, output styles,
  * memory files). hooks-in-settings and settings.json files stay read-only - those have
  * concurrent-write races with the live CLI.
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";

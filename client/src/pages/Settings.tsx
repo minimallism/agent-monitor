@@ -1,7 +1,7 @@
 /**
  * @file Settings.tsx
  * @description Provides a settings page for managing model pricing rules, notification preferences, and system information with real-time updates and actionable controls for data management and hook configuration.
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 
 import { useEffect, useState, useCallback, useRef, useSyncExternalStore, Fragment } from "react";

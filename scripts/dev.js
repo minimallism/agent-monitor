@@ -13,7 +13,7 @@
  * instead of Express — silent `ECONNRESET`s everywhere. Probing both IP
  * families before we ever try to bind catches that.
  *
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 
 const net = require("node:net");

@@ -6,7 +6,7 @@
  * the muted "{project} › {session} › {agent}" prefix. (The historical
  * tool-call grouping view was removed; the timeline now renders flat only.)
  *
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 
 import type { DashboardEvent } from "./types";

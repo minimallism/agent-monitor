@@ -5,7 +5,7 @@
  * by their SessionStatus (active/completed/error/abandoned). The view toggle
  * is persisted in localStorage so the user's choice survives reloads. Each
  * column paginates client-side at COLUMN_PAGE_SIZE.
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 
 import { useEffect, useState, useCallback, useMemo, useRef, useSyncExternalStore } from "react";

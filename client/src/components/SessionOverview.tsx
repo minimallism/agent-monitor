@@ -5,7 +5,7 @@
  * compactions, duration), top-tool usage bars, subagent-type breakdown, and a token
  * flow strip. Live-refreshes on `new_event` (debounced) so counters track the running
  * session without spamming the backend.
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 
 import { useEffect, useMemo, useRef, useState } from "react";

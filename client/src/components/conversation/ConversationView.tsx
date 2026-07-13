@@ -6,7 +6,7 @@
  * visibility-gated polling fallback, and a manual refresh button so the view
  * stays caught up even when hooks miss frames or the user is mid-text-only
  * turn (no PreToolUse fires until Stop).
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 import { useEffect, useState, useCallback, useRef } from "react";
 import { ChevronDown, Loader2, ArrowDown, MessagesSquare, RefreshCw } from "lucide-react";

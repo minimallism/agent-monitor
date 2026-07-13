@@ -17,7 +17,7 @@
  *   - AskUserQuestion     → formatted Q with options
  *   - Any other           → returns null (caller falls back to generic JSON)
  *
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 
 import {

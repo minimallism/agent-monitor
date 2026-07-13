@@ -5,7 +5,7 @@
  * placeholder values that the user might read as real zeros. All variants are
  * pure presentational and respect prefers-reduced-motion (animate-pulse is a
  * native Tailwind utility that already honors the OS setting).
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 
 import type { CSSProperties } from "react";

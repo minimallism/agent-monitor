@@ -4,7 +4,7 @@
  * actions (e.g. deleting an alert rule or a webhook target) in place of inline
  * confirms or the native window.confirm. Click-outside and Escape cancel; the
  * confirm button is styled destructive by default.
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 
 import { useEffect } from "react";

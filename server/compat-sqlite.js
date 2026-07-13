@@ -8,7 +8,7 @@
  * handle the error (e.g. show an informative message).
  *
  * @file This module exports a Database class that wraps node:sqlite's DatabaseSync to provide a better-sqlite3-like API.
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 
 const { DatabaseSync } = require("node:sqlite");

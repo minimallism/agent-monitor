@@ -3,7 +3,7 @@
  * @description Custom styled checkbox replacing the browser-default control for
  * a consistent look (accent fill + check when on). Self-contained with an
  * optional label; keyboard-operable (Space/Enter toggles).
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 
 import type { ReactNode } from "react";

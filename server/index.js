@@ -1,6 +1,6 @@
 /**
  * @file Sets up the Express server with API routes and WebSocket, serves the React client in production, and includes periodic maintenance tasks like session cleanup and compaction scanning.
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 
 if (!process.env.NODE_ENV) process.env.NODE_ENV = "production";

@@ -5,7 +5,7 @@
  * blocks, inline ToolCallBlocks for tool_use / tool_result pairs, and
  * MarkdownContent for prose. Used by ConversationView as the main body of
  * the Conversation tab on the Session detail page.
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 import { useState, useMemo } from "react";
 import {

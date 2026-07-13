@@ -2,7 +2,7 @@
  * @file Modal that tells the user when the dashboard's git checkout is behind
  * its remote and shows the exact command to run in a terminal. The dashboard
  * never pulls or restarts itself - the user copies and runs the command.
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 
 import { useCallback, useEffect, useState } from "react";

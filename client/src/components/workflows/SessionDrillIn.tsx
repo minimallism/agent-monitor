@@ -1,7 +1,7 @@
 /**
  * @file SessionDrillIn.tsx
  * @description Defines the SessionDrillIn component, which provides a detailed view of a specific session in the agent dashboard application. It allows users to drill into the agent tree, tool timeline, and event sequence for a selected session. The component manages its own state for loading, error handling, and active tab selection, and it fetches the necessary data from the backend API when a session is selected. It also includes a session selector for searching and selecting different sessions to view.
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 
 import { useState, useEffect, useRef, useCallback } from "react";

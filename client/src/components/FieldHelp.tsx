@@ -4,7 +4,7 @@
  * how to fill in a form field - description, optional copy-able examples, and an
  * optional note. Hover/focus/click to open; the popover is portal'd to <body>
  * and clamped to the viewport so it never clips inside scrolling cards.
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";

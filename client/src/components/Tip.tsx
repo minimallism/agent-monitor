@@ -2,7 +2,7 @@
  * @file Tip.tsx
  * @description A reusable React component that displays a tooltip with custom content when the user hovers over the wrapped children.
  * Tooltip follows the cursor position and uses a portal to avoid clipping by parent overflow or screen edges.
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 
 import { useState, useRef, useCallback } from "react";

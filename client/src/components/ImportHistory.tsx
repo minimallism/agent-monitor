@@ -10,7 +10,7 @@
  *     compaction baselines prevent token double-counting.
  *   • Archive extraction is guarded against path traversal on the server.
  *
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 
 import { useEffect, useRef, useState, useCallback } from "react";

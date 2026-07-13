@@ -4,7 +4,7 @@
  * Mirrors AgentCard's information hierarchy (icon · title · meta line) but
  * surfaces session-relevant fields: model, agent count, cost, last activity.
  * Clicking the card navigates to the session detail page.
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";

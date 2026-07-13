@@ -1,7 +1,7 @@
 /**
  * @file ConcurrencyTimeline.tsx
  * @description Defines the ConcurrencyTimeline component that visualizes concurrency data for agent sessions using horizontal bars. Each lane represents an agent type (main or subagent) with the bar width proportional to the number of sessions and timing indicated as a percentage of the session duration. The component handles empty states gracefully and assigns distinct colors to different agent types for clarity.
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 import { useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";

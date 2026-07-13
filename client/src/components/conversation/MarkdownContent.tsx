@@ -10,7 +10,7 @@
  * is escaped by React. Code blocks delegate to <CodeBlock /> for syntax highlighting and
  * copy-to-clipboard.
  *
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 
 import React from "react";

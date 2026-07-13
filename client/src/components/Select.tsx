@@ -6,7 +6,7 @@
  * (Tailwind + lucide) aligns labels, supports keyboard navigation, flips above
  * the trigger when there's no room below, and marks the selected option with an
  * accent + check. Used by the Run Claude page and the webhook settings form.
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 
 import { useEffect, useRef, useState } from "react";

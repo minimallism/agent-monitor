@@ -8,7 +8,7 @@
  * fresh each session. The overlay holds for ~2.5s, then fades out and
  * unmounts. Clicking anywhere skips it; honors
  * `prefers-reduced-motion`. CSS-only animations (no extra deps).
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

@@ -5,7 +5,7 @@
  * view; the "View session" Link navigates to the session page. Live events
  * trigger a debounced, filter-aware refetch that preserves the user's
  * accumulated page size.
- * @author Son Nguyen <hoangson091104@gmail.com>
+
  */
 
 import { useEffect, useState, useCallback, useRef, useMemo, useSyncExternalStore } from "react";
