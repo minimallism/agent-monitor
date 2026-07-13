@@ -37,10 +37,7 @@ const { getDataDir } = require("./lib/claude-home");
  * target and never modifies or deletes the sources, so existing web users keep
  * an untouched backup at the old path.
  *
- * Earlier builds kept the DB per-host — the repo-local `data/` dir for
- * `npm start`/`dev`, and the desktop app's per-user `userData/data` (handed in
- * via DASHBOARD_LEGACY_DB_PATH). When both exist we copy the larger one (more
- * rows ≈ larger file) so the fuller history wins.
+ * Earlier builds kept the DB in the repo-local `data/` dir for `npm start`/`dev`.
  */
 function migrateLegacyDatabase(targetPath) {
   try {
@@ -49,7 +46,6 @@ function migrateLegacyDatabase(targetPath) {
     if (fs.existsSync(targetPath)) return; // already migrated, or in active use
 
     const candidates = [
-      process.env.DASHBOARD_LEGACY_DB_PATH, // desktop app's old per-user DB
       path.join(__dirname, "..", "data", "dashboard.db"), // repo-local `npm start` DB
     ].filter((p) => p && fs.existsSync(p));
     if (candidates.length === 0) return;
@@ -114,8 +110,7 @@ fs.mkdirSync(DB_DIR, { recursive: true });
 
 // One-time, non-destructive migration into the shared location. Earlier builds
 // kept the database per-host: the repo-local `data/` dir for `npm start`/`dev`,
-// and the desktop app's per-user `userData/data` (handed to us via
-// DASHBOARD_LEGACY_DB_PATH). If the canonical DB doesn't exist yet, seed it from
+ If the canonical DB doesn't exist yet, seed it from
 // the richest legacy copy found so existing users keep all their history. The
 // source files are never modified or deleted, and an existing canonical DB is
 // never overwritten — so this is safe to run on every startup.

@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="apple-touch-icon" href="favicon.svg" />
-    <link rel="manifest" href="manifest.json" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <title>Claude Code Agent Monitor - real-time dashboard for Claude Code</title>
@@ -29,20 +28,15 @@
       property="og:description"
       content="Real-time local dashboard for Claude Code with sessions, analytics, workflows, plugin marketplace, MCP server, in-browser Run page, and a 12-tab Claude Config Explorer."
     />
-    <meta property="og:image" content="og-image.svg" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:type" content="image/svg+xml" />
-    <meta property="og:image:alt" content="Claude Code Agent Monitor - real-time monitoring + run Claude in-browser" />
 
     <!-- Twitter / X Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Claude Code Agent Monitor" />
     <meta
       name="twitter:description"
-      content="Real-time local dashboard for Claude Code with 13 pages, plugin marketplace, MCP server, VS Code extension, in-browser Run page and 12-tab Config Explorer."
+      content="Real-time local dashboard for Claude Code with 13 pages, plugin marketplace, MCP server, in-browser Run page and 12-tab Config Explorer."
     />
-    <meta name="twitter:image" content="og-image.svg" />
+
     <meta name="twitter:creator" content="@hoangsonww" />
 
     <!-- JSON-LD structured data -->
@@ -534,85 +528,7 @@
       .marquee.slow .marquee-track {
         animation-duration: 72s;
       }
-      .hero-mockup {
-        position: relative;
-        margin: 56px auto 0;
-        max-width: 1140px;
-        cursor: pointer;
-        border: 1px solid var(--border-strong);
-        border-radius: 18px;
-        background: var(--surface-1);
-        box-shadow:
-          0 1px 0 rgba(255, 255, 255, 0.05) inset,
-          0 80px 100px -40px rgba(99, 102, 241, 0.4),
-          0 30px 60px rgba(0, 0, 0, 0.7);
-        overflow: hidden;
-        transition:
-          transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-          box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-          border-color 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-        cursor: zoom-in;
-      }
-      .hero-mockup::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border-radius: inherit;
-        background: radial-gradient(
-          600px 300px at var(--mock-mx, 50%) var(--mock-my, 0%),
-          rgba(129, 140, 248, 0.18),
-          transparent 60%
-        );
-        opacity: 0;
-        transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-        pointer-events: none;
-        z-index: 2;
-      }
-      .hero-mockup:hover {
-        transform: translateY(-8px) scale(1.012);
-        border-color: rgba(129, 140, 248, 0.5);
-        box-shadow:
-          0 1px 0 rgba(255, 255, 255, 0.08) inset,
-          0 110px 130px -40px rgba(99, 102, 241, 0.55),
-          0 40px 80px rgba(0, 0, 0, 0.75),
-          0 0 0 1px rgba(129, 140, 248, 0.25);
-      }
-      .hero-mockup:hover::after { opacity: 1; }
-      .hero-mockup-bar {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 12px 16px;
-        border-bottom: 1px solid var(--border);
-        background: var(--surface-2);
-        position: relative;
-        z-index: 1;
-      }
-      .traffic { width: 12px; height: 12px; border-radius: 50%; }
-      .traffic.red { background: #ff5f57; }
-      .traffic.yellow { background: #febc2e; }
-      .traffic.green { background: #28c840; }
-      .hero-mockup-url {
-        margin-left: 12px;
-        font-family: "JetBrains Mono", monospace;
-        font-size: 12px;
-        color: var(--text-dim);
-        letter-spacing: 0.02em;
-      }
-      .hero-mockup img {
-        display: block;
-        width: 100%;
-        height: auto;
-        transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-      }
-      .hero-mockup:hover img {
-        transform: scale(1.025);
-      }
-      @media (prefers-reduced-motion: reduce) {
-        .hero-mockup, .hero-mockup img, .hero-mockup::after { transition: none !important; }
-        .hero-mockup:hover { transform: none; }
-        .hero-mockup:hover img { transform: none; }
-      }
+
       .stats {
         padding: 56px 0 24px;
       }
@@ -760,1084 +676,7 @@
         line-height: 1.6;
         flex: 1;
       }
-      .showcase-filters {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 8px;
-        margin-bottom: 36px;
-      }
-      .showcase-pill {
-        appearance: none;
-        border: 1px solid var(--border);
-        background: var(--surface-1);
-        color: var(--text-muted);
-        font-family: inherit;
-        font-size: 13px;
-        font-weight: 500;
-        padding: 7px 18px;
-        border-radius: 100px;
-        cursor: pointer;
-        transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
-        white-space: nowrap;
-      }
-      .showcase-pill:hover {
-        border-color: var(--border-strong);
-        color: var(--text);
-        background: var(--bg-2);
-      }
-      .showcase-pill.active {
-        background: linear-gradient(135deg, var(--indigo), var(--violet));
-        border-color: transparent;
-        color: #fff;
-        box-shadow: 0 4px 20px -4px rgba(99, 102, 241, 0.5);
-      }
-      .showcase-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 18px;
-      }
-      .showcase-card {
-        --sc-mx: 50%;
-        --sc-my: 50%;
-        position: relative;
-        background: var(--surface-1);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        overflow: hidden;
-        cursor: pointer;
-        transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
-          border-color 0.25s, box-shadow 0.32s;
-      }
-      .showcase-card::before {
-        content: "";
-        position: absolute;
-        inset: -1px;
-        border-radius: inherit;
-        background: radial-gradient(
-          480px circle at var(--sc-mx) var(--sc-my),
-          rgba(129, 140, 248, 0.18),
-          transparent 50%
-        );
-        opacity: 0;
-        transition: opacity 0.35s;
-        z-index: 3;
-        pointer-events: none;
-      }
-      .showcase-card:hover::before {
-        opacity: 1;
-      }
-      .showcase-card.hidden {
-        display: none;
-      }
-      .showcase-card.entering {
-        animation: showcaseIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
-      }
-      @keyframes showcaseIn {
-        from { opacity: 0; transform: scale(0.93) translateY(18px); }
-        to   { opacity: 1; transform: scale(1) translateY(0); }
-      }
-      .showcase-card:hover {
-        transform: translateY(-6px);
-        border-color: rgba(129, 140, 248, 0.35);
-        box-shadow: 0 28px 56px -16px rgba(99, 102, 241, 0.4),
-          0 0 0 1px rgba(99, 102, 241, 0.1);
-      }
-      .showcase-img {
-        position: relative;
-        aspect-ratio: 16 / 9;
-        overflow: hidden;
-        background: var(--bg-2);
-      }
-      .showcase-img img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: top center;
-        display: block;
-        transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-      }
-      .showcase-card:hover .showcase-img img {
-        transform: scale(1.05);
-      }
-      .showcase-img::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(180deg, transparent 30%, rgba(7, 7, 11, 0.75));
-        pointer-events: none;
-        transition: opacity 0.3s;
-      }
-      .showcase-overlay {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-        padding: 16px 18px;
-        z-index: 2;
-      }
-      .showcase-overlay h4 {
-        margin: 0 0 2px;
-        font-size: 14px;
-        font-weight: 600;
-        color: #fff;
-        text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
-      }
-      .showcase-overlay p {
-        margin: 0;
-        font-size: 12px;
-        color: rgba(255, 255, 255, 0.72);
-        line-height: 1.45;
-        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
-        max-height: 0;
-        opacity: 0;
-        overflow: hidden;
-        transition: max-height 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-          opacity 0.3s;
-      }
-      .showcase-card:hover .showcase-overlay p {
-        max-height: 60px;
-        opacity: 1;
-      }
-      .showcase-expand-icon {
-        position: absolute;
-        top: 12px;
-        right: 12px;
-        width: 30px;
-        height: 30px;
-        border-radius: 8px;
-        background: rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #fff;
-        font-size: 18px;
-        padding: 2px;
-        opacity: 0;
-        transform: scale(0.8);
-        transition: opacity 0.25s, transform 0.25s;
-        z-index: 3;
-      }
-      .showcase-card:hover .showcase-expand-icon {
-        opacity: 1;
-        transform: scale(1);
-      }
-      .showcase-lightbox {
-        position: fixed;
-        inset: 0;
-        z-index: 9999;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(0, 0, 0, 0.88);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s, visibility 0.3s;
-        cursor: zoom-out;
-      }
-      .showcase-lightbox.open {
-        opacity: 1;
-        visibility: visible;
-      }
-      .showcase-lightbox img {
-        max-width: 92vw;
-        max-height: 88vh;
-        border-radius: 12px;
-        box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
-        transform: scale(0.92);
-        transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-        cursor: default;
-      }
-      .showcase-lightbox.open img {
-        transform: scale(1);
-      }
-      .showcase-lightbox-caption {
-        position: absolute;
-        bottom: 28px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(15, 15, 20, 0.8);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 10px;
-        padding: 10px 20px;
-        color: #fff;
-        font-size: 14px;
-        font-weight: 500;
-        white-space: nowrap;
-        pointer-events: none;
-      }
-      .showcase-lightbox-close {
-        position: absolute;
-        top: 20px;
-        right: 24px;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        background: rgba(255, 255, 255, 0.08);
-        color: #fff;
-        font-size: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: background 0.2s, transform 0.2s;
-      }
-      .showcase-lightbox-close:hover {
-        background: rgba(255, 255, 255, 0.16);
-        transform: scale(1.1);
-      }
-      .showcase-lightbox-nav {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 10001;
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        background: rgba(255, 255, 255, 0.08);
-        color: #fff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0;
-        margin: 0;
-        cursor: pointer;
-        transition: background 0.2s, transform 0.2s;
-      }
-      .showcase-lightbox-nav svg {
-        display: block;
-      }
-      .showcase-lightbox-nav.prev svg {
-        margin-left: -1px;
-      }
-      .showcase-lightbox-nav.next svg {
-        margin-left: 1px;
-      }
-      .showcase-lightbox-nav:hover {
-        background: rgba(255, 255, 255, 0.16);
-        transform: translateY(-50%) scale(1.1);
-      }
-      .showcase-lightbox-nav.prev { left: 20px; }
-      .showcase-lightbox-nav.next { right: 20px; }
-      @media (max-width: 1100px) {
-        .showcase-lightbox img {
-          max-height: 70vh;
-        }
-        .showcase-lightbox-nav {
-          top: auto;
-          bottom: 28px;
-          transform: none;
-          width: 52px;
-          height: 52px;
-        }
-        .showcase-lightbox-nav:hover {
-          transform: scale(1.1);
-        }
-        .showcase-lightbox-nav.prev { left: calc(50% - 64px); }
-        .showcase-lightbox-nav.next { right: calc(50% - 64px); }
-        .showcase-lightbox-caption {
-          bottom: 92px;
-        }
-      }
-      @media (max-width: 480px) {
-        .showcase-lightbox-nav {
-          bottom: 20px;
-          width: 46px;
-          height: 46px;
-        }
-        .showcase-lightbox-nav.prev { left: calc(50% - 56px); }
-        .showcase-lightbox-nav.next { right: calc(50% - 56px); }
-        .showcase-lightbox-caption {
-          bottom: 80px;
-          font-size: 12px;
-          padding: 8px 14px;
-        }
-      }
-      .showcase-counter {
-        position: absolute;
-        top: 24px;
-        left: 50%;
-        transform: translateX(-50%);
-        color: rgba(255, 255, 255, 0.5);
-        font-size: 13px;
-        font-weight: 500;
-        letter-spacing: 0.05em;
-      }
-      .install {
-        background: linear-gradient(180deg, var(--surface-1), var(--bg-2));
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        padding: 44px;
-        display: grid;
-        grid-template-columns: 1fr 1.2fr;
-        gap: 48px;
-        align-items: center;
-      }
-      .install-text h3 {
-        font-size: 28px;
-        margin: 0 0 12px;
-        letter-spacing: -0.02em;
-      }
-      .install-text p {
-        color: var(--text-muted);
-        margin: 0 0 24px;
-        font-size: 15px;
-      }
-      .install-text .btn { margin-right: 10px; margin-bottom: 8px; white-space: nowrap; }
-      .code-window {
-        position: relative;
-        border: 1px solid var(--border-strong);
-        border-radius: 12px;
-        overflow: hidden;
-        background: var(--bg-2);
-        box-shadow:
-          0 1px 0 rgba(255, 255, 255, 0.04) inset,
-          0 30px 60px -20px rgba(0, 0, 0, 0.6),
-          0 12px 30px rgba(99, 102, 241, 0.15);
-      }
-      .code-window-bar {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 11px 14px;
-        background: linear-gradient(180deg, #2a2a3d, #1c1c2a);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      }
-      .code-window-bar .traffic {
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        box-shadow: 0 1px 0 rgba(0, 0, 0, 0.3) inset;
-      }
-      .code-window-bar .traffic.red { background: #ff5f57; }
-      .code-window-bar .traffic.yellow { background: #febc2e; }
-      .code-window-bar .traffic.green { background: #28c840; }
-      .code-window-title {
-        flex: 1;
-        text-align: center;
-        font-family: "JetBrains Mono", monospace;
-        font-size: 11.5px;
-        color: var(--text-dim);
-        letter-spacing: 0.04em;
-      }
-      .code-window-copy {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background: rgba(255, 255, 255, 0.04);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        color: var(--text-muted);
-        font-family: inherit;
-        font-size: 11px;
-        font-weight: 500;
-        padding: 4px 10px;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: background 0.15s, color 0.15s, border-color 0.15s;
-      }
-      .code-window-copy:hover {
-        background: rgba(255, 255, 255, 0.08);
-        color: var(--text);
-        border-color: rgba(255, 255, 255, 0.15);
-      }
-      .code-window-copy.copied {
-        color: var(--emerald);
-        border-color: rgba(52, 211, 153, 0.4);
-        background: rgba(52, 211, 153, 0.1);
-      }
-      .code-window-copy svg {
-        width: 12px;
-        height: 12px;
-      }
-      .code-block {
-        position: relative;
-        background: var(--bg-2);
-        padding: 22px 22px 22px 24px;
-        font-family: "JetBrains Mono", monospace;
-        font-size: 13.5px;
-        line-height: 1.85;
-        color: var(--text);
-        overflow-x: auto;
-        margin: 0;
-      }
-      .code-block .prompt { color: var(--violet); user-select: none; margin-right: 12px; }
-      .code-block .comment { color: var(--text-dim); }
-      .code-block .flag { color: var(--cyan); }
-      .code-block .str { color: var(--emerald); }
-      .code-copy {
-        position: absolute;
-        top: 12px;
-        right: 12px;
-        background: var(--surface-2);
-        border: 1px solid var(--border);
-        color: var(--text-muted);
-        font-size: 11px;
-        padding: 5px 10px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-family: inherit;
-      }
-      .code-copy:hover { color: var(--text); background: var(--surface-3); }
-      .code-copy.copied {
-        color: var(--emerald);
-        border-color: rgba(52, 211, 153, 0.4);
-      }
-      .values-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 18px;
-      }
-      .value-card {
-        position: relative;
-        padding: 32px 28px;
-        background: linear-gradient(180deg, var(--surface-1), var(--bg-2));
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        overflow: hidden;
-        transition: transform 0.22s, border-color 0.22s, box-shadow 0.22s;
-      }
-      .value-card:hover {
-        transform: translateY(-4px);
-        border-color: var(--border-strong);
-        box-shadow: 0 20px 50px -25px rgba(99, 102, 241, 0.5);
-      }
-      .value-card::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 80px;
-        background: radial-gradient(
-          240px 100px at 50% -10%,
-          var(--card-glow, rgba(129, 140, 248, 0.5)),
-          transparent 70%
-        );
-        opacity: 0.5;
-        pointer-events: none;
-      }
-      .value-icon {
-        width: 56px;
-        height: 56px;
-        margin: 0 0 18px;
-        border-radius: 16px;
-        display: grid;
-        place-items: center;
-        font-size: 28px;
-        background: rgba(99, 102, 241, 0.1);
-        position: relative;
-      }
-      .value-icon.cyan { background: rgba(34, 211, 238, 0.12); color: var(--cyan); }
-      .value-icon.emerald { background: rgba(52, 211, 153, 0.12); color: var(--emerald); }
-      .value-icon.violet { background: rgba(167, 139, 250, 0.14); color: var(--violet); }
-      .value-icon.pink { background: rgba(244, 114, 182, 0.12); color: var(--pink); }
-      .value-card h3 {
-        font-size: 19px;
-        font-weight: 700;
-        letter-spacing: -0.015em;
-        margin: 0 0 10px;
-      }
-      .value-card p {
-        margin: 0;
-        font-size: 14px;
-        color: var(--text-muted);
-        line-height: 1.65;
-      }
-      .archetype-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 16px;
-      }
-      .archetype {
-        position: relative;
-        background: var(--surface-1);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        padding: 26px 24px 22px;
-        overflow: hidden;
-        transition: transform 0.2s, border-color 0.2s;
-      }
-      .archetype::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 3px;
-        background: var(--archetype-accent, var(--accent));
-        opacity: 0.7;
-      }
-      .archetype:hover {
-        transform: translateY(-3px);
-        border-color: var(--border-strong);
-      }
-      .archetype-name {
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 0.16em;
-        color: var(--archetype-accent, var(--accent));
-        font-weight: 700;
-        margin-bottom: 8px;
-      }
-      .archetype h4 {
-        font-size: 17px;
-        font-weight: 600;
-        letter-spacing: -0.01em;
-        margin: 0 0 10px;
-      }
-      .archetype p {
-        font-size: 13.5px;
-        color: var(--text-muted);
-        line-height: 1.6;
-        margin: 0 0 14px;
-      }
-      .archetype-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-      }
-      .archetype-tag {
-        font-size: 10.5px;
-        font-weight: 500;
-        padding: 3px 9px;
-        border-radius: 999px;
-        background: var(--surface-2);
-        color: var(--text-muted);
-        border: 1px solid var(--border);
-      }
-      .how-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 16px;
-        position: relative;
-      }
-      .how-step {
-        background: var(--surface-1);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        padding: 28px;
-        position: relative;
-        transition: transform 0.2s, border-color 0.2s;
-      }
-      .how-step:hover {
-        transform: translateY(-3px);
-        border-color: var(--border-strong);
-      }
-      .how-step-num {
-        font-size: 14px;
-        font-weight: 700;
-        color: var(--accent);
-        font-family: "JetBrains Mono", monospace;
-        margin-bottom: 10px;
-        letter-spacing: 0.04em;
-      }
-      .how-step h4 {
-        margin: 0 0 8px;
-        font-size: 16px;
-        font-weight: 600;
-      }
-      .how-step p {
-        margin: 0;
-        color: var(--text-muted);
-        font-size: 13.5px;
-        line-height: 1.6;
-      }
-      .pages-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 14px;
-      }
-      .page-card {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        padding: 24px 22px 20px;
-        background: var(--surface-1);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        text-decoration: none;
-        color: var(--text);
-        overflow: hidden;
-        transition:
-          transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
-          border-color 0.22s,
-          box-shadow 0.25s;
-      }
-      .page-card::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: var(--page-accent, var(--accent));
-        opacity: 0;
-        transition: opacity 0.25s;
-      }
-      .page-card:hover {
-        transform: translateY(-4px);
-        border-color: var(--border-strong);
-        box-shadow: 0 24px 48px -16px rgba(99, 102, 241, 0.35);
-      }
-      .page-card:hover::before {
-        opacity: 1;
-      }
-      .page-card-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-      }
-      .page-card-title {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-      .page-card-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: var(--page-accent, var(--accent));
-        box-shadow: 0 0 8px var(--page-accent, var(--accent));
-        flex-shrink: 0;
-      }
-      .page-card-name {
-        font-size: 15px;
-        font-weight: 600;
-        letter-spacing: -0.01em;
-      }
-      .page-card-route {
-        font-family: "JetBrains Mono", ui-monospace, monospace;
-        font-size: 11.5px;
-        color: var(--text-dim);
-        background: var(--bg-2);
-        padding: 3px 10px;
-        border-radius: 6px;
-        border: 1px solid var(--border);
-        white-space: nowrap;
-        flex-shrink: 0;
-      }
-      .page-card-desc {
-        font-size: 13.5px;
-        color: var(--text-muted);
-        line-height: 1.55;
-        margin: 0;
-      }
-      .page-card-arrow {
-        position: absolute;
-        bottom: 18px;
-        right: 18px;
-        width: 16px;
-        height: 16px;
-        color: var(--text-dim);
-        opacity: 0;
-        transform: translateX(-4px);
-        transition: opacity 0.2s, transform 0.2s;
-      }
-      .page-card:hover .page-card-arrow {
-        opacity: 1;
-        transform: translateX(0);
-        color: var(--page-accent, var(--accent));
-      }
-      .stack-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        gap: 12px;
-      }
-      .stack-item {
-        background: var(--surface-1);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-sm);
-        padding: 18px;
-        text-align: center;
-        transition: transform 0.18s, border-color 0.18s, background 0.18s;
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      .stack-grid.visible .stack-item {
-        opacity: 1;
-        transform: translateY(0);
-        transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-          opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-          border-color 0.18s, background 0.18s;
-      }
-      .stack-item:hover {
-        transform: translateY(-3px);
-        border-color: var(--border-strong);
-        background: var(--surface-2);
-      }
-      .stack-item-icon {
-        font-size: 26px;
-        margin-bottom: 8px;
-      }
-      .stack-item-name {
-        font-size: 13px;
-        font-weight: 600;
-        color: var(--text);
-        margin-bottom: 2px;
-      }
-      .stack-item-desc {
-        font-size: 11px;
-        color: var(--text-dim);
-      }
-      .faq {
-        margin: 0 auto;
-      }
-      .faq-item {
-        background: var(--surface-1);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        margin-bottom: 12px;
-        overflow: hidden;
-        transition: border-color 0.25s;
-      }
-      .faq-item[open] { border-color: var(--border-strong); }
-      .faq-item summary {
-        cursor: pointer;
-        list-style: none;
-        padding: 20px 24px;
-        font-weight: 600;
-        font-size: 15px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 16px;
-      }
-      .faq-item summary::-webkit-details-marker { display: none; }
-      .faq-item summary::after {
-        content: "+";
-        font-size: 22px;
-        color: var(--accent);
-        transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-        line-height: 1;
-        font-weight: 400;
-        flex-shrink: 0;
-      }
-      .faq-item.faq-open summary::after {
-        content: "−";
-        transform: rotate(180deg);
-      }
-      .faq-answer {
-        display: grid;
-        grid-template-rows: 0fr;
-        transition: grid-template-rows 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-      }
-      .faq-item[open] .faq-answer {
-        /* JS controls grid-template-rows inline; this is the fallback */
-      }
-      .faq-answer-inner {
-        overflow: hidden;
-      }
-      .faq-answer-inner p {
-        margin: 0;
-        padding: 0 24px 22px;
-        color: var(--text-muted);
-        font-size: 14px;
-        line-height: 1.7;
-      }
-      .big-cta {
-        text-align: center;
-        padding: 96px 24px;
-        position: relative;
-      }
-      .big-cta-card {
-        max-width: var(--max-width);
-        margin: 0 auto;
-        position: relative;
-        border-radius: 28px;
-        padding: 1.5px;
-        background: conic-gradient(
-          from var(--cta-angle, 0deg),
-          rgba(99, 102, 241, 0.85),
-          rgba(167, 139, 250, 0.85),
-          rgba(34, 211, 238, 0.85),
-          rgba(244, 114, 182, 0.7),
-          rgba(99, 102, 241, 0.85)
-        );
-        animation: ctaSpin 14s linear infinite;
-        box-shadow:
-          0 60px 140px -50px rgba(99, 102, 241, 0.55),
-          0 30px 80px -40px rgba(167, 139, 250, 0.4);
-        overflow: visible;
-      }
-      @property --cta-angle {
-        syntax: "<angle>";
-        inherits: false;
-        initial-value: 0deg;
-      }
-      @keyframes ctaSpin {
-        to { --cta-angle: 360deg; }
-      }
-      @supports not (background: conic-gradient(from 0deg, red, blue)) {
-        .big-cta-card { animation: none; }
-      }
-      .big-cta-inner {
-        position: relative;
-        border-radius: 27px;
-        padding: 76px 56px 64px;
-        background:
-          radial-gradient(
-            900px 400px at 50% -10%,
-            rgba(167, 139, 250, 0.28),
-            transparent 65%
-          ),
-          radial-gradient(
-            700px 350px at 0% 100%,
-            rgba(34, 211, 238, 0.18),
-            transparent 60%
-          ),
-          radial-gradient(
-            700px 350px at 100% 100%,
-            rgba(244, 114, 182, 0.14),
-            transparent 60%
-          ),
-          linear-gradient(180deg, #11111b 0%, #0a0a13 100%);
-        overflow: hidden;
-        isolation: isolate;
-      }
-      .big-cta-inner::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-        background-size: 22px 22px;
-        mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
-        -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
-        opacity: 0.7;
-        pointer-events: none;
-        z-index: 0;
-      }
-      .big-cta-inner::after {
-        content: "";
-        position: absolute;
-        top: -120px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 520px;
-        height: 320px;
-        background: radial-gradient(closest-side, rgba(129, 140, 248, 0.55), transparent 70%);
-        filter: blur(40px);
-        pointer-events: none;
-        z-index: 0;
-        animation: ctaPulse 6s ease-in-out infinite;
-      }
-      @keyframes ctaPulse {
-        0%, 100% { opacity: 0.7; transform: translateX(-50%) scale(1); }
-        50% { opacity: 1; transform: translateX(-50%) scale(1.1); }
-      }
-      .big-cta-eyebrow {
-        position: relative;
-        z-index: 1;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 6px 14px;
-        margin: 0 auto 22px;
-        border-radius: 999px;
-        background: rgba(99, 102, 241, 0.15);
-        border: 1px solid rgba(129, 140, 248, 0.4);
-        font-size: 11.5px;
-        font-weight: 700;
-        letter-spacing: 0.16em;
-        text-transform: uppercase;
-        color: var(--accent);
-        backdrop-filter: blur(6px);
-      }
-      .big-cta-eyebrow::before {
-        content: "";
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: var(--accent);
-        box-shadow: 0 0 12px var(--accent);
-        animation: pulse 2s ease-in-out infinite;
-      }
-      .big-cta-card h2 {
-        position: relative;
-        z-index: 1;
-        font-size: clamp(36px, 5.6vw, 64px);
-        line-height: 1.05;
-        margin: 0 auto 18px;
-        max-width: 18ch;
-        letter-spacing: -0.035em;
-        font-weight: 800;
-        background: linear-gradient(135deg, #fff 30%, var(--accent) 70%, var(--violet) 100%);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-      }
-      .big-cta-card p {
-        position: relative;
-        z-index: 1;
-        max-width: 560px;
-        margin: 0 auto 36px;
-        color: var(--text-muted);
-        font-size: 17px;
-        line-height: 1.65;
-      }
-      .big-cta-card .btn { position: relative; z-index: 1; }
-      .big-cta-buttons {
-        position: relative;
-        z-index: 1;
-        display: inline-flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        justify-content: center;
-      }
-      .big-cta-buttons .btn {
-        padding: 14px 28px;
-        font-size: 14.5px;
-      }
-      .big-cta-trust {
-        position: relative;
-        z-index: 1;
-        margin: 32px auto 0;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: center;
-        gap: 8px 18px;
-        padding-top: 28px;
-        border-top: 1px solid rgba(255, 255, 255, 0.06);
-        max-width: 760px;
-      }
-      .big-cta-trust span {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 12.5px;
-        font-weight: 500;
-        color: var(--text-muted);
-        letter-spacing: 0.005em;
-      }
-      .big-cta-trust span svg {
-        width: 14px;
-        height: 14px;
-        color: var(--emerald);
-        flex-shrink: 0;
-      }
-      @media (prefers-reduced-motion: reduce) {
-        .big-cta-card { animation: none; }
-        .big-cta-inner::after { animation: none; }
-      }
-      footer {
-        border-top: 1px solid var(--border);
-        padding: 56px 24px 36px;
-        margin-top: 24px;
-        position: relative;
-        z-index: 1;
-        background: rgba(7, 7, 11, 0.78);
-      }
-      .footer-inner {
-        max-width: var(--max-width);
-        margin: 0 auto;
-        display: grid;
-        grid-template-columns: 1.4fr repeat(3, 1fr);
-        gap: 40px;
-        align-items: start;
-      }
-      .footer-brand p {
-        color: var(--text-muted);
-        font-size: 13px;
-        margin: 14px 0 0;
-        line-height: 1.65;
-        max-width: 32ch;
-      }
-      .footer-col h4 {
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 0.12em;
-        color: var(--text-dim);
-        margin: 0 0 14px;
-        font-weight: 700;
-      }
-      .footer-col a {
-        display: block;
-        color: var(--text-muted);
-        text-decoration: none;
-        font-size: 14px;
-        padding: 4px 0;
-        transition: color 0.15s;
-      }
-      .footer-col a:hover { color: var(--text); }
-      .footer-bottom {
-        max-width: var(--max-width);
-        margin: 36px auto 0;
-        padding-top: 24px;
-        border-top: 1px solid var(--border);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        color: var(--text-dim);
-        font-size: 13px;
-        flex-wrap: wrap;
-        gap: 12px;
-      }
-      .footer-bottom a {
-        color: var(--text-muted);
-        text-decoration: none;
-      }
-      .footer-bottom a:hover { color: var(--text); }
-      .reveal {
-        opacity: 0;
-        transform: translateY(28px);
-        filter: blur(6px);
-        transition:
-          opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-          transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-          filter 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-        will-change: opacity, transform, filter;
-      }
-      .reveal.visible {
-        opacity: 1;
-        transform: none;
-        filter: none;
-      }
-      .reveal-stagger > * {
-        opacity: 0;
-        transform: translateY(24px);
-        filter: blur(4px);
-        transition:
-          opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-          transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-          filter 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-      }
-      .reveal-stagger.visible > * {
-        opacity: 1;
-        transform: none;
-        filter: none;
-      }
-      .reveal-stagger.visible > *:nth-child(1) { transition-delay: 0ms; }
-      .reveal-stagger.visible > *:nth-child(2) { transition-delay: 60ms; }
-      .reveal-stagger.visible > *:nth-child(3) { transition-delay: 120ms; }
-      .reveal-stagger.visible > *:nth-child(4) { transition-delay: 180ms; }
-      .reveal-stagger.visible > *:nth-child(5) { transition-delay: 240ms; }
-      .reveal-stagger.visible > *:nth-child(6) { transition-delay: 300ms; }
-      .reveal-stagger.visible > *:nth-child(7) { transition-delay: 360ms; }
-      .reveal-stagger.visible > *:nth-child(8) { transition-delay: 420ms; }
-      .reveal-stagger.visible > *:nth-child(9) { transition-delay: 480ms; }
-      .reveal-stagger.visible > *:nth-child(10) { transition-delay: 540ms; }
-      .reveal-stagger.visible > *:nth-child(11) { transition-delay: 600ms; }
-      .reveal-stagger.visible > *:nth-child(12) { transition-delay: 660ms; }
-      .reveal-stagger.visible > *:nth-child(13) { transition-delay: 720ms; }
-      .reveal-stagger.visible > *:nth-child(14) { transition-delay: 780ms; }
-      .reveal-stagger.visible > *:nth-child(15) { transition-delay: 840ms; }
-      .reveal-stagger.visible > *:nth-child(16) { transition-delay: 900ms; }
-      .reveal-stagger.visible > *:nth-child(17) { transition-delay: 960ms; }
-      .reveal-stagger.visible > *:nth-child(18) { transition-delay: 1020ms; }
-      .reveal-stagger.visible > *:nth-child(19) { transition-delay: 1080ms; }
-      .reveal-stagger.visible > *:nth-child(20) { transition-delay: 1140ms; }
-      .reveal-stagger.visible > *:nth-child(21) { transition-delay: 1200ms; }
+
 
       @media (prefers-reduced-motion: reduce) {
         .reveal, .reveal-stagger > * {
@@ -2001,7 +840,7 @@
         .nav-links { display: none; }
         .nav-toggle { display: inline-flex; }
         .hero { padding: 88px 22px 48px; }
-        .hero-mockup { margin-top: 44px; max-width: 100%; }
+
         section { padding-top: 80px; padding-bottom: 80px; }
         .install { padding: 36px; gap: 32px; }
         footer { padding: 48px 22px 32px; }
@@ -2022,10 +861,7 @@
         .marquee-track { animation-duration: 38s; }
         .marquee.reverse .marquee-track { animation-duration: 46s; }
         .marquee.slow .marquee-track { animation-duration: 56s; }
-        .hero-mockup { margin-top: 36px; border-radius: 14px; }
-        .hero-mockup-bar { padding: 10px 14px; }
         .traffic { width: 10px; height: 10px; }
-        .hero-mockup-url { font-size: 11px; }
         .stats { padding: 40px 0 12px; }
         .stat { padding: 22px 16px; }
         .stat-num { font-size: 28px; }
@@ -2037,9 +873,7 @@
         .feature-card { padding: 24px 20px 20px; }
         .feature-card h3 { font-size: 16.5px; }
         .feature-card p { font-size: 13.5px; }
-        .showcase-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
-        .showcase-overlay p { max-height: 60px; opacity: 1; }
-        .showcase-expand-icon { opacity: 1; transform: scale(1); }
+
         .install {
           grid-template-columns: 1fr;
           padding: 28px;
@@ -2089,13 +923,6 @@
           font-size: 14.5px;
         }
         .badge { font-size: 11.5px; padding: 5px 11px; margin-bottom: 18px; }
-        .hero-mockup {
-          margin: 32px -4px 0;
-          border-radius: 12px;
-          box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset,
-            0 40px 60px -30px rgba(99, 102, 241, 0.4),
-            0 16px 30px rgba(0, 0, 0, 0.6);
-        }
         .stats { padding: 32px 0 8px; }
         .stats-grid {
           grid-template-columns: repeat(2, 1fr);
@@ -2108,9 +935,7 @@
           grid-template-columns: 1fr;
         }
         .feature-card { padding: 22px 18px 18px; }
-        .showcase-grid { grid-template-columns: 1fr; gap: 14px; }
-        .showcase-filters { gap: 6px; }
-        .showcase-pill { font-size: 12px; padding: 6px 14px; }
+
         .install { padding: 22px 18px; border-radius: 14px; }
         .install-text h3 { font-size: 22px; }
         .install-text .btn {
@@ -2184,7 +1009,6 @@
       }
       @media (hover: none) {
         .feature-card:hover,
-        .showcase-card:hover,
         .value-card:hover,
         .archetype:hover,
         .how-step:hover,
@@ -2196,8 +1020,7 @@
         .btn:hover {
           transform: none;
         }
-        .hero-mockup:hover { transform: none; }
-        .hero-mockup:hover img { transform: none; }
+
       }
     </style>
   </head>
@@ -2223,7 +1046,6 @@
         <nav class="nav-links" aria-label="Primary">
           <a href="#values" data-section="values" class="nav-link">Why</a>
           <a href="#features" data-section="features" class="nav-link">Features</a>
-          <a href="#showcase" data-section="showcase" class="nav-link">Showcase</a>
           <a href="#who" data-section="who" class="nav-link">Built for</a>
           <a href="#install" data-section="install" class="nav-link">Install</a>
           <a href="#stack" data-section="stack" class="nav-link">Stack</a>
@@ -2295,7 +1117,6 @@
       </button>
       <a href="#values" data-mp data-section="values">Why</a>
       <a href="#features" data-mp data-section="features">Features</a>
-      <a href="#showcase" data-mp data-section="showcase">Showcase</a>
       <a href="#who" data-mp data-section="who">Built for</a>
       <a href="#install" data-mp data-section="install">Install</a>
       <a href="#stack" data-mp data-section="stack">Stack</a>
@@ -2376,15 +1197,12 @@
               <span class="marquee-item"><span class="dot pink"></span>Resume sessions</span>
               <span class="marquee-item"><span class="dot violet"></span>MCP server (25 tools)</span>
               <span class="marquee-item"><span class="dot rose"></span>Plugin marketplace</span>
-              <span class="marquee-item"><span class="dot"></span>VS Code extension</span>
-              <span class="marquee-item"><span class="dot cyan"></span>WebSocket push</span>
+                            <span class="marquee-item"><span class="dot cyan"></span>WebSocket push</span>
               <span class="marquee-item"><span class="dot emerald"></span>SQLite (WAL)</span>
               <span class="marquee-item"><span class="dot amber"></span>OpenAPI 3.0</span>
               <span class="marquee-item"><span class="dot amber"></span>ReDoc API reference</span>
               <span class="marquee-item"><span class="dot pink"></span>Mermaid diagrams</span>
-              <span class="marquee-item"><span class="dot violet"></span>macOS &amp; Windows desktop app</span>
-              <span class="marquee-item"><span class="dot emerald"></span>Native OS toasts</span>
-              <span class="marquee-item"><span class="dot rose"></span>Hooks fan-out</span>
+                            <span class="marquee-item"><span class="dot rose"></span>Hooks fan-out</span>
               <span class="marquee-item"><span class="dot cyan"></span>Tray live snapshot</span>
               <span class="marquee-item"><span class="dot amber"></span>⌘Q confirmation</span>
               <span class="marquee-item"><span class="dot"></span>Auto-port discovery</span>
@@ -2398,15 +1216,12 @@
               <span class="marquee-item"><span class="dot pink"></span>Resume sessions</span>
               <span class="marquee-item"><span class="dot violet"></span>MCP server (25 tools)</span>
               <span class="marquee-item"><span class="dot rose"></span>Plugin marketplace</span>
-              <span class="marquee-item"><span class="dot"></span>VS Code extension</span>
-              <span class="marquee-item"><span class="dot cyan"></span>WebSocket push</span>
+                            <span class="marquee-item"><span class="dot cyan"></span>WebSocket push</span>
               <span class="marquee-item"><span class="dot emerald"></span>SQLite (WAL)</span>
               <span class="marquee-item"><span class="dot amber"></span>OpenAPI 3.0</span>
               <span class="marquee-item"><span class="dot amber"></span>ReDoc API reference</span>
               <span class="marquee-item"><span class="dot pink"></span>Mermaid diagrams</span>
-              <span class="marquee-item"><span class="dot violet"></span>macOS &amp; Windows desktop app</span>
-              <span class="marquee-item"><span class="dot emerald"></span>Native OS toasts</span>
-              <span class="marquee-item"><span class="dot rose"></span>Hooks fan-out</span>
+                            <span class="marquee-item"><span class="dot rose"></span>Hooks fan-out</span>
               <span class="marquee-item"><span class="dot cyan"></span>Tray live snapshot</span>
               <span class="marquee-item"><span class="dot amber"></span>⌘Q confirmation</span>
               <span class="marquee-item"><span class="dot"></span>Auto-port discovery</span>
@@ -2433,8 +1248,7 @@
               <span class="marquee-item"><span class="dot amber"></span>History import &amp; backfill</span>
               <span class="marquee-item"><span class="dot pink"></span>Native title bar</span>
               <span class="marquee-item"><span class="dot rose"></span>Open-at-Login</span>
-              <span class="marquee-item"><span class="dot cyan"></span>SMAppService &amp; HKCU Run startup</span>
-              <span class="marquee-item"><span class="dot"></span>Single-instance lock</span>
+                            <span class="marquee-item"><span class="dot"></span>Single-instance lock</span>
               <span class="marquee-item"><span class="dot emerald"></span>Per-arch DMG titles</span>
               <!-- duplicate -->
               <span class="marquee-item"><span class="dot violet"></span>Compaction-aware tokens</span>
@@ -2454,8 +1268,7 @@
               <span class="marquee-item"><span class="dot amber"></span>History import &amp; backfill</span>
               <span class="marquee-item"><span class="dot pink"></span>Native title bar</span>
               <span class="marquee-item"><span class="dot rose"></span>Open-at-Login</span>
-              <span class="marquee-item"><span class="dot cyan"></span>SMAppService &amp; HKCU Run startup</span>
-              <span class="marquee-item"><span class="dot"></span>Single-instance lock</span>
+                            <span class="marquee-item"><span class="dot"></span>Single-instance lock</span>
               <span class="marquee-item"><span class="dot emerald"></span>Per-arch DMG titles</span>
             </div>
           </div>
@@ -2499,20 +1312,6 @@
           </div>
         </div>
 
-        <div class="hero-mockup reveal">
-          <div class="hero-mockup-bar">
-            <div class="traffic red"></div>
-            <div class="traffic yellow"></div>
-            <div class="traffic green"></div>
-            <div class="hero-mockup-url">localhost:4820 - Analytics</div>
-          </div>
-          <img
-            src="images/analytics.png"
-            alt="Claude Code Agent Monitor - analytics page with token usage, tool frequency, activity heatmap and session trends"
-            loading="lazy"
-            decoding="async"
-          />
-        </div>
       </section>
 
       <!-- ─── STATS ─────────────────────────────────────── -->
@@ -2631,7 +1430,7 @@
             <h3>Claude Config Explorer</h3>
             <p>
               12 tabs covering skills, subagents, slash commands, output styles, plugins,
-              marketplaces, MCP servers, hooks, settings, memory, keybindings, statusline. The
+              marketplaces, MCP servers, hooks, settings, memory, keybindings. The
               Memory tab surfaces not just the user and project <code>CLAUDE.md</code> files but
               the per-project file-based memory store - every auto-memory fact under
               <code>~/.claude/projects/&lt;slug&gt;/memory/</code>, grouped by project and
@@ -2744,37 +1543,8 @@
               <code>/api/redoc</code> - both self-hosted alongside the dashboard, fully offline.
             </p>
           </div>
-          <div class="feature-card">
-            <div class="feature-icon rose">🧩</div>
-            <h3>VS Code extension</h3>
-            <p>
-              Full dashboard sidebar inside VS Code. Monitor active sessions, view agents, and
-              track tool calls without leaving your editor. Ships as a VSIX with zero external
-              dependencies.
-            </p>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon violet">🍎🪟</div>
-            <h3>Desktop app (macOS &amp; Windows)</h3>
-            <p>
-              The whole dashboard as a native desktop app - a macOS <code>.app</code> and a Windows
-              <code>.exe</code>, built with Electron 35. It embeds the Express server in-process,
-              lives in the menu-bar / notification-area (tray) with a live status snapshot dropdown,
-              auto-starts at login, and installs Claude Code hooks on first boot - zero-setup
-              monitoring. Runs alongside <code>npm run dev</code> with hooks fanning out to both
-              dashboards in parallel.
-            </p>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon cyan">📰</div>
-            <h3>Live activity feed</h3>
-            <p>
-              A real-time streaming event log with pause/resume buffering, multi-dimension
-              filters, color-coded entries by event type, expandable hook payloads, and
-              per-row session navigation. WebSocket-scoped updates so off-screen events never
-              cost a refetch.
-            </p>
-          </div>
+
+          div>
           <div class="feature-card">
             <div class="feature-icon emerald">📥</div>
             <h3>History import &amp; backfill</h3>
@@ -2794,10 +1564,7 @@
             <h3>Cross-surface notifications</h3>
             <p>
               Configurable per event type (new session, error, completion, subagent spawn). The
-              web dashboard uses Web Push (VAPID); the macOS app fires <strong>native macOS
-              toasts</strong> directly from the embedded server, side-stepping Web Push (which
-              has no FCM credentials inside Electron). Both surfaces stay live when running
-              together.
+              web dashboard uses Web Push (VAPID).
             </p>
           </div>
           <div class="feature-card">
@@ -2815,8 +1582,8 @@
             <h3>One-click self-update</h3>
             <p>
               Checks the upstream git remote for new releases, then updates in place - pull,
-              reinstall, rebuild, and restart from a single action. Both the dev server and the
-              desktop app surface an update badge the moment you fall behind.
+              reinstall, rebuild, and restart from a single action. The dashboard surfaces an update
+              badge the moment you fall behind.
             </p>
           </div>
           <div class="feature-card">
@@ -2830,324 +1597,6 @@
           </div>
         </div>
       </section>
-
-      <!-- ─── SHOWCASE ──────────────────────────────────── -->
-      <section id="showcase" class="container">
-        <div class="reveal">
-          <div class="section-eyebrow">In action</div>
-          <h2 class="section-title">See it for yourself.</h2>
-          <p class="section-lead">
-            Every page of the dashboard, from real-time monitoring to config editing,
-            API docs, and even the VS Code extension. Click any screenshot to expand.
-          </p>
-        </div>
-
-        <div class="showcase-filters reveal">
-          <button class="showcase-pill active" data-filter="all">All</button>
-          <button class="showcase-pill" data-filter="dashboard">Dashboard</button>
-          <button class="showcase-pill" data-filter="sessions">Sessions</button>
-          <button class="showcase-pill" data-filter="board">Board &amp; Feed</button>
-          <button class="showcase-pill" data-filter="tools">Tools</button>
-          <button class="showcase-pill" data-filter="system">System &amp; Extensions</button>
-        </div>
-
-        <div class="showcase-grid reveal-stagger" id="showcase-grid">
-
-          <!-- ── Dashboard ──────────────────────── -->
-          <div class="showcase-card" data-cat="dashboard" data-title="Dashboard · Monitor">
-            <div class="showcase-img">
-              <img src="images/dashboard.png" alt="Dashboard overview with active agent cards and stats" loading="lazy" />
-              <span class="showcase-expand-icon">⤢</span>
-              <div class="showcase-overlay">
-                <h4>Dashboard · Monitor</h4>
-                <p>Overview stats, active agent cards, and recent activity feed</p>
-              </div>
-            </div>
-          </div>
-          <div class="showcase-card" data-cat="dashboard" data-title="Dashboard · Health">
-            <div class="showcase-img">
-              <img src="images/dashboard-health.png" alt="Dashboard system health tab" loading="lazy" />
-              <span class="showcase-expand-icon">⤢</span>
-              <div class="showcase-overlay">
-                <h4>Dashboard · Health</h4>
-                <p>Composite health score, storage donut, cache/error/success gauges</p>
-              </div>
-            </div>
-          </div>
-          <div class="showcase-card" data-cat="dashboard" data-title="Analytics">
-            <div class="showcase-img">
-              <img src="images/analytics.png" alt="Analytics page with token usage and heatmap" loading="lazy" />
-              <span class="showcase-expand-icon">⤢</span>
-              <div class="showcase-overlay">
-                <h4>Analytics</h4>
-                <p>Token usage, tool frequency, activity heatmap, session trends</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- ── Sessions ───────────────────────── -->
-          <div class="showcase-card" data-cat="sessions" data-title="Sessions List">
-            <div class="showcase-img">
-              <img src="images/sessions.png" alt="Sessions overview table" loading="lazy" />
-              <span class="showcase-expand-icon">⤢</span>
-              <div class="showcase-overlay">
-                <h4>Sessions</h4>
-                <p>Searchable, filterable, server-paginated table of recorded sessions, each shown by its real name synced live from the transcript</p>
-              </div>
-            </div>
-          </div>
-          <div class="showcase-card" data-cat="sessions" data-title="Session Detail">
-            <div class="showcase-img">
-              <img src="images/session.png" alt="Session detail overview" loading="lazy" />
-              <span class="showcase-expand-icon">⤢</span>
-              <div class="showcase-overlay">
-                <h4>Session Detail</h4>
-                <p>Full session overview with metadata, cost, model, and tool breakdown</p>
-              </div>
-            </div>
-          </div>
-          <div class="showcase-card" data-cat="sessions" data-title="Session · Conversation">
-            <div class="showcase-img">
-              <img src="images/session-conversation.png" alt="Session conversation tab" loading="lazy" />
-              <span class="showcase-expand-icon">⤢</span>
-              <div class="showcase-overlay">
-                <h4>Session · Conversation</h4>
-                <p>Live transcript with markdown, syntax-highlighted code, styled tool calls, slash-command output, and rename markers</p>
-              </div>
-            </div>
-          </div>
-          <div class="showcase-card" data-cat="sessions" data-title="Session · Agents">
-            <div class="showcase-img">
-              <img src="images/session-agents.png" alt="Session agents tab" loading="lazy" />
-              <span class="showcase-expand-icon">⤢</span>
-              <div class="showcase-overlay">
-                <h4>Session · Agents</h4>
-                <p>Overview tiles, subagent breakdown, and hierarchy tree</p>
-              </div>
-            </div>
-          </div>
-          <div class="showcase-card" data-cat="sessions" data-title="Session · Timeline">
-            <div class="showcase-img">
-              <img src="images/session-timeline.png" alt="Session timeline tab" loading="lazy" />
-              <span class="showcase-expand-icon">⤢</span>
-              <div class="showcase-overlay">
-                <h4>Session · Timeline</h4>
-                <p>Chronological event timeline with multi-dimension filters</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- ── Board & Feed ───────────────────── -->
-          <div class="showcase-card" data-cat="board" data-title="Kanban Board · Agents">
-            <div class="showcase-img">
-              <img src="images/board.png" alt="Kanban board agents view" loading="lazy" />
-              <span class="showcase-expand-icon">⤢</span>
-              <div class="showcase-overlay">
-                <h4>Kanban Board · Agents</h4>
-                <p>Working / Waiting / Completed / Error columns with live WebSocket updates</p>
-              </div>
-            </div>
-          </div>
-          <div class="showcase-card" data-cat="board" data-title="Kanban Board · Sessions">
-            <div class="showcase-img">
-              <img src="images/board-sessions.png" alt="Kanban board sessions view" loading="lazy" />
-              <span class="showcase-expand-icon">⤢</span>
-              <div class="showcase-overlay">
-                <h4>Kanban Board · Sessions</h4>
-                <p>Sessions grouped by status across 5 columns</p>
-              </div>
-            </div>
-          </div>
-          <div class="showcase-card" data-cat="board" data-title="Activity Feed">
-            <div class="showcase-img">
-              <img src="images/feed.png" alt="Activity feed" loading="lazy" />
-              <span class="showcase-expand-icon">⤢</span>
-              <div class="showcase-overlay">
-                <h4>Activity Feed</h4>
-                <p>Real-time event log with pause/resume and multi-dimension filters</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- ── Tools ──────────────────────────── -->
-          <div class="showcase-card" data-cat="tools" data-title="Run Claude · Config">
-            <div class="showcase-img">
-              <img src="images/run.png" alt="Run Claude pre-run configuration" loading="lazy" />
-              <span class="showcase-expand-icon">⤢</span>
-              <div class="showcase-overlay">
-                <h4>Run Claude · Config</h4>
-                <p>Pick mode, source, cwd, model, permissions, and thinking effort</p>
-              </div>
-            </div>
-          </div>
-          <div class="showcase-card" data-cat="tools" data-title="Run Claude · Live Stream">
-            <div class="showcase-img">
-              <img src="images/run-results.png" alt="Run Claude live streaming output" loading="lazy" />
-              <span class="showcase-expand-icon">⤢</span>
-              <div class="showcase-overlay">
-                <h4>Run Claude · Live Stream</h4>
-                <p>Character-by-character streaming with collapsible tool calls and thinking blocks</p>
-              </div>
-            </div>
-          </div>
-          <div class="showcase-card" data-cat="tools" data-title="Claude Config Explorer">
-            <div class="showcase-img">
-              <img src="images/config.png" alt="Claude Config Explorer 12-tab inspector" loading="lazy" />
-              <span class="showcase-expand-icon">⤢</span>
-              <div class="showcase-overlay">
-                <h4>Claude Config Explorer</h4>
-                <p>12 tabs: plugins, skills, subagents, slash commands, MCP servers, hooks, and more</p>
-              </div>
-            </div>
-          </div>
-          <div class="showcase-card" data-cat="tools" data-title="Workflows">
-            <div class="showcase-img">
-              <img src="images/workflows.png" alt="Workflows visualization" loading="lazy" />
-              <span class="showcase-expand-icon">⤢</span>
-              <div class="showcase-overlay">
-                <h4>Workflows</h4>
-                <p>D3-powered orchestration DAG, tool Sankey, collaboration network</p>
-              </div>
-            </div>
-          </div>
-          <div class="showcase-card" data-cat="tools" data-title="Workflow Runs">
-            <div class="showcase-img">
-              <img src="images/dynamicworkflows-workflows.png" alt="Dynamic Workflow Runs on the Workflows page" loading="lazy" />
-              <span class="showcase-expand-icon">⤢</span>
-              <div class="showcase-overlay">
-                <h4>Workflow Runs</h4>
-                <p>Dynamic Workflow-tool fleets, reconstructed from on-disk run journals, with a per-agent breakdown</p>
-              </div>
-            </div>
-          </div>
-          <div class="showcase-card" data-cat="tools" data-title="Workflow Runs in a session">
-            <div class="showcase-img">
-              <img src="images/dynamicworkflows-session.png" alt="Dynamic Workflow Runs on the session detail page" loading="lazy" />
-              <span class="showcase-expand-icon">⤢</span>
-              <div class="showcase-overlay">
-                <h4>Workflow Runs — in a session</h4>
-                <p>Each fleet linked to its launching session, with inner agents and folded-in token cost</p>
-              </div>
-            </div>
-          </div>
-          <!-- ── System & Extensions ────────────── -->
-          <div class="showcase-card" data-cat="system" data-title="Settings">
-            <div class="showcase-img">
-              <img src="images/settings.png" alt="Settings page" loading="lazy" />
-              <span class="showcase-expand-icon">⤢</span>
-              <div class="showcase-overlay">
-                <h4>Settings</h4>
-                <p>Model pricing rules, data management, and system information</p>
-              </div>
-            </div>
-          </div>
-          <div class="showcase-card" data-cat="system" data-title="Alerts &amp; Webhooks">
-            <div class="showcase-img">
-              <img src="images/alerts.png" alt="Settings Alerts and Webhooks" loading="lazy" />
-              <span class="showcase-expand-icon">⤢</span>
-              <div class="showcase-overlay">
-                <h4>Alerts &amp; Webhooks</h4>
-                <p>Rule-based alerts, a live fired-alert feed, and 14 webhook providers</p>
-              </div>
-            </div>
-          </div>
-          <div class="showcase-card" data-cat="system" data-title="Swagger API Docs">
-            <div class="showcase-img">
-              <img src="images/swagger.png" alt="Swagger OpenAPI documentation" loading="lazy" />
-              <span class="showcase-expand-icon">⤢</span>
-              <div class="showcase-overlay">
-                <h4>Swagger API Docs</h4>
-                <p>
-                  Comprehensive OpenAPI 3.0 spec with a try-it-out Swagger UI
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="showcase-card" data-cat="system" data-title="ReDoc API Docs">
-            <div class="showcase-img">
-              <img src="images/redoc.png" alt="ReDoc OpenAPI documentation" loading="lazy" />
-              <span class="showcase-expand-icon">⤢</span>
-              <div class="showcase-overlay">
-                <h4>ReDoc API Docs</h4>
-                <p>
-                  Clean, read-optimized OpenAPI 3.0 reference with a ReDoc UI
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="showcase-card" data-cat="system" data-title="MCP Server">
-            <div class="showcase-img">
-              <img src="images/mcp.png" alt="MCP Server interactive REPL" loading="lazy" />
-              <span class="showcase-expand-icon">⤢</span>
-              <div class="showcase-overlay">
-                <h4>MCP Server</h4>
-                <p>Interactive REPL exposing dashboard tools for Claude Code integration</p>
-              </div>
-            </div>
-          </div>
-          <div class="showcase-card" data-cat="system" data-title="Update Checker">
-            <div class="showcase-img">
-              <img src="images/update.png" alt="Update checker modal" loading="lazy" />
-              <span class="showcase-expand-icon">⤢</span>
-              <div class="showcase-overlay">
-                <h4>Update Checker</h4>
-                <p>Commits-behind count with one-click copy-to-clipboard update command</p>
-              </div>
-            </div>
-          </div>
-          <div class="showcase-card" data-cat="system" data-title="Connection Status">
-            <div class="showcase-img">
-              <img src="images/live.png" alt="Connection details modal with throughput sparkline and event-type breakdown" loading="lazy" />
-              <span class="showcase-expand-icon">⤢</span>
-              <div class="showcase-overlay">
-                <h4>Connection Status</h4>
-                <p>WebSocket details modal with 60-second throughput sparkline, top event types, and recent activity</p>
-              </div>
-            </div>
-          </div>
-          <div class="showcase-card" data-cat="system" data-title="Desktop App (macOS &amp; Windows)">
-            <div class="showcase-img">
-              <img src="images/macos.png" alt="Claude Code Monitor running as a native desktop app on macOS and Windows" loading="lazy" />
-              <span class="showcase-expand-icon">⤢</span>
-              <div class="showcase-overlay">
-                <h4>Desktop App (macOS &amp; Windows)</h4>
-                <p>The full dashboard, natively on macOS and Windows. Real window, embedded server, real-time intact — plus a menu-bar / notification-area (tray) icon for quick access.</p>
-              </div>
-            </div>
-          </div>
-          <div class="showcase-card" data-cat="system" data-title="VS Code Extension">
-            <div class="showcase-img">
-              <img src="vscode-extension/vscode.png" alt="VS Code extension sidebar" loading="lazy" />
-              <span class="showcase-expand-icon">⤢</span>
-              <div class="showcase-overlay">
-                <h4>VS Code Extension</h4>
-                <p>Full dashboard sidebar inside VS Code with session monitoring</p>
-              </div>
-            </div>
-          </div>
-          <div class="showcase-card" data-cat="system" data-title="Import History">
-            <div class="showcase-img">
-              <img src="images/import.png" alt="Import history settings panel" loading="lazy" />
-              <span class="showcase-expand-icon">⤢</span>
-              <div class="showcase-overlay">
-                <h4>Import History</h4>
-                <p>Rescan default folder, scan custom paths, upload archives with progress</p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      <!-- Lightbox -->
-      <div class="showcase-lightbox" id="showcase-lightbox">
-        <button class="showcase-lightbox-close" aria-label="Close">✕</button>
-        <button class="showcase-lightbox-nav prev" aria-label="Previous"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
-        <button class="showcase-lightbox-nav next" aria-label="Next"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"></polyline></svg></button>
-        <span class="showcase-counter" id="showcase-counter"></span>
-        <img src="" alt="" id="showcase-lightbox-img" />
-        <div class="showcase-lightbox-caption" id="showcase-lightbox-caption"></div>
-      </div>
 
       <!-- ─── HOW IT WORKS ───────────────────────────────── -->
       <section id="how" class="container">
@@ -3304,19 +1753,7 @@
               <span class="archetype-tag">Multi-project</span>
             </div>
           </div>
-          <div class="archetype" style="--archetype-accent: var(--blue)">
-            <div class="archetype-name">08 - VS Code native</div>
-            <h4>Monitor without leaving the editor</h4>
-            <p>
-              Use the VS Code extension sidebar to watch sessions and tool calls while you code.
-              No browser tab needed - everything docks into VS Code as a side panel.
-            </p>
-            <div class="archetype-tags">
-              <span class="archetype-tag">VS Code</span>
-              <span class="archetype-tag">Extension</span>
-              <span class="archetype-tag">Sidebar</span>
-            </div>
-          </div>
+
         </div>
       </section>
 
@@ -3343,8 +1780,7 @@
             <p>
               No accounts, no cloud, no telemetry. Everything stays on your machine. Existing
               sessions in <code>~/.claude/projects</code> import on first start. Prefer a
-              containerized toolchain? An optional VS Code Dev Container / Codespaces config ships
-              in <code>.devcontainer/</code> (opt-in - host-based dev is unaffected).
+             .
             </p>
             <a href="wiki/#quickstart" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -3397,249 +1833,7 @@
           </div>
         </div>
 
-        <!-- ─── DESKTOP APP (macOS & Windows) ──────────────── -->
-        <div class="reveal install-group">
-          <div class="section-eyebrow">Desktop app (macOS &amp; Windows)</div>
-          <h3 class="install-subtitle">Install it once, forget the terminal.</h3>
-          <p class="section-lead">
-            Prefer not to keep a terminal open? The dashboard also ships as a native desktop app -
-            a macOS <code>.app</code> and a Windows <code>.exe</code> - an Electron 35 shell that
-            embeds the same Express server in-process and renders the built React client in a
-            native window. Same dashboard, native OS lifecycle (macOS &amp; Windows) on top.
-          </p>
-        </div>
-        <div class="how-grid reveal-stagger">
-          <div class="how-step">
-            <div class="how-step-num">01</div>
-            <h4>Native, tray-first</h4>
-            <p>
-              A menu-bar / notification-area (tray) icon with a single-click dropdown showing a
-              <strong>live status snapshot</strong> (sessions, agents, events today), a native
-              application menu, single-instance lock, and
-              window-close-hides-but-server-keeps-running. ⌘Q / Ctrl+Q opens a confirmation dialog
-              (press it again to skip it). macOS shows a tinted template glyph in the menu bar;
-              Windows uses a colored icon in the notification area.
-            </p>
-          </div>
-          <div class="how-step">
-            <div class="how-step-num">02</div>
-            <h4>Auto-start at login</h4>
-            <p>
-              Toggle <em>Open at Login</em> from the tray menu. On macOS it registers through the
-              native <code>SMAppService</code> API (visible under <em>System Settings &rarr; General
-              &rarr; Login Items</em>); on Windows it writes a per-user
-              <code>HKCU\…\Run</code> entry (visible under <em>Task Manager &rarr; Startup</em>) - so
-              the dashboard is always running when you sit down.
-            </p>
-          </div>
-          <div class="how-step">
-            <div class="how-step-num">03</div>
-            <h4>Zero-setup, durable data</h4>
-            <p>
-              On first boot the app installs Claude Code hooks and starts background services
-              automatically - an install-only user gets monitoring with essentially no manual
-              setup. Your SQLite database lives in a per-user data dir outside the app
-              bundle, so it survives reinstalls and updates. The app also recovers your login-shell
-              <code>PATH</code> at startup, so <em>Run Claude</em> can find and launch the
-              <code>claude</code> CLI.
-            </p>
-          </div>
-          <div class="how-step">
-            <div class="how-step-num">04</div>
-            <h4>Coexists with the web dashboard</h4>
-            <p>
-              Run the desktop app and <code>npm run dev</code> at the same time and both stay
-              real-time. Every running dashboard appends its <code>{port, pid, startedAt}</code>
-              entry to <code>~/.claude/.agent-dashboard.json</code> on startup; the hook handler
-              fans each hook out to every live entry in parallel, so both UIs receive the same
-              events and both their SQLite stores stay in sync. Stale entries self-evict via a
-              PID liveness check on read.
-            </p>
-          </div>
-        </div>
-        <div class="reveal install-group">
-          <div class="section-eyebrow">Install steps</div>
-          <h3 class="install-subtitle">From download to running in under a minute.</h3>
-          <p class="section-lead">
-            The builds are unsigned / ad-hoc signed by default, so the first launch trips one OS
-            warning - macOS Gatekeeper (<em>"Apple could not verify…"</em>) or Windows SmartScreen
-            (<em>"Windows protected your PC"</em>). Clear it once and everything after that is
-            normal native OS lifecycle.
-          </p>
-        </div>
-        <div class="how-grid reveal-stagger">
-          <div class="how-step">
-            <div class="how-step-num">01</div>
-            <h4>Download the right asset</h4>
-            <p>
-              Open the <a href="https://github.com/hoangsonww/Claude-Code-Agent-Monitor/releases/latest">latest
-              release</a>. <strong>macOS:</strong> grab
-              <code>ClaudeCodeMonitor-&lt;version&gt;-arm64.dmg</code> for Apple Silicon (M1 / M2 /
-              M3 / M4) or <code>-x64.dmg</code> for Intel Macs (<em>Apple menu &rarr; About This
-              Mac</em> - anything labelled "Apple" silicon is <code>arm64</code>).
-              <strong>Windows:</strong> grab
-              <code>ClaudeCodeMonitor-Setup-&lt;version&gt;-x64.exe</code> (NSIS installer) or
-              <code>ClaudeCodeMonitor-&lt;version&gt;-x64-portable.exe</code> (no-install portable).
-            </p>
-          </div>
-          <div class="how-step">
-            <div class="how-step-num">02</div>
-            <h4>Install or run it</h4>
-            <p>
-              <strong>macOS:</strong> double-click the DMG to mount it, then drag
-              <strong>Claude Code Monitor.app</strong> onto the <code>Applications</code> shortcut
-              beside it and eject the DMG once the copy is done. <strong>Windows:</strong> run the
-              <code>*-Setup-*.exe</code> - it installs <strong>per-user</strong> (no administrator
-              elevation) and adds Start-menu / desktop shortcuts - or just run the
-              <code>*-portable.exe</code> to launch without installing.
-            </p>
-          </div>
-          <div class="how-step">
-            <div class="how-step-num">03</div>
-            <h4>Clear the first-launch warning</h4>
-            <p>
-              <strong>macOS:</strong> the build is ad-hoc signed (not notarized), so Gatekeeper
-              shows <em>"Apple could not verify…"</em> - clear the quarantine once in Terminal with
-              <code>xattr -cr "/Applications/Claude Code Monitor.app"</code> (or
-              <em>System Settings &rarr; Privacy &amp; Security &rarr; Open Anyway</em>).
-              <strong>Windows:</strong> the build is unsigned, so SmartScreen may show
-              <em>"Windows protected your PC"</em> - click <strong>More info &rarr; Run anyway</strong>.
-              One-time step per install.
-            </p>
-          </div>
-          <div class="how-step">
-            <div class="how-step-num">04</div>
-            <h4>Launch &amp; toggle auto-start</h4>
-            <p>
-              Open <strong>Claude Code Monitor</strong> (Applications / Spotlight on macOS, the
-              Start menu / desktop shortcut on Windows). The tray icon appears within a second;
-              click it &rarr; <em>Open at Login</em> and the app will start at every login from now
-              on - managed through <em>System Settings &rarr; General &rarr; Login Items</em> on
-              macOS, or a per-user <code>HKCU\…\Run</code> entry (<em>Task Manager &rarr;
-              Startup</em>) on Windows.
-            </p>
-          </div>
-        </div>
-        <div class="install reveal install-group">
-          <div class="install-text">
-            <h3>Get it in two ways.</h3>
-            <p>
-              <strong>Download a pre-built installer - no build required.</strong> Hit the
-              button below to land on the <strong>latest GitHub Release</strong>. <strong>macOS:</strong>
-              grab the matching arch DMG -
-              <code>ClaudeCodeMonitor-&lt;version&gt;-arm64.dmg</code> for Apple Silicon
-              or <code>-x64.dmg</code> for Intel - and drag the app into
-              <code>/Applications</code>. <strong>Windows:</strong> grab
-              <code>ClaudeCodeMonitor-Setup-&lt;version&gt;-x64.exe</code> (NSIS installer) or
-              <code>ClaudeCodeMonitor-&lt;version&gt;-x64-portable.exe</code> (no-install) and run
-              it. The link always redirects to the current release because CI publishes a new
-              <code>vX.Y.Z</code> automatically every time the version in
-              <code>package.json</code> is bumped on <code>master</code>, attaching <strong>both</strong>
-              the macOS DMGs and the Windows <code>.exe</code>s. Releases are public - no GitHub
-              sign-in required.
-            </p>
-            <p>
-              Want a <strong>per-commit build from CI</strong> instead of waiting for a
-              release? The <strong>🍎 macOS Desktop (DMG)</strong> job uploads a
-              <code>ClaudeCodeMonitor-dmg</code> artifact and the <strong>🪟 Windows Desktop
-              (EXE)</strong> job uploads a <code>ClaudeCodeMonitor-win</code> artifact on every
-              green run - useful for testing master before it's tagged. Or
-              <strong>build it yourself</strong> on the host OS: a single-arch macOS build
-              (<code>desktop:dmg:arm64</code> or <code>desktop:dmg:x64</code>) finishes
-              in about a minute, while <code>desktop:dmg</code> produces both DMGs in
-              one go; on Windows, <code>desktop:win</code> builds the installer and
-              <code>desktop:win:portable</code> the portable <code>.exe</code>. Each macOS DMG is
-              roughly 125&nbsp;MB, about 250&nbsp;MB installed.
-            </p>
-            <a
-              href="https://github.com/hoangsonww/Claude-Code-Agent-Monitor/releases/latest"
-              class="btn btn-primary"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" />
-                <line x1="12" y1="15" x2="12" y2="3" />
-              </svg>
-              Download the latest release
-            </a>
-            <a
-              href="https://github.com/hoangsonww/Claude-Code-Agent-Monitor/actions/workflows/ci.yml?query=branch%3Amaster+is%3Asuccess"
-              class="btn btn-tertiary"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="9" />
-                <polyline points="12 7 12 12 15 14" />
-              </svg>
-              Per-commit CI builds
-            </a>
-            <a
-              href="https://github.com/hoangsonww/Claude-Code-Agent-Monitor/blob/master/DESKTOP.md"
-              class="btn btn-tertiary"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                <polyline points="14 2 14 8 20 8" />
-              </svg>
-              Full desktop app guide
-            </a>
-            <a
-              href="https://github.com/hoangsonww/Claude-Code-Agent-Monitor/blob/master/desktop/README.md"
-              class="btn btn-tertiary"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="16 18 22 12 16 6" />
-                <polyline points="8 6 2 12 8 18" />
-              </svg>
-              Architecture reference
-            </a>
-          </div>
-          <div class="code-window">
-            <div class="code-window-bar">
-              <span class="traffic red"></span>
-              <span class="traffic yellow"></span>
-              <span class="traffic green"></span>
-              <span class="code-window-title">~/Claude-Code-Agent-Monitor - zsh</span>
-              <button class="code-window-copy" onclick="copyInstall(this)" aria-label="Copy desktop build commands">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                </svg>
-                <span class="copy-label">Copy</span>
-              </button>
-            </div>
-            <pre class="code-block" id="desktop-block"><span class="comment"># Build the desktop app locally (run on the host OS)</span>
-<span class="prompt">$</span>npm run setup
-<span class="prompt">$</span>npm run build
-<span class="comment"># desktop:install preflights the native better-sqlite3 build and, on</span>
-<span class="comment"># failure, prints copy-pasteable setup help (incl. a no-toolchain alternative)</span>
-<span class="prompt">$</span>npm run desktop:install
 
-<span class="comment"># macOS - fast, one architecture (recommended for your own Mac)</span>
-<span class="prompt">$</span>npm run desktop:dmg:arm64   <span class="comment"># Apple Silicon</span>
-<span class="prompt">$</span>npm run desktop:dmg:x64     <span class="comment"># Intel</span>
-
-<span class="comment"># macOS - both arches, two separate DMGs (what the release ships)</span>
-<span class="prompt">$</span>npm run desktop:dmg
-
-<span class="comment"># Windows - run these on Windows</span>
-<span class="prompt">$</span>npm run desktop:win            <span class="comment"># NSIS installer .exe</span>
-<span class="prompt">$</span>npm run desktop:win:portable   <span class="comment"># no-install portable .exe</span>
-
-<span class="comment"># macOS: open the DMG, drag the app to Applications, then</span>
-<span class="comment"># clear the Gatekeeper quarantine on first launch:</span>
-<span class="prompt">$</span>xattr -cr <span class="str">"/Applications/Claude Code Monitor.app"</span>
-</pre>
-          </div>
-        </div>
-      </section>
 
       <!-- ─── PAGES ─────────────────────────────────────── -->
       <section id="pages" class="container">
@@ -3758,7 +1952,6 @@
           <div class="stack-item"><div class="stack-item-icon">🌐</div><div class="stack-item-name">i18next</div><div class="stack-item-desc">en / zh / vi</div></div>
           <div class="stack-item"><div class="stack-item-icon">📋</div><div class="stack-item-name">OpenAPI 3.0</div><div class="stack-item-desc">+ Swagger UI</div></div>
           <div class="stack-item"><div class="stack-item-icon">🔔</div><div class="stack-item-name">Web Push</div><div class="stack-item-desc">VAPID</div></div>
-          <div class="stack-item"><div class="stack-item-icon">🐳</div><div class="stack-item-name">Docker</div><div class="stack-item-desc">+ Podman</div></div>
           <div class="stack-item"><div class="stack-item-icon">☸️</div><div class="stack-item-name">Kubernetes</div><div class="stack-item-desc">+ Kustomize + Helm</div></div>
           <div class="stack-item"><div class="stack-item-icon">🌿</div><div class="stack-item-name">Terraform</div><div class="stack-item-desc">AWS / GCP / Azure / OCI</div></div>
           <div class="stack-item"><div class="stack-item-icon">🔥</div><div class="stack-item-name">Prometheus</div><div class="stack-item-desc">+ Grafana</div></div>
@@ -3775,12 +1968,8 @@
           <div class="stack-item"><div class="stack-item-icon">🔄</div><div class="stack-item-name">workbox</div><div class="stack-item-desc">service worker (planned)</div></div>
           <div class="stack-item"><div class="stack-item-icon">🐙</div><div class="stack-item-name">GitHub Actions</div><div class="stack-item-desc">CI / release</div></div>
           <div class="stack-item"><div class="stack-item-icon">🦊</div><div class="stack-item-name">GitLab CI</div><div class="stack-item-desc">pipelines</div></div>
-          <div class="stack-item"><div class="stack-item-icon">📦</div><div class="stack-item-name">VS Code</div><div class="stack-item-desc">extension API</div></div>
-          <div class="stack-item"><div class="stack-item-icon">🐍</div><div class="stack-item-name">Python 3</div><div class="stack-item-desc">statusline script</div></div>
           <div class="stack-item"><div class="stack-item-icon">☁️</div><div class="stack-item-name">Coralogix</div><div class="stack-item-desc">observability</div></div>
           <div class="stack-item"><div class="stack-item-icon">🔭</div><div class="stack-item-name">OpenTelemetry</div><div class="stack-item-desc">collector</div></div>
-          <div class="stack-item"><div class="stack-item-icon">🖥️</div><div class="stack-item-name">Electron 35</div><div class="stack-item-desc">macOS .app shell</div></div>
-          <div class="stack-item"><div class="stack-item-icon">📦</div><div class="stack-item-name">electron-builder</div><div class="stack-item-desc">DMG packaging</div></div>
           <div class="stack-item"><div class="stack-item-icon">🤖</div><div class="stack-item-name">Claude CLI</div><div class="stack-item-desc">spawned via Run page</div></div>
           <div class="stack-item"><div class="stack-item-icon">🔔</div><div class="stack-item-name">web-push</div><div class="stack-item-desc">VAPID push library</div></div>
           <div class="stack-item"><div class="stack-item-icon">📄</div><div class="stack-item-name">swagger-ui-express</div><div class="stack-item-desc">interactive API docs</div></div>
@@ -3789,14 +1978,8 @@
           <div class="stack-item"><div class="stack-item-icon">🪢</div><div class="stack-item-name">tar</div><div class="stack-item-desc">tar/tgz extract</div></div>
           <div class="stack-item"><div class="stack-item-icon">🌍</div><div class="stack-item-name">cors</div><div class="stack-item-desc">Express CORS</div></div>
           <div class="stack-item"><div class="stack-item-icon">🧵</div><div class="stack-item-name">ws</div><div class="stack-item-desc">WebSocket server</div></div>
-          <div class="stack-item"><div class="stack-item-icon">🔑</div><div class="stack-item-name">SMAppService</div><div class="stack-item-desc">macOS Login Items</div></div>
-          <div class="stack-item"><div class="stack-item-icon">🔑</div><div class="stack-item-name">HKCU Run key</div><div class="stack-item-desc">Windows startup</div></div>
           <div class="stack-item"><div class="stack-item-icon">🚦</div><div class="stack-item-name">concurrently</div><div class="stack-item-desc">dev process orchestrator</div></div>
-          <div class="stack-item"><div class="stack-item-icon">⚙️</div><div class="stack-item-name">@types/node</div><div class="stack-item-desc">strict TS in desktop/</div></div>
           <div class="stack-item"><div class="stack-item-icon">🆔</div><div class="stack-item-name">uuid</div><div class="stack-item-desc">v4 ids</div></div>
-          <div class="stack-item"><div class="stack-item-icon">🪟</div><div class="stack-item-name">Chromium</div><div class="stack-item-desc">embedded BrowserWindow</div></div>
-          <div class="stack-item"><div class="stack-item-icon">🖥️</div><div class="stack-item-name">native OS APIs</div><div class="stack-item-desc">tray, dock, dialog</div></div>
-          <div class="stack-item"><div class="stack-item-icon">📦</div><div class="stack-item-name">NSIS</div><div class="stack-item-desc">Windows installer .exe</div></div>
         </div>
       </section>
 
@@ -3891,48 +2074,7 @@
               </p>
             </div></div>
           </details>
-          <details class="faq-item">
-            <summary>Is there a desktop app, and how is it different from running the server?</summary>
-            <div class="faq-answer"><div class="faq-answer-inner">
-              <p>
-                Yes - a native desktop app built with Electron 35, on both macOS (a <code>.app</code>
-                shipped as a <code>.dmg</code>) and Windows (an NSIS installer <code>.exe</code> plus a
-                no-install portable <code>.exe</code>). It embeds the same
-                Express server in-process and renders the built React client in a native window,
-                so it is the same dashboard with native OS lifecycle (macOS &amp; Windows) on top: a
-                menu-bar / notification-area (tray) icon, a native app menu, auto-start at login, a
-                single-instance lock, and
-                window-close-hides-but-server-keeps-running. It also installs Claude Code hooks
-                and starts background services on first boot, so you get monitoring with
-                essentially zero manual setup. Get it from the
-                <a href="https://github.com/hoangsonww/Claude-Code-Agent-Monitor/releases/latest" target="_blank" rel="noopener noreferrer" style="color: var(--accent);">latest release</a>,
-                from the <code>ClaudeCodeMonitor-dmg</code> / <code>ClaudeCodeMonitor-win</code> CI
-                artifacts, or by building locally with
-                <code>npm run desktop:dmg:arm64</code> / <code>:x64</code> on macOS or
-                <code>npm run desktop:win</code> / <code>desktop:win:portable</code> on Windows. The
-                builds are unsigned / ad-hoc signed by default, so clear the first-launch warning -
-                Gatekeeper on macOS (<code>xattr -cr "/Applications/Claude Code Monitor.app"</code>) or
-                SmartScreen on Windows (<em>More info &rarr; Run anyway</em>). Your SQLite
-                database lives in a per-user data dir (<code>~/Library/Application Support/Claude Code Monitor/data/</code>
-                on macOS, <code>%APPDATA%\Claude Code Monitor\data\</code> on Windows) outside the
-                app bundle, so it survives reinstalls and updates, and the
-                app recovers your shell <code>PATH</code> at startup so <em>Run Claude</em> can
-                launch the <code>claude</code> CLI. See the
-                <a href="https://github.com/hoangsonww/Claude-Code-Agent-Monitor/blob/master/DESKTOP.md" target="_blank" rel="noopener noreferrer" style="color: var(--accent);">desktop app guide</a>.
-              </p>
-            </div></div>
-          </details>
-          <details class="faq-item">
-            <summary>What about scaling / multi-user?</summary>
-            <div class="faq-answer"><div class="faq-answer-inner">
-              <p>
-                The default deployment mode is single-user, localhost-bound. For team setups we ship
-                Docker / Podman compose files, Kubernetes manifests with Kustomize, Terraform
-                modules for AWS/GCP/Azure/OCI, Helm charts, and Prometheus/Grafana observability -
-                see the <a href="wiki/#deployment" target="_blank" rel="noopener noreferrer" style="color: var(--accent);">deployment guide</a>.
-              </p>
-            </div></div>
-          </details>
+          
         </div>
       </section>
 
@@ -4020,7 +2162,6 @@
           <h4>Product</h4>
           <a href="#values">Why local-first</a>
           <a href="#features">Features</a>
-          <a href="#showcase">Showcase</a>
           <a href="#how">How it works</a>
           <a href="#who">Built for</a>
           <a href="#install">Install</a>
@@ -4192,111 +2333,6 @@
           card.style.setProperty("--my", ((e.clientY - r.top) / r.height) * 100 + "%");
         });
       });
-      document.querySelectorAll(".showcase-card").forEach((card) => {
-        card.addEventListener("mousemove", (e) => {
-          const r = card.getBoundingClientRect();
-          card.style.setProperty("--sc-mx", ((e.clientX - r.left) / r.width) * 100 + "%");
-          card.style.setProperty("--sc-my", ((e.clientY - r.top) / r.height) * 100 + "%");
-        });
-      });
-      (function () {
-        const pills = document.querySelectorAll(".showcase-pill");
-        const cards = document.querySelectorAll(".showcase-card");
-        const lightbox = document.getElementById("showcase-lightbox");
-        const lbImg = document.getElementById("showcase-lightbox-img");
-        const lbCaption = document.getElementById("showcase-lightbox-caption");
-        const lbCounter = document.getElementById("showcase-counter");
-        let visibleCards = [];
-        let lbIndex = 0;
-        pills.forEach((pill) => {
-          pill.addEventListener("click", () => {
-            pills.forEach((p) => p.classList.remove("active"));
-            pill.classList.add("active");
-            const filter = pill.dataset.filter;
-            let delay = 0;
-            cards.forEach((card) => {
-              const show = filter === "all" || card.dataset.cat === filter;
-              card.classList.toggle("hidden", !show);
-              if (show) {
-                card.classList.remove("entering");
-                void card.offsetWidth;
-                card.style.animationDelay = delay + "ms";
-                card.classList.add("entering");
-                delay += 40;
-              }
-            });
-            updateVisibleCards();
-          });
-        });
-        function updateVisibleCards() {
-          visibleCards = Array.from(cards).filter((c) => !c.classList.contains("hidden"));
-        }
-        updateVisibleCards();
-        cards.forEach((card) => {
-          card.addEventListener("click", () => {
-            updateVisibleCards();
-            lbIndex = visibleCards.indexOf(card);
-            openLightbox();
-          });
-        });
-        function openLightbox() {
-          const card = visibleCards[lbIndex];
-          if (!card) return;
-          const img = card.querySelector("img");
-          lbImg.src = img.src;
-          lbImg.alt = img.alt;
-          lbCaption.textContent = card.dataset.title || "";
-          lbCounter.textContent = (lbIndex + 1) + " / " + visibleCards.length;
-          lightbox.classList.add("open");
-          document.body.style.overflow = "hidden";
-        }
-        function closeLightbox() {
-          lightbox.classList.remove("open");
-          document.body.style.overflow = "";
-        }
-        lightbox.querySelector(".showcase-lightbox-close").addEventListener("click", closeLightbox);
-        lightbox.addEventListener("click", (e) => {
-          if (e.target === lightbox) closeLightbox();
-        });
-        lightbox.querySelector(".prev").addEventListener("click", (e) => {
-          e.stopPropagation();
-          lbIndex = (lbIndex - 1 + visibleCards.length) % visibleCards.length;
-          openLightbox();
-        });
-        lightbox.querySelector(".next").addEventListener("click", (e) => {
-          e.stopPropagation();
-          lbIndex = (lbIndex + 1) % visibleCards.length;
-          openLightbox();
-        });
-        document.addEventListener("keydown", (e) => {
-          if (!lightbox.classList.contains("open")) return;
-          if (e.key === "Escape") closeLightbox();
-          if (e.key === "ArrowLeft") { lbIndex = (lbIndex - 1 + visibleCards.length) % visibleCards.length; openLightbox(); }
-          if (e.key === "ArrowRight") { lbIndex = (lbIndex + 1) % visibleCards.length; openLightbox(); }
-        });
-      })();
-      const heroMockup = document.querySelector(".hero-mockup");
-      if (heroMockup) {
-        heroMockup.addEventListener("mousemove", (e) => {
-          const r = heroMockup.getBoundingClientRect();
-          heroMockup.style.setProperty("--mock-mx", ((e.clientX - r.left) / r.width) * 100 + "%");
-          heroMockup.style.setProperty("--mock-my", ((e.clientY - r.top) / r.height) * 100 + "%");
-        });
-        heroMockup.addEventListener("click", () => {
-          const lb = document.getElementById("showcase-lightbox");
-          const lbImg = document.getElementById("showcase-lightbox-img");
-          const lbCaption = document.getElementById("showcase-lightbox-caption");
-          const lbCounter = document.getElementById("showcase-counter");
-          const img = heroMockup.querySelector("img");
-          if (!lb || !lbImg || !img) return;
-          lbImg.src = img.src;
-          lbImg.alt = img.alt;
-          if (lbCaption) lbCaption.textContent = "Analytics";
-          if (lbCounter) lbCounter.textContent = "";
-          lb.classList.add("open");
-          document.body.style.overflow = "hidden";
-        });
-      }
       const progressFill = document.getElementById("scroll-progress-fill");
       let progressFrame = 0;
       function updateProgress() {
@@ -4361,7 +2397,7 @@ npm run install-hooks
 npm run dev
 # then open http://localhost:4820`;
         // Prefer the actual rendered code block this button belongs to, so the
-        // Install and Desktop-app code windows each copy their own commands.
+        // Install code windows each copy their own commands.
         const win = btn.closest(".code-window");
         const block = win ? win.querySelector(".code-block") : null;
         const text = block
@@ -4389,7 +2425,6 @@ npm run dev
           });
       }
     </script>
-    <script>if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});</script>
 
     <!-- FAQ smooth accordion -->
     <script>
