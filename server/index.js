@@ -54,7 +54,6 @@ const settingsRouter = require("./routes/settings");
 const workflowsRouter = require("./routes/workflows");
 const pushRouter = require("./routes/push");
 const importRouter = require("./routes/import");
-const updatesRouter = require("./routes/updates");
 const ccConfigRouter = require("./routes/cc-config");
 const runRouter = require("./routes/run");
 const alertsRouter = require("./routes/alerts");
@@ -81,7 +80,6 @@ function createApp() {
   app.use("/api/workflows", workflowsRouter);
   app.use("/api/push", pushRouter);
   app.use("/api/import", importRouter);
-  app.use("/api/updates", updatesRouter);
   app.use("/api/cc-config", ccConfigRouter);
   app.use("/api/run", runRouter);
   app.use("/api/alerts", alertsRouter);
@@ -291,9 +289,6 @@ function startBackgroundServices() {
     if (t.unref) t.unref();
   }
 
-  const { startUpdateScheduler } = require("./update-scheduler");
-  const { broadcast } = require("./websocket");
-  startUpdateScheduler({ broadcast });
   try {
     const { startCcWatcher } = require("./lib/cc-watcher");
     startCcWatcher({ broadcast });

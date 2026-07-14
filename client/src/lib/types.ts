@@ -371,56 +371,6 @@ export interface ImportProgressMessage {
   counters?: Record<string, number>;
 }
 
-/** Payload for `update_status` WebSocket messages and GET /api/updates/status */
-export interface UpdateStatusPayload {
-  /** False when the install directory isn't a git clone at all - in that case
-   *  every other field except `repo_root`/`manual_command`/`message` is absent. */
-  git_repo: boolean;
-  /** True when `local_sha` is behind `remote_sha` on the canonical remote. */
-  update_available: boolean;
-  /** Absolute path to the detected git repository root. */
-  repo_root?: string;
-  /** Resolved ref compared against, e.g. "upstream/master" or "origin/main";
-   *  null when no remote could be resolved (e.g. no remotes configured). */
-  remote_ref?: string | null;
-  /** Remote name we compared against - "upstream" if configured (fork
-   * convention), else "origin", else whatever single remote is set up. */
-  canonical_remote?: string | null;
-  /** Local branch HEAD points at. null on detached HEAD. */
-  current_branch?: string | null;
-  /** What the local branch tracks (e.g. "origin/feature/foo"). null when
-   * no upstream is configured for the current branch. */
-  tracking_upstream?: string | null;
-  /** True when the local branch's tracked upstream is exactly remote_ref
-   * - i.e. a plain `git pull --ff-only` will do the right thing. */
-  tracks_canonical?: boolean;
-  /** Categorical hint for the UI. Discriminated so callers can branch on
-   * shape (e.g. show "Restart after running" only when the command
-   * actually rewrites the working tree). */
-  situation?:
-    | "tracking_canonical"
-    | "fork_or_diverged_tracking"
-    | "feature_branch"
-    | "detached_head";
-  /** Plain-language explanation when the user is *not* on the canonical
-   * default branch, so the manual command makes sense in context. */
-  situation_note?: string | null;
-  /** Local HEAD commit SHA; null when it couldn't be resolved. */
-  local_sha?: string | null;
-  /** Remote-ref commit SHA; null when it couldn't be resolved. */
-  remote_sha?: string | null;
-  /** Number of commits the local branch trails behind `remote_sha`. */
-  commits_behind?: number;
-  /** Shell command the user can copy/run to update manually (`git pull`,
-   *  `git fetch && git merge`, etc., chosen based on `situation`). */
-  manual_command?: string | null;
-  /** Human-readable status line shown in the Settings "Updates" panel. */
-  message?: string | null;
-  /** Set instead of a normal result when the remote fetch itself failed
-   *  (e.g. offline) - the message text explains it in user-facing terms. */
-  fetch_error?: string;
-}
-
 /** Payload for the `run_stream` WebSocket message: one streamed JSON envelope
  *  from a headless/conversation `claude` process started via POST /api/run. */
 export interface RunStreamPayload {
@@ -699,7 +649,7 @@ export interface WSMessage {
   /** Discriminant selecting which member of the `data` union applies:
    *  session_created/updated → Session; agent_created/updated → Agent;
    *  new_event → DashboardEvent; import.progress → ImportProgressMessage;
-   *  update_status → UpdateStatusPayload; run_stream/run_status/run_input_ack
+   *  run_stream/run_status/run_input_ack
    *  → their matching Run*Payload; cc_config_changed → CcConfigChangedPayload;
    *  alert_triggered/alert_updated → AlertEvent; workflow_upserted → WorkflowRun. */
   type:
@@ -709,7 +659,6 @@ export interface WSMessage {
     | "agent_updated"
     | "new_event"
     | "import.progress"
-    | "update_status"
     | "run_stream"
     | "run_status"
     | "run_input_ack"
@@ -722,7 +671,6 @@ export interface WSMessage {
     | Agent
     | DashboardEvent
     | ImportProgressMessage
-    | UpdateStatusPayload
     | RunStreamPayload
     | RunStatusPayload
     | RunInputAckPayload

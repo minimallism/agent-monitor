@@ -7,7 +7,6 @@
 import { useState, useCallback } from "react";
 import { Outlet } from "react-router-dom";
 import { Sidebar, SIDEBAR_STORAGE_KEY, loadCollapsed } from "./Sidebar";
-import { UpdateNotifier } from "./UpdateNotifier";
 
 export function Layout() {
   const [collapsed, setCollapsed] = useState(loadCollapsed);
@@ -24,7 +23,6 @@ export function Layout() {
 
   return (
     <div className="min-h-screen bg-surface-0">
-      <UpdateNotifier />
       <Sidebar collapsed={collapsed} onToggle={toggle} />
       <main
         className="min-h-screen min-w-0 transition-[margin-left,width] duration-200"

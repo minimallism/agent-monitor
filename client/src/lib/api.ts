@@ -18,7 +18,6 @@ import type {
   Stats,
   TranscriptListResult,
   TranscriptResult,
-  UpdateStatusPayload,
   WebhookDelivery,
   WebhookProvider,
   WebhookTarget,
@@ -28,7 +27,7 @@ import type {
   WorkflowRun,
   WorkflowRunsResponse,
   WorkflowRunDetail,
-} from "./types";
+} from "../lib/types";
 
 const BASE = "/api";
 
@@ -83,19 +82,6 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
  * this object only covers request/response REST calls.
  */
 export const api = {
-  /** Self-update status: whether this install is a git clone and, if so,
-   *  whether the tracked upstream/origin remote is ahead. */
-  updates: {
-    /** GET /api/updates/status - cached/last-known result. */
-    status: () => request<UpdateStatusPayload>("/updates/status"),
-    /** POST /api/updates/check - force a fresh `git fetch` + comparison. */
-    check: () =>
-      request<UpdateStatusPayload>("/updates/check", {
-        method: "POST",
-        body: JSON.stringify({}),
-      }),
-  },
-
   /** Lightweight overview counters for the dashboard header. */
   stats: {
     /** GET /api/stats. Sends the browser's UTC offset so `events_today` is

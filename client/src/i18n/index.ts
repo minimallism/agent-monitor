@@ -28,8 +28,6 @@ import kanban_en from "./locales/en/kanban.json";
 import kanban_zh from "./locales/zh/kanban.json";
 import errors_en from "./locales/en/errors.json";
 import errors_zh from "./locales/zh/errors.json";
-import updates_en from "./locales/en/updates.json";
-import updates_zh from "./locales/zh/updates.json";
 import ccConfig_en from "./locales/en/ccConfig.json";
 import ccConfig_zh from "./locales/zh/ccConfig.json";
 import run_en from "./locales/en/run.json";
@@ -55,7 +53,6 @@ i18n
         settings: settings_en,
         kanban: kanban_en,
         errors: errors_en,
-        updates: updates_en,
         ccConfig: ccConfig_en,
         run: run_en,
         alerts: alerts_en,
@@ -72,7 +69,6 @@ i18n
         settings: settings_zh,
         kanban: kanban_zh,
         errors: errors_zh,
-        updates: updates_zh,
         ccConfig: ccConfig_zh,
         run: run_zh,
         alerts: alerts_zh,
@@ -93,7 +89,6 @@ i18n
       "settings",
       "kanban",
       "errors",
-      "updates",
       "ccConfig",
       "run",
       "alerts",
