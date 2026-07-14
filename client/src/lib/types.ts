@@ -371,39 +371,6 @@ export interface ImportProgressMessage {
   counters?: Record<string, number>;
 }
 
-/** Payload for the `run_stream` WebSocket message: one streamed JSON envelope
- *  from a headless/conversation `claude` process started via POST /api/run. */
-export interface RunStreamPayload {
-  /** Id of the `RunHandle` this envelope belongs to. */
-  id: string;
-  /** Raw stream-json envelope emitted by the Claude Code CLI (assistant text
-   *  deltas, tool_use/tool_result blocks, etc.) - shape varies by event type. */
-  envelope: unknown;
-}
-/** Payload for the `run_status` WebSocket message: a lifecycle transition for
- *  a run started via POST /api/run (mirrors `RunHandle.status`). */
-export interface RunStatusPayload {
-  id: string;
-  status: "spawning" | "running" | "completed" | "error" | "killed";
-  /** Epoch-ms timestamp of this status transition. */
-  at: number;
-  /** Process exit code; present once status reaches "completed"/"error". */
-  exitCode?: number;
-  /** Claude Code session id resumed/created by this run, once known. */
-  sessionId?: string | null;
-  /** Failure message; present when status is "error". */
-  error?: string;
-}
-/** Payload for the `run_input_ack` WebSocket message: confirms a message sent
- *  via POST /api/run/:id/message was written to the child process's stdin. */
-export interface RunInputAckPayload {
-  id: string;
-  /** Echoes the id returned by the `send` call this acks. */
-  messageId: string;
-  /** Epoch-ms timestamp the input was delivered. */
-  at: number;
-}
-
 /** Payload for the `cc_config_changed` WebSocket message: broadcast whenever a
  *  Claude Code config artifact (skill, agent, command, settings, memory, …) is
  *  written or deleted, either through the dashboard's cc-config editor or by
@@ -649,8 +616,7 @@ export interface WSMessage {
   /** Discriminant selecting which member of the `data` union applies:
    *  session_created/updated → Session; agent_created/updated → Agent;
    *  new_event → DashboardEvent; import.progress → ImportProgressMessage;
-   *  run_stream/run_status/run_input_ack
-   *  → their matching Run*Payload; cc_config_changed → CcConfigChangedPayload;
+   *  cc_config_changed → CcConfigChangedPayload;
    *  alert_triggered/alert_updated → AlertEvent; workflow_upserted → WorkflowRun. */
   type:
     | "session_created"
@@ -659,9 +625,6 @@ export interface WSMessage {
     | "agent_updated"
     | "new_event"
     | "import.progress"
-    | "run_stream"
-    | "run_status"
-    | "run_input_ack"
     | "cc_config_changed"
     | "alert_triggered"
     | "alert_updated"
@@ -671,9 +634,6 @@ export interface WSMessage {
     | Agent
     | DashboardEvent
     | ImportProgressMessage
-    | RunStreamPayload
-    | RunStatusPayload
-    | RunInputAckPayload
     | CcConfigChangedPayload
     | AlertEvent
     | WorkflowRun;

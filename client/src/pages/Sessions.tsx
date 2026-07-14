@@ -5,7 +5,7 @@
  */
 
 import { useEffect, useState, useCallback, useSyncExternalStore } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   FolderOpen,
@@ -15,7 +15,6 @@ import {
   SortDesc,
   SortAsc,
   ChevronDown,
-  Play,
 } from "lucide-react";
 import { api } from "../lib/api";
 import { eventBus } from "../lib/eventBus";
@@ -46,9 +45,7 @@ export function Sessions() {
   const [sortBy, setSortBy] = useState("time");
   const [sortDesc, setSortDesc] = useState(true);
   const [directories, setDirectories] = useState<string[]>([]);
-  // Set of session IDs that are currently being driven by an in-flight Run
-  // handle on /run. Lets us badge those rows with a "Run" link.
-  const [dashboardRunIds, setDashboardRunIds] = useState<Set<string>>(new Set());
+  
 
   const FILTER_OPTIONS: Array<{ label: string; value: string }> = [
     { label: t("filterAll"), value: "" },
@@ -85,7 +82,10 @@ export function Sessions() {
       // awaiting_input_since column - the underlying SessionStatus is
       // still "active". Map it to a client-side filter on top of the
       // active set so paging/totals stay consistent with the visible rows.
-      if (filter === "waiting") {
+      if (filter === "waiting" || filter === "active") {
+        // Both "waiting" and "active" are derived from the same underlying
+        // status `active` — the `awaiting_input_since` column discriminates.
+        // Fetch all active sessions and filter client-side, matching kanban.
         const res = await api.sessions.list({
           status: "active",
           q: search || undefined,
@@ -95,9 +95,11 @@ export function Sessions() {
           limit: 10000,
           offset: 0,
         });
-        const waiting = res.sessions.filter(isSessionAwaitingInput);
-        setTotal(waiting.length);
-        setSessions(waiting.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE));
+        const filtered = res.sessions.filter((s) =>
+          filter === "waiting" ? isSessionAwaitingInput(s) : !isSessionAwaitingInput(s)
+        );
+        setTotal(filtered.length);
+        setSessions(filtered.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE));
         return;
       }
       const params: {
@@ -145,33 +147,10 @@ export function Sessions() {
           load();
         }
       }
-      if (msg.type === "run_status") {
-        loadDashboardRuns();
-      }
     });
   }, [load]);
 
-  // Pull active Run handles so we can mark which sessions are being driven
-  // from /run right now. Refresh on mount, on run_status WS messages, and
-  // every 15s as a safety net for stale browser state.
-  const loadDashboardRuns = useCallback(() => {
-    api.run
-      .list()
-      .then((r) => {
-        const ids = new Set<string>();
-        for (const h of r.items) {
-          if (h.sessionId) ids.add(h.sessionId);
-        }
-        setDashboardRunIds(ids);
-      })
-      .catch(() => undefined);
-  }, []);
-
-  useEffect(() => {
-    loadDashboardRuns();
-    const t = setInterval(loadDashboardRuns, 15000);
-    return () => clearInterval(t);
-  }, [loadDashboardRuns]);
+  
 
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   // The server already paginates, so the rendered page IS the loaded list.
@@ -346,17 +325,7 @@ export function Sessions() {
                           <p className="text-sm font-medium text-gray-200">
                             {session.name || `${t("defaultName")}${session.id.slice(0, 8)}`}
                           </p>
-                          {dashboardRunIds.has(session.id) && (
-                            <Link
-                              to={`/run?session=${encodeURIComponent(session.id)}`}
-                              onClick={(e) => e.stopPropagation()}
-                              className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-300 bg-emerald-500/10 border border-emerald-500/25 hover:bg-emerald-500/20 hover:text-emerald-200 px-1.5 py-0.5 rounded-full transition-colors"
-                              title={t("dashboardRunBadge", "Driven by Run page · click to open")}
-                            >
-                              <Play className="w-2.5 h-2.5" />
-                              {t("common:dashboardRun", "Run")}
-                            </Link>
-                          )}
+                          
                         </div>
                         <p className="text-[11px] text-gray-600 font-mono">
                           {session.id.slice(0, 12)}

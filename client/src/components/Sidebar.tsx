@@ -15,7 +15,6 @@ import {
   BarChart3,
   Workflow,
   Boxes,
-  Play,
   Settings,
   PanelLeftClose,
   PanelLeftOpen,
@@ -32,7 +31,6 @@ const NAV_KEYS = [
   { to: "/analytics", icon: BarChart3, key: "nav:analytics" },
   { to: "/workflows", icon: Workflow, key: "nav:workflows" },
   { to: "/cc-config", icon: Boxes, key: "nav:ccConfig" },
-  { to: "/run", icon: Play, key: "nav:run" },
   { to: "/settings", icon: Settings, key: "nav:settings" },
 ] as const;
 

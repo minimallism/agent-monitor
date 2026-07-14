@@ -30,8 +30,6 @@ import errors_en from "./locales/en/errors.json";
 import errors_zh from "./locales/zh/errors.json";
 import ccConfig_en from "./locales/en/ccConfig.json";
 import ccConfig_zh from "./locales/zh/ccConfig.json";
-import run_en from "./locales/en/run.json";
-import run_zh from "./locales/zh/run.json";
 import alerts_en from "./locales/en/alerts.json";
 import alerts_zh from "./locales/zh/alerts.json";
 import splash_en from "./locales/en/splash.json";
@@ -54,7 +52,6 @@ i18n
         kanban: kanban_en,
         errors: errors_en,
         ccConfig: ccConfig_en,
-        run: run_en,
         alerts: alerts_en,
         splash: splash_en,
       },
@@ -70,7 +67,6 @@ i18n
         kanban: kanban_zh,
         errors: errors_zh,
         ccConfig: ccConfig_zh,
-        run: run_zh,
         alerts: alerts_zh,
         splash: splash_zh,
       },
@@ -90,7 +86,6 @@ i18n
       "kanban",
       "errors",
       "ccConfig",
-      "run",
       "alerts",
       "splash",
     ],

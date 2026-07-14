@@ -1,11 +1,8 @@
 /**
  * @file KanbanBoard.tsx
- * @description Kanban-style board with two views: agents grouped by their
- * AgentStatus (working/waiting/completed/error) or sessions grouped
- * by their SessionStatus (active/completed/error/abandoned). The view toggle
- * is persisted in localStorage so the user's choice survives reloads. Each
- * column paginates client-side at COLUMN_PAGE_SIZE.
-
+ * @description Kanban-style board displaying agents grouped by their status
+ * (working/waiting/completed/error). Each column paginates client-side at
+ * COLUMN_PAGE_SIZE.
  */
 
 import { useEffect, useState, useCallback, useMemo, useRef, useSyncExternalStore } from "react";
@@ -14,72 +11,24 @@ import { RefreshCw, Columns3, ChevronDown, HelpCircle } from "lucide-react";
 import { api } from "../lib/api";
 import { eventBus } from "../lib/eventBus";
 import { AgentCard } from "../components/AgentCard";
-import { SessionCard } from "../components/SessionCard";
 import { EmptyState } from "../components/EmptyState";
 import { CardSkeleton } from "../components/Skeleton";
-import {
-  STATUS_CONFIG,
-  SESSION_STATUS_CONFIG,
-  isAgentAwaitingInput,
-  isSessionAwaitingInput,
-} from "../lib/types";
-import type {
-  Agent,
-  AgentStatus,
-  EffectiveAgentStatus,
-  EffectiveSessionStatus,
-  Session,
-  WSMessage,
-} from "../lib/types";
-
-type BoardView = "agents" | "sessions";
+import { STATUS_CONFIG, isAgentAwaitingInput } from "../lib/types";
+import type { Agent, AgentStatus, EffectiveAgentStatus, Session, WSMessage } from "../lib/types";
 
 // Persisted statuses we fetch from the API.
 const AGENT_FETCH_STATUSES: AgentStatus[] = ["working", "waiting", "completed", "error"];
 
-// Columns rendered on the Agents board.
+// Columns rendered on the board.
 const AGENT_COLUMNS: EffectiveAgentStatus[] = ["working", "waiting", "completed", "error"];
-const SESSION_COLUMNS: EffectiveSessionStatus[] = [
-  "active",
-  "waiting",
-  "completed",
-  "error",
-  "abandoned",
-];
 const COLUMN_PAGE_SIZE = 10;
-const VIEW_STORAGE_KEY = "kanban-board-view";
-
-function loadView(): BoardView {
-  try {
-    const stored = localStorage.getItem(VIEW_STORAGE_KEY);
-    if (stored === "agents" || stored === "sessions") return stored;
-  } catch {
-    /* ignore */
-  }
-  return "agents";
-}
-
-function persistView(view: BoardView): void {
-  try {
-    localStorage.setItem(VIEW_STORAGE_KEY, view);
-  } catch {
-    /* ignore */
-  }
-}
 
 export function KanbanBoard() {
   const { t } = useTranslation("kanban");
-  const [view, setViewState] = useState<BoardView>(loadView);
   const [agents, setAgents] = useState<Agent[]>([]);
   const [sessions, setSessions] = useState<Session[]>([]);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState<Record<string, number>>({});
-
-  const setView = useCallback((next: BoardView) => {
-    setViewState(next);
-    persistView(next);
-    setExpanded({}); // reset per-column pagination when switching views
-  }, []);
 
   const loadAgents = useCallback(async () => {
     // Fetch every persisted agent status. Bucketing happens below in
@@ -96,29 +45,13 @@ export function KanbanBoard() {
     setSessions(sessionsRes.sessions);
   }, []);
 
-  const loadSessions = useCallback(async () => {
-    // Each column needs the full set for its status - column-level
-    // pagination ("show more") is handled client-side at COLUMN_PAGE_SIZE.
-    // Wire-limit raised to the server's safety cap (10000); cost
-    // computation on the server scales with returned rows, so each
-    // column's request stays bounded by how many sessions actually have
-    // that status. The "waiting" column is derived client-side from the
-    // active set (see grouping below).
-    const persistedStatuses = SESSION_COLUMNS.filter((s) => s !== "waiting");
-    const results = await Promise.all(
-      persistedStatuses.map((status) => api.sessions.list({ status, limit: 10000 }))
-    );
-    setSessions(results.flatMap((r) => r.sessions));
-  }, []);
-
   const load = useCallback(async () => {
     try {
-      if (view === "agents") await loadAgents();
-      else await loadSessions();
+      await loadAgents();
     } finally {
       setLoading(false);
     }
-  }, [view, loadAgents, loadSessions]);
+  }, [loadAgents]);
 
   useEffect(() => {
     setLoading(true);
@@ -128,24 +61,17 @@ export function KanbanBoard() {
   useEffect(() => {
     let debounceTimer: ReturnType<typeof setTimeout> | null = null;
     return eventBus.subscribe((msg: WSMessage) => {
-      if (view === "agents") {
-        if (
-          msg.type === "agent_created" ||
-          msg.type === "agent_updated" ||
-          msg.type === "session_updated" ||
-          msg.type === "session_created"
-        ) {
-          if (debounceTimer) clearTimeout(debounceTimer);
-          debounceTimer = setTimeout(loadAgents, 300);
-        }
-      } else {
-        if (msg.type === "session_created" || msg.type === "session_updated") {
-          if (debounceTimer) clearTimeout(debounceTimer);
-          debounceTimer = setTimeout(loadSessions, 300);
-        }
+      if (
+        msg.type === "agent_created" ||
+        msg.type === "agent_updated" ||
+        msg.type === "session_updated" ||
+        msg.type === "session_created"
+      ) {
+        if (debounceTimer) clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(loadAgents, 300);
       }
     });
-  }, [view, loadAgents, loadSessions]);
+  }, [loadAgents]);
 
   // Lookup map for AgentCard's session prop - memoized to avoid rebuilding on every render
   const sessionsById = useMemo(() => {
@@ -170,22 +96,7 @@ export function KanbanBoard() {
     {} as Record<EffectiveAgentStatus, Agent[]>
   );
 
-  const groupedSessions = SESSION_COLUMNS.reduce(
-    (acc, status) => {
-      acc[status] =
-        status === "waiting"
-          ? sessions.filter(isSessionAwaitingInput)
-          : sessions.filter((s) => s.status === status && !isSessionAwaitingInput(s));
-      return acc;
-    },
-    {} as Record<EffectiveSessionStatus, Session[]>
-  );
-
-  const total = view === "agents" ? agents.length : sessions.length;
-  const subtitle =
-    view === "agents"
-      ? t("agentCount", { count: agents.length })
-      : t("sessionCount", { count: sessions.length });
+  const total = agents.length;
 
   const wsConnected = useSyncExternalStore(eventBus.onConnection, () => eventBus.connected);
 
@@ -210,11 +121,10 @@ export function KanbanBoard() {
               </span>
             )}
           </div>
-          <p className="text-xs text-gray-500 truncate">{subtitle}</p>
+          <p className="text-xs text-gray-500 truncate">{t("agentCount", { count: agents.length })}</p>
         </div>
       </div>
       <div className="flex items-center gap-2 flex-shrink-0">
-        <ViewToggle view={view} onChange={setView} />
         <button onClick={load} className="btn-ghost flex-shrink-0">
           <RefreshCw className="w-4 h-4" /> {t("common:refresh")}
         </button>
@@ -229,8 +139,8 @@ export function KanbanBoard() {
         <div className="flex-1 flex items-center justify-center overflow-hidden">
           <EmptyState
             icon={Columns3}
-            title={view === "agents" ? t("noAgents") : t("noSessions")}
-            description={view === "agents" ? t("noAgentsDesc") : t("noSessionsDesc")}
+            title={t("noAgents")}
+            description={t("noAgentsDesc")}
             action={
               <button onClick={load} className="btn-primary">
                 <RefreshCw className="w-4 h-4" /> {t("common:refresh")}
@@ -247,120 +157,45 @@ export function KanbanBoard() {
       {Header}
 
       <div className="flex-1 min-h-0 flex gap-4 overflow-x-auto pb-4 px-8">
-        {view === "agents"
-          ? AGENT_COLUMNS.map((status) => {
-              const config = STATUS_CONFIG[status];
-              const items = groupedAgents[status];
-              const limit = expanded[status] || COLUMN_PAGE_SIZE;
-              return (
-                <Column
-                  key={status}
-                  labelKey={config.labelKey}
-                  color={config.color}
-                  dotClass={config.dot}
-                  pulse={status === "working" || status === "waiting"}
-                  count={items?.length ?? 0}
-                  emptyLabel={t("noAgentsInColumn")}
-                  tooltip={t(`tooltip.agent.${status}`)}
-                  remaining={Math.max(0, (items?.length ?? 0) - limit)}
-                  onShowMore={() =>
-                    setExpanded((prev) => ({
-                      ...prev,
-                      [status]: limit + COLUMN_PAGE_SIZE,
-                    }))
-                  }
-                >
-                  {loading && (items?.length ?? 0) === 0
-                    ? Array.from({ length: 3 }).map((_, i) => (
-                        <CardSkeleton key={`sk-${status}-${i}`} />
-                      ))
-                    : items
-                        ?.slice(0, limit)
-                        .map((agent) => (
-                          <AgentCard
-                            key={agent.id}
-                            agent={agent}
-                            session={sessionsById.get(agent.session_id)}
-                          />
-                        ))}
-                </Column>
-              );
-            })
-          : SESSION_COLUMNS.map((status) => {
-              const config = SESSION_STATUS_CONFIG[status];
-              const items = groupedSessions[status];
-              const limit = expanded[status] || COLUMN_PAGE_SIZE;
-              return (
-                <Column
-                  key={status}
-                  labelKey={config.labelKey}
-                  color={config.color}
-                  dotClass={config.dot}
-                  pulse={status === "active" || status === "waiting"}
-                  count={items?.length ?? 0}
-                  emptyLabel={t("noSessionsInColumn")}
-                  tooltip={t(`tooltip.session.${status}`)}
-                  remaining={Math.max(0, (items?.length ?? 0) - limit)}
-                  onShowMore={() =>
-                    setExpanded((prev) => ({
-                      ...prev,
-                      [status]: limit + COLUMN_PAGE_SIZE,
-                    }))
-                  }
-                >
-                  {loading && (items?.length ?? 0) === 0
-                    ? Array.from({ length: 3 }).map((_, i) => (
-                        <CardSkeleton key={`sk-${status}-${i}`} />
-                      ))
-                    : items
-                        ?.slice(0, limit)
-                        .map((session) => <SessionCard key={session.id} session={session} />)}
-                </Column>
-              );
-            })}
+        {AGENT_COLUMNS.map((status) => {
+          const config = STATUS_CONFIG[status];
+          const items = groupedAgents[status];
+          const limit = expanded[status] || COLUMN_PAGE_SIZE;
+          return (
+            <Column
+              key={status}
+              labelKey={config.labelKey}
+              color={config.color}
+              dotClass={config.dot}
+              pulse={status === "working" || status === "waiting"}
+              count={items?.length ?? 0}
+              emptyLabel={t("noAgentsInColumn")}
+              tooltip={t(`tooltip.agent.${status}`)}
+              remaining={Math.max(0, (items?.length ?? 0) - limit)}
+              onShowMore={() =>
+                setExpanded((prev) => ({
+                  ...prev,
+                  [status]: limit + COLUMN_PAGE_SIZE,
+                }))
+              }
+            >
+              {loading && (items?.length ?? 0) === 0
+                ? Array.from({ length: 3 }).map((_, i) => (
+                    <CardSkeleton key={`sk-${status}-${i}`} />
+                  ))
+                : items
+                    ?.slice(0, limit)
+                    .map((agent) => (
+                      <AgentCard
+                        key={agent.id}
+                        agent={agent}
+                        session={sessionsById.get(agent.session_id)}
+                      />
+                    ))}
+            </Column>
+          );
+        })}
       </div>
-    </div>
-  );
-}
-
-interface ViewToggleProps {
-  view: BoardView;
-  onChange: (next: BoardView) => void;
-}
-
-function ViewToggle({ view, onChange }: ViewToggleProps) {
-  const { t } = useTranslation("kanban");
-  const baseClass =
-    "px-3 py-1.5 text-xs font-medium transition-colors first:rounded-l-lg last:rounded-r-lg";
-  const activeClass = "bg-accent/15 text-accent";
-  const inactiveClass = "text-gray-400 hover:text-gray-200 hover:bg-surface-3";
-
-  return (
-    <div
-      role="tablist"
-      aria-label={t("viewToggle.agents") + " / " + t("viewToggle.sessions")}
-      className="inline-flex border border-border rounded-lg overflow-hidden bg-surface-2"
-    >
-      <button
-        type="button"
-        role="tab"
-        aria-selected={view === "agents"}
-        onClick={() => onChange("agents")}
-        className={`${baseClass} ${view === "agents" ? activeClass : inactiveClass}`}
-      >
-        {t("viewToggle.agents")}
-      </button>
-      <button
-        type="button"
-        role="tab"
-        aria-selected={view === "sessions"}
-        onClick={() => onChange("sessions")}
-        className={`${baseClass} border-l border-border ${
-          view === "sessions" ? activeClass : inactiveClass
-        }`}
-      >
-        {t("viewToggle.sessions")}
-      </button>
     </div>
   );
 }

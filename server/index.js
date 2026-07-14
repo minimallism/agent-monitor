@@ -55,7 +55,6 @@ const workflowsRouter = require("./routes/workflows");
 const pushRouter = require("./routes/push");
 const importRouter = require("./routes/import");
 const ccConfigRouter = require("./routes/cc-config");
-const runRouter = require("./routes/run");
 const alertsRouter = require("./routes/alerts");
 const webhooksRouter = require("./routes/webhooks");
 
@@ -81,7 +80,6 @@ function createApp() {
   app.use("/api/push", pushRouter);
   app.use("/api/import", importRouter);
   app.use("/api/cc-config", ccConfigRouter);
-  app.use("/api/run", runRouter);
   app.use("/api/alerts", alertsRouter);
   app.use("/api/webhooks", webhooksRouter);
 
@@ -313,19 +311,6 @@ function startBackgroundServices() {
     startSessionSync(broadcast);
   } catch (err) {
     console.warn("session sync failed to start:", err.message);
-  }
-  // Flip any dashboard_runs rows the previous process left flagged
-  // running/spawning — those handles died with the previous server, so
-  // there's no way to attach to them anymore. Marking them abandoned
-  // keeps the Run history honest and unblocks Resume on conversation rows.
-  try {
-    const { reconcileOrphans } = require("./lib/dashboard-runs");
-    const reconciled = reconcileOrphans();
-    if (reconciled > 0) {
-      console.log(`[runs] reconciled ${reconciled} orphan run(s) → abandoned`);
-    }
-  } catch (err) {
-    console.warn("dashboard-runs reconciliation failed:", err.message);
   }
 }
 
