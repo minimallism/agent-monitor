@@ -1403,7 +1403,7 @@ export function Dashboard() {
                               ? "error"
                               : event.event_type === "PreToolUse"
                                 ? "working"
-                                : "waiting"
+                                : "completed"
                         }
                       />
                       <span className="text-sm text-gray-300 truncate flex-1">

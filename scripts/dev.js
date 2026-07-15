@@ -124,7 +124,7 @@ async function pickPort() {
     {
       stdio: "inherit",
       shell: isWin,
-      env: { ...process.env, DASHBOARD_PORT: String(port) },
+      env: { ...process.env, NODE_ENV: "development", DASHBOARD_PORT: String(port) },
     }
   );
 
