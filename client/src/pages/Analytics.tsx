@@ -9,11 +9,6 @@ import { useTranslation } from "react-i18next";
 import {
   RefreshCw,
   Download,
-  Zap,
-  Bot,
-  FolderOpen,
-  Cpu,
-  DollarSign,
   Clock,
   BarChart3,
 } from "lucide-react";
@@ -21,7 +16,7 @@ import { api } from "../lib/api";
 import { eventBus } from "../lib/eventBus";
 import { fmt, fmtCost, fmtCostFull, formatModelName } from "../lib/format";
 import { Tip } from "../components/Tip";
-import { Skeleton, StatValueSkeleton, TextSkeleton } from "../components/Skeleton";
+import { Skeleton } from "../components/Skeleton";
 import type { Analytics as AnalyticsData, CostResult } from "../lib/types";
 
 // ── Tooltip ───────────────────────────────────────────────────────────────────
@@ -511,52 +506,6 @@ function DonutChart({
   );
 }
 
-// ── StatPill ──────────────────────────────────────────────────────────────────
-
-function StatPill({
-  label,
-  value,
-  raw,
-  sub,
-  icon: Icon,
-  color = "text-accent",
-  loading = false,
-}: {
-  label: string;
-  value: string | number;
-  raw?: string;
-  sub?: string;
-  icon: React.ElementType;
-  color?: string;
-  loading?: boolean;
-}) {
-  return (
-    <div className="card p-5 flex flex-col gap-2">
-      <div className="flex items-center justify-between">
-        <span className="text-xs text-gray-500 uppercase tracking-wider">{label}</span>
-        <Icon className={`w-4 h-4 ${color}`} />
-      </div>
-      {loading ? (
-        <StatValueSkeleton />
-      ) : (
-        <p className={`text-2xl font-bold ${color}`}>
-          {raw ? <Tip raw={raw}>{value}</Tip> : value}
-        </p>
-      )}
-      {loading ? (
-        <TextSkeleton width="w-20" />
-      ) : (
-        sub && <p className="text-[11px] text-gray-500">{sub}</p>
-      )}
-    </div>
-  );
-}
-
-// ── Loading skeleton ───────────────────────────────────────────────────────────
-
-/** A single chart-card placeholder: title bar, chart body, two footer lines.
- *  Uses the shared pulsing <Skeleton> so the whole grid shimmers while data
- *  loads (mirrors the chart-card layout so nothing jumps when data arrives). */
 function ChartCardSkeleton({
   className = "",
   bodyH = "h-32",
@@ -874,59 +823,6 @@ export function Analytics() {
             {t("export")}
           </button>
         </div>
-      </div>
-
-      {/* Key stats */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        <StatPill
-          label={t("totalSessions")}
-          value={data ? fmt(data.overview.total_sessions) : ""}
-          raw={data ? data.overview.total_sessions.toLocaleString() : undefined}
-          sub={data ? `${data.overview.active_sessions} ${t("common:active")}` : undefined}
-          icon={FolderOpen}
-          color="text-blue-400"
-          loading={!data}
-        />
-        <StatPill
-          label={t("totalAgents")}
-          value={data ? fmt(data.overview.total_agents) : ""}
-          raw={data ? data.overview.total_agents.toLocaleString() : undefined}
-          sub={data ? `${data.overview.active_agents} ${t("common:active")}` : undefined}
-          icon={Bot}
-          color="text-emerald-400"
-          loading={!data}
-        />
-        <StatPill
-          label={t("totalTokens")}
-          value={data ? fmt(totalTokens) : ""}
-          raw={data ? totalTokens.toLocaleString() : undefined}
-          sub={data ? `${cacheHitPct}${t("cacheHitRate")}` : undefined}
-          icon={Cpu}
-          color="text-violet-400"
-          loading={!data}
-        />
-        <StatPill
-          label={t("totalCost")}
-          value={costData ? fmtCost(costData.total_cost) : ""}
-          raw={costData ? fmtCostFull(costData.total_cost) : undefined}
-          sub={
-            costData
-              ? `${costData.breakdown.length} ${t("common:cost.model", { count: costData.breakdown.length })}`
-              : undefined
-          }
-          icon={DollarSign}
-          color="text-emerald-400"
-          loading={!costData}
-        />
-        <StatPill
-          label={t("totalEvents")}
-          value={data ? fmt(data.overview.total_events) : ""}
-          raw={data ? data.overview.total_events.toLocaleString() : undefined}
-          sub={data ? `~${data.avg_events_per_session}${t("perSession")}` : undefined}
-          icon={Zap}
-          color="text-yellow-400"
-          loading={!data}
-        />
       </div>
 
       {!data ? (
