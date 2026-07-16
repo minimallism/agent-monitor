@@ -210,6 +210,14 @@ export interface Analytics {
     /** Tokens written to create/extend a prompt cache entry. */
     total_cache_write: number;
   };
+  /** Token totals grouped by model, most total tokens first. */
+  tokens_by_model: Array<{
+    model: string;
+    input_tokens: number;
+    output_tokens: number;
+    cache_read_tokens: number;
+    cache_write_tokens: number;
+  }>;
   /** Tool invocation counts across all events, most-used first. */
   tool_usage: Array<{ tool_name: string; count: number }>;
   /** Event counts bucketed by local calendar day, for the activity chart. */

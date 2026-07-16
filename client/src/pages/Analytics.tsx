@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { api } from "../lib/api";
 import { eventBus } from "../lib/eventBus";
-import { fmt } from "../lib/format";
+import { fmt, formatModelName } from "../lib/format";
 import { Tip } from "../components/Tip";
 import { Skeleton } from "../components/Skeleton";
 import type { Analytics as AnalyticsData } from "../lib/types";
@@ -573,8 +573,15 @@ export function Analytics() {
   const maxEventTypeCount = data?.event_types[0]?.count ?? 1;
   const maxToolCount = (data?.tool_usage ?? [])[0]?.count ?? 1;
 
-  const cacheHitPct =
-    totalTokens > 0 ? Math.round(((data?.tokens.total_cache_read ?? 0) / totalTokens) * 100) : 0;
+  const modelTokenRows = (data?.tokens_by_model ?? [])
+    .sort((a, b) => (b.input_tokens + b.output_tokens) - (a.input_tokens + a.output_tokens))
+    .slice(0, 6);
+  const displayedModelTotal = modelTokenRows.reduce((sum, m) => sum + m.input_tokens + m.output_tokens, 0);
+  const maxModelTotal = modelTokenRows.length > 0
+    ? Math.max(...modelTokenRows.map(m => m.input_tokens + m.output_tokens))
+    : 1;
+
+
 
   const sessionOutcomeSegments = [
     {
@@ -747,55 +754,59 @@ export function Analytics() {
 
             {activeTab === "tokens" && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/* Token bars */}
+                {/* Token Usage by Model */}
                 <div className="card p-5">
-                  <h3 className="text-sm font-medium text-gray-300 mb-5">
-                    {t("tokenDistribution")}
-                  </h3>
-                  <div className="space-y-4">
-                    {[
-                      {
-                        label: t("common:token.input"),
-                        value: data?.tokens.total_input ?? 0,
-                        color: "bg-blue-400",
-                      },
-                      {
-                        label: t("common:token.output"),
-                        value: data?.tokens.total_output ?? 0,
-                        color: "bg-emerald-400",
-                      },
-                      {
-                        label: t("common:token.cacheRead"),
-                        value: data?.tokens.total_cache_read ?? 0,
-                        color: "bg-violet-400",
-                      },
-                      {
-                        label: t("common:token.cacheWrite"),
-                        value: data?.tokens.total_cache_write ?? 0,
-                        color: "bg-yellow-400",
-                      },
-                    ].map(({ label, value, color }) => (
-                      <BarRow
-                        key={label}
-                        label={label}
-                        count={value}
-                        max={Math.max(totalTokens, 1)}
-                        color={color}
-                      />
-                    ))}
-                  </div>
-                  <div className="mt-6 pt-4 border-t border-border space-y-1.5">
-                    <div className="flex justify-between text-xs text-gray-500">
-                      <span>{t("common:token.totalTokens")}</span>
-                      <Tip raw={totalTokens.toLocaleString()}>
-                        <span className="text-gray-300 font-mono">{fmt(totalTokens)}</span>
-                      </Tip>
-                    </div>
-                    <div className="flex justify-between text-xs text-gray-500">
-                      <span>{t("cacheEfficiency")}</span>
-                      <span className="text-violet-400 font-mono">{cacheHitPct}%</span>
-                    </div>
-                  </div>
+                  <h3 className="text-sm font-medium text-gray-300 mb-5">{t("modelTokenUsage")}</h3>
+                  {modelTokenRows.length === 0 ? (
+                    <p className="text-sm text-gray-500">{t("common:noData")}</p>
+                  ) : (
+                    <>
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="text-[11px] text-gray-500 uppercase tracking-wider">Token Usage</span>
+                        <span className="text-[10px] font-mono text-gray-500">
+                          {(displayedModelTotal / 1000).toFixed(1)}K total
+                        </span>
+                      </div>
+                      <div className="space-y-2.5">
+                        {modelTokenRows.map((m, i) => {
+                          const pct = maxModelTotal > 0 ? Math.round(((m.input_tokens + m.output_tokens) / maxModelTotal) * 100) : 0;
+                          const colors = [
+                            "bg-blue-400",
+                            "bg-violet-400",
+                            "bg-emerald-400",
+                            "bg-amber-400",
+                            "bg-pink-400",
+                            "bg-cyan-400",
+                          ];
+                          return (
+                            <Tip
+                              block
+                              key={i}
+                              raw={`${formatModelName(m.model) ?? m.model}\nInput: ${m.input_tokens.toLocaleString()}\nOutput: ${m.output_tokens.toLocaleString()}\nCache Read: ${m.cache_read_tokens.toLocaleString()}\nShare: ${pct.toFixed(1)}%`}
+                            >
+                              <div className="flex items-center gap-3 cursor-default">
+                                <span
+                                  className="text-xs text-gray-400 w-28 truncate flex-shrink-0"
+                                  title={formatModelName(m.model) ?? m.model}
+                                >
+                                  {formatModelName(m.model) ?? m.model}
+                                </span>
+                                <div className="flex-1 bg-surface-3 rounded-full h-2">
+                                  <div
+                                    className={`${colors[i % colors.length]} h-2 rounded-full transition-all duration-700`}
+                                    style={{ width: `${pct}%` }}
+                                  />
+                                </div>
+                                <span className="text-xs text-gray-500 w-12 text-right flex-shrink-0 font-mono">
+                                  {pct.toFixed(1)}%
+                                </span>
+                              </div>
+                            </Tip>
+                          );
+                        })}
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 {/* Token summary */}

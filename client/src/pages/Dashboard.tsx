@@ -37,8 +37,8 @@ import { StatCard } from "../components/StatCard";
 import { AgentCard } from "../components/AgentCard";
 import { EmptyState } from "../components/EmptyState";
 import { Tip } from "../components/Tip";
-import { fmt, fmtCost, formatModelName } from "../lib/format";
-import type { Stats, Agent, WSMessage, WorkflowData, Session, Analytics } from "../lib/types";
+import { fmt, fmtCost } from "../lib/format";
+import type { Stats, Agent, WSMessage, Session, Analytics } from "../lib/types";
 
 interface SystemInfo {
   hooks: { installed: boolean; path: string; hooks: Record<string, boolean> };
@@ -49,13 +49,12 @@ interface SystemInfo {
 
 function SystemHealthTab() {
   const [info, setInfo] = useState<SystemInfo | null>(null);
-  const [workflow, setWorkflow] = useState<WorkflowData | null>(null);
+
 
   const loadData = useCallback(async () => {
     try {
-      const [infoRes, workflowRes] = await Promise.all([api.settings.info(), api.workflows.get()]);
+      const infoRes = await api.settings.info();
       setInfo(infoRes as any);
-      setWorkflow(workflowRes);
     } catch (e) {
       console.error(e);
     }
@@ -67,21 +66,9 @@ function SystemHealthTab() {
     return () => clearInterval(int);
   }, [loadData]);
 
-  const stats = useMemo(() => {
-    if (!info || !workflow) return null;
 
-    const modelStats = (workflow.modelDelegation?.tokensByModel || [])
-      .sort((a, b) => b.input_tokens + b.output_tokens - (a.input_tokens + a.output_tokens))
-      .slice(0, 6);
-    const totalTokens = modelStats.reduce((sum, m) => sum + m.input_tokens + m.output_tokens, 0);
 
-    return {
-      modelStats,
-      totalTokens,
-    };
-  }, [info, workflow]);
-
-  if (!info || !workflow || !stats) {
+  if (!info) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {[1, 2, 3, 4, 5, 6].map((i) => (
@@ -91,75 +78,11 @@ function SystemHealthTab() {
     );
   }
 
-  const {
-    modelStats,
-    totalTokens,
-  } = stats;
-
-
 
   return (
     <div className="space-y-6 animate-fade-in pb-10">
 
-      {/* Row 2: Token Usage */}
-      <div>
-        {/* Model Token Distribution */}
-        <div className="card p-5 flex flex-col gap-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Bot className="w-4 h-4 text-blue-400" />
-              <span className="text-xs text-gray-500 uppercase tracking-wider">Token Usage</span>
-            </div>
-            <span className="text-[10px] font-mono text-gray-500">
-              {(totalTokens / 1000).toFixed(1)}K total
-            </span>
-          </div>
 
-          <div className="space-y-2.5">
-            {modelStats.map((m, i) => {
-              const pct =
-                totalTokens > 0 ? ((m.input_tokens + m.output_tokens) / totalTokens) * 100 : 0;
-              const colors = [
-                "bg-blue-400",
-                "bg-violet-400",
-                "bg-emerald-400",
-                "bg-amber-400",
-                "bg-pink-400",
-                "bg-cyan-400",
-              ];
-              return (
-                <Tip
-                  block
-                  key={i}
-                  raw={`${formatModelName(m.model) ?? m.model}\nInput: ${m.input_tokens.toLocaleString()}\nOutput: ${m.output_tokens.toLocaleString()}\nCache Read: ${m.cache_read_tokens.toLocaleString()}\nShare: ${pct.toFixed(1)}%`}
-                >
-                  <div className="flex items-center gap-3 cursor-default">
-                    <span
-                      className="text-xs text-gray-400 w-28 truncate flex-shrink-0"
-                      title={formatModelName(m.model) ?? m.model}
-                    >
-                      {formatModelName(m.model) ?? m.model}
-                    </span>
-                    <div className="flex-1 bg-surface-3 rounded-full h-2">
-                      <div
-                        className={`${colors[i % colors.length]} h-2 rounded-full transition-all duration-700`}
-                        style={{ width: `${pct}%` }}
-                      />
-                    </div>
-                    <span className="text-xs text-gray-500 w-12 text-right flex-shrink-0 font-mono">
-                      {pct.toFixed(1)}%
-                    </span>
-                  </div>
-                </Tip>
-              );
-            })}
-            {modelStats.length === 0 && (
-              <p className="text-xs text-gray-600 text-center py-4">No model data</p>
-            )}
-          </div>
-        </div>
-
-      </div>
 
 
 

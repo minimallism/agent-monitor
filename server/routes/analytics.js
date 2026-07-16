@@ -28,6 +28,17 @@ router.get("/", (req, res) => {
   const eventTypes = stmts.eventTypeCounts.all();
   const avgEvents = stmts.avgEventsPerSession.get();
 
+  const tokensByModel = db
+    .prepare(
+      `SELECT COALESCE(model, 'unknown') as model,
+        SUM(input_tokens + baseline_input) as input_tokens,
+        SUM(output_tokens + baseline_output) as output_tokens,
+        SUM(cache_read_tokens + baseline_cache_read) as cache_read_tokens,
+        SUM(cache_write_tokens + baseline_cache_write) as cache_write_tokens
+       FROM token_usage GROUP BY model ORDER BY (input_tokens + output_tokens) DESC`
+    )
+    .all();
+
   // Calculate total cost across all sessions
   const pricingRules = stmts.listPricing.all();
   // Join the owning session's start date so each bucket is priced at the rate
@@ -51,6 +62,7 @@ router.get("/", (req, res) => {
       total_cache_read: tokenTotals?.total_cache_read ?? 0,
       total_cache_write: tokenTotals?.total_cache_write ?? 0,
     },
+    tokens_by_model: tokensByModel,
     total_cost: totalCost,
     tool_usage: toolUsage,
     daily_events: dailyEvents,
