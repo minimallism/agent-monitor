@@ -96,9 +96,7 @@ function SystemHealthTab() {
     totalTokens,
   } = stats;
 
-  // Tool flow top tools
-  const topTools = (workflow.toolFlow?.toolCounts || []).slice(0, 8);
-  const maxToolCount = topTools.length > 0 ? (topTools[0]?.count ?? 1) : 1;
+
 
   return (
     <div className="space-y-6 animate-fade-in pb-10">
@@ -163,64 +161,7 @@ function SystemHealthTab() {
 
       </div>
 
-      {/* Row 3: Tool Usage */}
-      <div>
-        {/* Tool Invocations */}
-        <div className="card p-5 flex flex-col gap-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Zap className="w-4 h-4 text-amber-400" />
-              <span className="text-xs text-gray-500 uppercase tracking-wider">Tool Usage</span>
-            </div>
-            <span className="text-[10px] font-mono text-gray-500">top {topTools.length}</span>
-          </div>
 
-          <div className="space-y-2">
-            {topTools.map((tool, i) => {
-              const pct = maxToolCount > 0 ? Math.round((tool.count / maxToolCount) * 100) : 0;
-              const colors = [
-                "bg-amber-400",
-                "bg-blue-400",
-                "bg-emerald-400",
-                "bg-violet-400",
-                "bg-pink-400",
-                "bg-cyan-400",
-                "bg-red-400",
-                "bg-indigo-400",
-              ];
-              return (
-                <Tip
-                  block
-                  key={i}
-                  raw={`${tool.tool_name}: ${tool.count.toLocaleString()} invocations`}
-                >
-                  <div className="flex items-center gap-3 cursor-default">
-                    <span
-                      className="text-xs text-gray-400 w-28 truncate flex-shrink-0"
-                      title={tool.tool_name}
-                    >
-                      {tool.tool_name}
-                    </span>
-                    <div className="flex-1 bg-surface-3 rounded-full h-2">
-                      <div
-                        className={`${colors[i % colors.length]} h-2 rounded-full transition-all duration-500`}
-                        style={{ width: `${pct}%` }}
-                      />
-                    </div>
-                    <span className="text-xs text-gray-500 w-10 text-right flex-shrink-0 font-mono">
-                      {tool.count > 999 ? `${(tool.count / 1000).toFixed(1)}K` : tool.count}
-                    </span>
-                  </div>
-                </Tip>
-              );
-            })}
-            {topTools.length === 0 && (
-              <p className="text-xs text-gray-600 text-center py-6">No tool data yet</p>
-            )}
-          </div>
-        </div>
-
-      </div>
 
       {/* Row 4: Integration Gateway */}
       <div>

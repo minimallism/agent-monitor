@@ -14,10 +14,10 @@ import {
 } from "lucide-react";
 import { api } from "../lib/api";
 import { eventBus } from "../lib/eventBus";
-import { fmt, fmtCost, fmtCostFull, formatModelName } from "../lib/format";
+import { fmt } from "../lib/format";
 import { Tip } from "../components/Tip";
 import { Skeleton } from "../components/Skeleton";
-import type { Analytics as AnalyticsData, CostResult } from "../lib/types";
+import type { Analytics as AnalyticsData } from "../lib/types";
 
 // ── Tooltip ───────────────────────────────────────────────────────────────────
 
@@ -277,87 +277,7 @@ function Sparkline({
   );
 }
 
-function CostTrendLine({
-  data,
-  color = "#10b981",
-}: {
-  data: Array<{ date: string; cost: number }>;
-  color?: string;
-}) {
-  const { show, move, hide, node } = useTooltip();
-  if (data.length === 0) return null;
 
-  const width = 320;
-  const height = 88;
-  const padX = 8;
-  const padY = 8;
-  const min = Math.min(...data.map((d) => d.cost), 0);
-  const max = Math.max(...data.map((d) => d.cost), 0);
-  const span = Math.max(max - min, 0.0001);
-  const step = data.length > 1 ? (width - padX * 2) / (data.length - 1) : 0;
-
-  const points = data.map(({ date, cost }, i) => {
-    const x = padX + i * step;
-    const y = height - padY - ((cost - min) / span) * (height - padY * 2);
-    return { date, cost, x, y };
-  });
-
-  const linePoints = points.map((p) => `${p.x},${p.y}`).join(" ");
-  const firstX = points[0]?.x ?? padX;
-  const lastX = points[points.length - 1]?.x ?? padX;
-  const areaPoints = `${firstX},${height - padY} ${linePoints} ${lastX},${height - padY}`;
-
-  return (
-    <div className="relative">
-      {node}
-      <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-[88px] overflow-visible">
-        <defs>
-          <linearGradient id="daily-cost-fill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={color} stopOpacity={0.35} />
-            <stop offset="100%" stopColor={color} stopOpacity={0.02} />
-          </linearGradient>
-        </defs>
-        <polyline points={areaPoints} fill="url(#daily-cost-fill)" stroke="none" />
-        <polyline
-          points={linePoints}
-          fill="none"
-          stroke={color}
-          strokeWidth={2}
-          strokeLinejoin="round"
-          strokeLinecap="round"
-        />
-        {points.map((point) => (
-          <g key={point.date}>
-            <circle
-              cx={point.x}
-              cy={point.y}
-              r={2.5}
-              fill={color}
-              style={{ pointerEvents: "none" }}
-            />
-            <circle
-              cx={point.x}
-              cy={point.y}
-              r={8}
-              fill="transparent"
-              onMouseEnter={(e) =>
-                show(
-                  e,
-                  <>
-                    <span className="text-gray-400">{point.date}</span>
-                    <span className="ml-2 font-medium">{fmtCostFull(point.cost)}</span>
-                  </>
-                )
-              }
-              onMouseMove={move}
-              onMouseLeave={hide}
-            />
-          </g>
-        ))}
-      </svg>
-    </div>
-  );
-}
 
 // ── Bar row ───────────────────────────────────────────────────────────────────
 
@@ -393,35 +313,7 @@ function BarRow({
   );
 }
 
-function CostBarRow({
-  label,
-  cost,
-  max,
-  color = "bg-emerald-400",
-}: {
-  label: string;
-  cost: number;
-  max: number;
-  color?: string;
-}) {
-  const width = max > 0 ? Math.max(2, Math.round((cost / max) * 100)) : 0;
-  return (
-    <div className="flex items-center gap-3">
-      <span className="text-xs text-gray-400 w-24 truncate flex-shrink-0" title={label}>
-        {label}
-      </span>
-      <div className="flex-1 bg-surface-3 rounded-full h-2">
-        <div
-          className={`${color} h-2 rounded-full transition-all`}
-          style={{ width: `${width}%` }}
-        />
-      </div>
-      <span className="text-xs text-emerald-400 font-mono w-16 text-right flex-shrink-0">
-        <Tip raw={fmtCostFull(cost)}>{fmtCost(cost)}</Tip>
-      </span>
-    </div>
-  );
-}
+
 
 // ── Donut segment via SVG ─────────────────────────────────────────────────────
 
@@ -548,24 +440,19 @@ function AnalyticsChartsSkeleton() {
 // ── Main page ─────────────────────────────────────────────────────────────────
 
 export function Analytics() {
-  const { t, i18n } = useTranslation("analytics");
+  const { t } = useTranslation("analytics");
   const [data, setData] = useState<AnalyticsData | null>(null);
-  const [costData, setCostData] = useState<CostResult | null>(null);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"tokens" | "cost" | "workflow" | "productivity">(
-    "cost"
+  const [activeTab, setActiveTab] = useState<"tokens" | "workflow" | "productivity">(
+    "tokens"
   );
   const wsConnected = useSyncExternalStore(eventBus.onConnection, () => eventBus.connected);
 
   const load = useCallback(async () => {
     try {
-      const [result, cost] = await Promise.all([
-        api.analytics.get(),
-        api.pricing.totalCost().catch(() => null),
-      ]);
+      const result = await api.analytics.get();
       setData(result);
-      setCostData(cost);
       setLastUpdate(new Date());
     } finally {
       setLoading(false);
@@ -660,43 +547,7 @@ export function Analytics() {
   }
   dailySessionsLocal.sort((a, b) => a.date.localeCompare(b.date));
 
-  // Convert daily_costs - server already returns local dates
-  const dailyCostsLocal: Array<{ date: string; cost: number }> = [];
-  const costMap: Record<string, number> = {};
-  for (const d of costData?.daily_costs ?? []) {
-    costMap[d.date] = (costMap[d.date] ?? 0) + d.cost;
-  }
-  for (const [date, cost] of Object.entries(costMap)) {
-    dailyCostsLocal.push({ date, cost });
-  }
-  dailyCostsLocal.sort((a, b) => a.date.localeCompare(b.date));
 
-  const dailyCostLast30 = Array.from({ length: 30 }, (_, i) => {
-    const d = new Date(today);
-    d.setDate(today.getDate() - (29 - i));
-    const dateStr = localDateStr(d);
-    return { date: dateStr, cost: costMap[dateStr] ?? 0 };
-  });
-  const peakCostDay = dailyCostLast30.reduce(
-    (max, curr) => (curr.cost > max.cost ? curr : max),
-    dailyCostLast30[0] ?? { date: "", cost: 0 }
-  );
-  const totalCost30d = dailyCostLast30.reduce((sum, day) => sum + day.cost, 0);
-  const costBreakdown = [...(costData?.breakdown ?? [])]
-    .filter((b) => b.cost > 0)
-    .sort((a, b) => b.cost - a.cost);
-  const locale = i18n.resolvedLanguage ?? i18n.language;
-  const weekdayOrder = [1, 2, 3, 4, 5, 6, 0];
-  const weekdayCosts = weekdayOrder.map((dow) => {
-    const label = new Intl.DateTimeFormat(locale, { weekday: "short" }).format(
-      new Date(Date.UTC(2026, 0, 4 + dow))
-    );
-    const cost = dailyCostLast30
-      .filter((day) => new Date(day.date + "T12:00:00").getDay() === dow)
-      .reduce((sum, day) => sum + day.cost, 0);
-    return { label, cost };
-  });
-  const maxWeekdayCost = Math.max(...weekdayCosts.map((d) => d.cost), 1);
 
   const totalTokens =
     (data?.tokens.total_input ?? 0) +
@@ -718,9 +569,9 @@ export function Analytics() {
     },
   ].filter((s) => s.value > 0);
 
-  const maxToolCount = data?.tool_usage[0]?.count ?? 1;
   const maxAgentTypeCount = data?.agent_types[0]?.count ?? 1;
   const maxEventTypeCount = data?.event_types[0]?.count ?? 1;
+  const maxToolCount = (data?.tool_usage ?? [])[0]?.count ?? 1;
 
   const cacheHitPct =
     totalTokens > 0 ? Math.round(((data?.tokens.total_cache_read ?? 0) / totalTokens) * 100) : 0;
@@ -875,7 +726,6 @@ export function Analytics() {
             <div className="flex gap-1 bg-surface-2 rounded-lg p-1 mb-6 w-fit">
               {(
                 [
-                  { key: "cost" as const, label: t("tabs.costAnalytics") },
                   { key: "tokens" as const, label: t("tabs.tokenAnalytics") },
                   { key: "productivity" as const, label: t("tabs.productivityAnalytics") },
                   { key: "workflow" as const, label: t("tabs.workflowIntelligence") },
@@ -1015,113 +865,7 @@ export function Analytics() {
               </div>
             )}
 
-            {activeTab === "cost" && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/* Daily cost trends */}
-                <div className="card p-5">
-                  <h3 className="text-sm font-medium text-gray-300 mb-1">{t("dailyCostTrends")}</h3>
-                  {dailyCostsLocal.length === 0 ? (
-                    <p className="text-sm text-gray-500">{t("noDailyCostData")}</p>
-                  ) : (
-                    <>
-                      <p className="text-[11px] text-gray-600 mb-4">{t("costPerDay")}</p>
-                      <CostTrendLine data={dailyCostLast30} />
-                      <div className="flex justify-between text-[11px] text-gray-600 mt-2">
-                        <span>{dailyCostLast30[0]?.date?.slice(5)}</span>
-                        <span>{dailyCostLast30[dailyCostLast30.length - 1]?.date?.slice(5)}</span>
-                      </div>
-                      <div className="mt-4 pt-4 border-t border-border space-y-1">
-                        <div className="flex justify-between text-xs">
-                          <span className="text-gray-500">{t("peakCostDay")}</span>
-                          <span className="text-emerald-400 font-mono">
-                            <Tip raw={`${peakCostDay.date} • ${fmtCostFull(peakCostDay.cost)}`}>
-                              {fmtCost(peakCostDay.cost)}
-                            </Tip>
-                          </span>
-                        </div>
-                        <div className="flex justify-between text-xs">
-                          <span className="text-gray-500">{t("totalCost30d")}</span>
-                          <span className="text-emerald-400 font-mono">
-                            <Tip raw={fmtCostFull(totalCost30d)}>{fmtCost(totalCost30d)}</Tip>
-                          </span>
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </div>
 
-                {/* Cost by model */}
-                <div className="card p-5">
-                  <h3 className="text-sm font-medium text-gray-300 mb-5">{t("costByModel")}</h3>
-                  {costBreakdown.length > 0 ? (
-                    <>
-                      <DonutChart
-                        segments={costBreakdown.map((b, i) => ({
-                          label: formatModelName(b.model) ?? b.model,
-                          value: Math.round(b.cost * 100),
-                          color:
-                            ["#8b5cf6", "#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#ec4899"][
-                              i % 6
-                            ] ?? "#6b7280",
-                        }))}
-                        formatTotal={(cents) => fmtCost(cents / 100)}
-                      />
-                      <div className="mt-4 pt-4 border-t border-border space-y-2">
-                        {costBreakdown.map((b) => (
-                          <div key={b.model} className="flex justify-between text-xs">
-                            <span className="text-gray-400 font-mono truncate">
-                              {formatModelName(b.model)}
-                            </span>
-                            <span className="text-emerald-400 font-mono font-medium ml-2">
-                              <Tip raw={fmtCostFull(b.cost)}>{fmtCost(b.cost)}</Tip>
-                            </span>
-                          </div>
-                        ))}
-                        <div className="flex justify-between text-xs pt-2 border-t border-border">
-                          <span className="text-gray-300 font-medium">{t("common:total")}</span>
-                          <span className="text-emerald-400 font-mono font-semibold">
-                            <Tip raw={fmtCostFull(costData?.total_cost ?? 0)}>
-                              {fmtCost(costData?.total_cost ?? 0)}
-                            </Tip>
-                          </span>
-                        </div>
-                      </div>
-                    </>
-                  ) : (
-                    <p className="text-sm text-gray-500">{t("noCostData")}</p>
-                  )}
-                </div>
-
-                {/* Cost by weekday */}
-                <div className="card p-5">
-                  <h3 className="text-sm font-medium text-gray-300 mb-1">{t("costByWeekday")}</h3>
-                  {dailyCostsLocal.length === 0 ? (
-                    <p className="text-sm text-gray-500">{t("noDailyCostData")}</p>
-                  ) : (
-                    <>
-                      <p className="text-[11px] text-gray-600 mb-4">{t("last30Days")}</p>
-                      <div className="space-y-3">
-                        {weekdayCosts.map(({ label, cost }) => (
-                          <CostBarRow
-                            key={label}
-                            label={label}
-                            cost={cost}
-                            max={maxWeekdayCost}
-                            color="bg-cyan-400"
-                          />
-                        ))}
-                      </div>
-                      <div className="mt-4 pt-4 border-t border-border text-xs flex justify-between">
-                        <span className="text-gray-500">{t("common:total")}</span>
-                        <span className="text-cyan-400 font-mono">
-                          <Tip raw={fmtCostFull(totalCost30d)}>{fmtCost(totalCost30d)}</Tip>
-                        </span>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-            )}
 
             {activeTab === "workflow" && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -1202,22 +946,51 @@ export function Analytics() {
 
             {activeTab === "productivity" && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/* Top tools */}
+                {/* Tool Usage */}
                 <div className="card p-5">
                   <h3 className="text-sm font-medium text-gray-300 mb-5">{t("toolUsage")}</h3>
                   {(data?.tool_usage ?? []).length === 0 ? (
                     <p className="text-sm text-gray-500">{t("noToolData")}</p>
                   ) : (
-                    <div className="space-y-3">
-                      {(data?.tool_usage ?? []).slice(0, 12).map(({ tool_name, count }) => (
-                        <BarRow
-                          key={tool_name}
-                          label={tool_name}
-                          count={count}
-                          max={maxToolCount}
-                          color="bg-yellow-400"
-                        />
-                      ))}
+                    <div className="space-y-2">
+                      {(data?.tool_usage ?? []).slice(0, 10).map((tool, i) => {
+                        const pct = maxToolCount > 0 ? Math.round((tool.count / maxToolCount) * 100) : 0;
+                        const colors = [
+                          "bg-amber-400",
+                          "bg-blue-400",
+                          "bg-emerald-400",
+                          "bg-violet-400",
+                          "bg-pink-400",
+                          "bg-cyan-400",
+                          "bg-red-400",
+                          "bg-indigo-400",
+                        ];
+                        return (
+                          <Tip
+                            block
+                            key={i}
+                            raw={`${tool.tool_name}: ${tool.count.toLocaleString()} invocations`}
+                          >
+                            <div className="flex items-center gap-3 cursor-default">
+                              <span
+                                className="text-xs text-gray-400 w-28 truncate flex-shrink-0"
+                                title={tool.tool_name}
+                              >
+                                {tool.tool_name}
+                              </span>
+                              <div className="flex-1 bg-surface-3 rounded-full h-2">
+                                <div
+                                  className={`${colors[i % colors.length]} h-2 rounded-full transition-all duration-500`}
+                                  style={{ width: `${pct}%` }}
+                                />
+                              </div>
+                              <span className="text-xs text-gray-500 w-10 text-right flex-shrink-0 font-mono">
+                                {tool.count > 999 ? `${(tool.count / 1000).toFixed(1)}K` : tool.count}
+                              </span>
+                            </div>
+                          </Tip>
+                        );
+                      })}
                     </div>
                   )}
                 </div>

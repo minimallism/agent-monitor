@@ -14,7 +14,6 @@
   "eventCountLabel_other": "{{count}} events",
   "tabs": {
     "tokenAnalytics": "Token Analytics",
-    "costAnalytics": "Cost Analytics",
     "workflowIntelligence": "Workflow Intelligence",
     "productivityAnalytics": "Productivity Analytics"
   },
@@ -28,23 +27,15 @@
   "cacheEfficiency": "Cache efficiency",
   "tokenBreakdown": "Token Breakdown",
   "tokenInfo": "Token data captured from Claude Code Stop events.",
-  "costByModel": "Cost by Model",
-  "dailyCostTrends": "Daily Cost Trends",
-  "costByWeekday": "Cost by Weekday",
-  "costPerDay": "Cost per day",
-  "peakCostDay": "Peak cost day",
-  "totalCost30d": "Total cost (30d)",
-  "noDailyCostData": "No daily cost data yet.",
-  "noCostData": "No cost data yet.",
   "subagentTypes": "Subagent Types",
   "noSubagentData": "No subagent data yet.",
   "agentStatus": "Agent Status",
   "totalAgentsLabel": "Total agents",
   "eventTypes": "Event Types",
   "noEventData": "No event data yet.",
+  "sessionOutcomes": "Session Outcomes",
   "toolUsage": "Tool Usage",
   "noToolData": "No tool usage data yet.",
-  "sessionOutcomes": "Session Outcomes",
   "totalSessionsLabel": "Total sessions",
   "dailySessionTrends": "Daily Session Trends",
   "noSessionTrendData": "No session trend data yet.",
@@ -52,3 +43,4 @@
   "less": "Less",
   "more": "More"
 }
+

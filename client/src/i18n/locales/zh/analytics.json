@@ -14,7 +14,6 @@
   "eventCountLabel_other": "{{count}} 个事件",
   "tabs": {
     "tokenAnalytics": "Token 分析",
-    "costAnalytics": "费用分析",
     "workflowIntelligence": "工作流智能",
     "productivityAnalytics": "生产力分析"
   },
@@ -28,23 +27,15 @@
   "cacheEfficiency": "缓存效率",
   "tokenBreakdown": "Token 细分",
   "tokenInfo": "Token 数据从 Claude Code Stop 事件中捕获。",
-  "costByModel": "按模型的费用",
-  "dailyCostTrends": "每日费用趋势",
-  "costByWeekday": "按星期的费用",
-  "costPerDay": "每日费用",
-  "peakCostDay": "费用峰值日",
-  "totalCost30d": "总费用（30天）",
-  "noDailyCostData": "暂无每日费用数据。",
-  "noCostData": "暂无费用数据。",
   "subagentTypes": "Subagent类型",
   "noSubagentData": "暂无Subagent数据。",
   "agentStatus": "Agent状态",
   "totalAgentsLabel": "总Agent数",
   "eventTypes": "事件类型",
   "noEventData": "暂无事件数据。",
+  "sessionOutcomes": "会话结果",
   "toolUsage": "工具使用",
   "noToolData": "暂无工具使用数据。",
-  "sessionOutcomes": "会话结果",
   "totalSessionsLabel": "总会话数",
   "dailySessionTrends": "每日会话趋势",
   "noSessionTrendData": "暂无会话趋势数据。",
@@ -52,3 +43,4 @@
   "less": "少",
   "more": "多"
 }
+
