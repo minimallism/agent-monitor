@@ -9,6 +9,224 @@
   "allSessions": "所有会话",
   "activeOnly": "仅活跃",
   "completed": "已完成",
+  "orchestration": {
+    "title": "Agent 编排 DAG",
+    "subtitle": "会话扩散、Subagent 类型、压缩与结果",
+    "sessions": "会话",
+    "mainAgent": "主 Agent",
+    "otherTypes": "+{{count}} 种其他类型",
+    "compactions": "压缩次数",
+    "layers": {
+      "origin": "源",
+      "mainAgent": "主 Agent",
+      "subagentTypes": "Subagent 类型",
+      "compactions": "压缩",
+      "outcomes": "结果"
+    },
+    "noData": "暂无编排数据",
+    "noDataDesc": "当 Claude Code 开始在会话中生成 Subagent 后，编排数据将在此显示。",
+    "ariaLabel": "Agent 编排 DAG，展示会话扩散、Subagent 类型、压缩与结果",
+    "legend": "图例",
+    "edgeWeight": "边粗 = 流转频率",
+    "count": "次数",
+    "tooltip": {
+      "tipClickToFilter": "点击可按此节点筛选页面其余内容",
+      "layer": {
+        "session": "会话层",
+        "main": "主 Agent 层",
+        "subagent": "Subagent 层",
+        "subagentOverflow": "溢出（其他 Subagent 类型）",
+        "nested": "嵌套层",
+        "outcome": "结果层"
+      },
+      "desc": {
+        "session": "范围内的所有 Claude Code 会话。每个会话启动一个主 Agent，可生成 Subagent。",
+        "main": "负责协调会话的顶层 Agent，可委派任务给 Subagent 并管理上下文。",
+        "subagent": "由主 Agent 生成以执行特定任务的 Subagent。",
+        "subagentOverflow": "超出顶部显示节点数量的额外 Subagent 类型。",
+        "subagentClean": "所有运行均无错误完成。",
+        "subagentAllError": "所有运行均以错误结束。",
+        "subagentSomeErrors": "{{count}} 次运行以错误结束。",
+        "nested": "会话上下文窗口填满时触发的上下文压缩事件。",
+        "outcomeCompleted": "成功完成的会话。",
+        "outcomeError": "因错误终止的会话。",
+        "outcomeAbandoned": "在完成前被放弃的会话。",
+        "outcomeFallback": "具有此结果的会话。"
+      }
+    }
+  },
+  "toolFlow": {
+    "title": "工具执行流",
+    "subtitle": "跨会话的连续工具调用流转",
+    "noData": "暂无工具执行数据",
+    "tooltip": {
+      "node": "工具用量",
+      "totalCalls": "总调用次数",
+      "shareOfAll": "占比",
+      "nodeDescFmt": "{{name}} 占所有会话中全部工具调用的此比例。",
+      "link": "工具流转",
+      "transitionsObserved": "观察到的流转次数",
+      "shareOfSourceFmt": "占 {{source}} 的比例",
+      "shareOfTargetFmt": "占 {{target}} 的比例",
+      "linkDescFmt": "{{source}} 后紧跟 {{target}} 出现了这么多次。"
+    }
+  },
+  "pipeline": {
+    "title": "Agent 协作网络",
+    "subtitle": "Agent 类型间的共现与委派关系",
+    "spawned": "生成次数",
+    "spawns": " 次",
+    "inSessions": "涉及会话数",
+    "noData": "暂无协作数据",
+    "noDataDesc": "当在会话中观察到多种 Agent 类型后，协作数据将在此显示。",
+    "ariaLabel": "Agent 协作网络，展示 Agent 类型间的共现与委派关系",
+    "legend": "节点",
+    "legendDesc": "箭头 = 顺序配对",
+    "tooltip": {
+      "agentType": "Agent 类型",
+      "shareOfAllSpawns": "生成占比",
+      "health": {
+        "perfect": "近乎完美的成功率",
+        "healthy": "健康的成功率",
+        "shaky": "不稳定的成功率",
+        "failing": "失败率偏高"
+      },
+      "nodeDescFmt": "{{id}} 已在 {{sessions}} 个会话中被生成 {{total}} 次，成功率为 {{rate}}%（{{health}}）。",
+      "edge": "连接",
+      "sequentialPairs": "顺序配对次数",
+      "shareOfSrcFmt": "占 {{source}} 的比例",
+      "shareOfTgtFmt": "占 {{target}} 的比例",
+      "totalSpawnsFmt": "{{id}} 的总生成次数",
+      "edgeDescFmt": "{{source}} 后紧跟 {{target}} 共出现了 {{count}} 次顺序配对。"
+    }
+  },
+  "effectiveness": {
+    "title": "Subagent 效能",
+    "subtitle": "各 Agent 类型的成功率、时长与活跃度",
+    "success": "成功率",
+    "successRateAria": "成功率：{{rate}}%",
+    "weeklyActivityAria": "每周活动迷你图",
+    "sessionCount": "{{count}} 个会话",
+    "sessions": "会话数",
+    "avgDuration": "平均时长",
+    "weeklyActivity": "本周活动",
+    "noData": "暂无 Subagent 数据"
+  },
+  "patterns": {
+    "title": "工作流模式",
+    "subtitle": "高频出现的 Agent 编排序列",
+    "label": "常见模式",
+    "noData": "未找到工作流模式",
+    "noDataDesc": "当处理了足够多包含 Subagent 活动的会话后，模式将在此显示。",
+    "solo": "独立会话（无 Subagent）",
+    "detail": {
+      "clickHint": "点击查看详情",
+      "stepsHeading": "完整步骤序列",
+      "stepsCount": "{{count}} 步",
+      "uniqueAgents": "不同 Agent 数",
+      "occurrences": "出现次数",
+      "shareOfSessions": "会话占比",
+      "narrativeHeading": "含义解读",
+      "suggestionHeading": "建议",
+      "narrative": {
+        "soloFmt": "独立 Agent：{{first}} 独自完成整个会话。",
+        "twoStepFmt": "两步管道：{{first}} → {{last}}。",
+        "shortFmt": "{{count}} 步管道，由 {{first}} 开始至 {{last}} 结束。",
+        "longFmt": "长管道（{{count}} 步），由 {{first}} 开始至 {{last}} 结束。",
+        "loopHintFmt": " 包含围绕 {{agent}} 的循环。",
+        "dominant": " 此模式占主导地位。",
+        "common": " 此模式较为常见。",
+        "regular": " 此模式定期出现。",
+        "niche": " 此模式较为罕见。"
+      },
+      "suggestion": {
+        "loop": "循环可能是有意为之；若频繁出现，建议将其形式化为命名工作流。",
+        "solo": "独立会话可考虑委派给 Subagent 处理复杂任务。",
+        "shortChain": "此短管道适合形式化为正式工作流。",
+        "mediumChain": "考虑是否所有步骤均有必要，或某些步骤可以合并。",
+        "longChain": "长管道存在上下文压力风险，建议拆分为多个会话或工作流。"
+      }
+    }
+  },
+  "modelDelegation": {
+    "title": "模型委派流",
+    "subtitle": "主模型到 Subagent 模型的搭配关系",
+    "mainModels": "主模型",
+    "subagentModels": "Subagent 模型",
+    "agentsCount": "{{count}} 个 Agent",
+    "tokensCount": "{{tokens}} token",
+    "sessionsCount": "{{count}} 个会话",
+    "noData": "暂无模型委派数据",
+    "ariaLabel": "模型委派流，展示主模型到 Subagent 模型的搭配关系",
+    "tooltip": {
+      "mainModel": "主模型",
+      "subagentModel": "Subagent 模型",
+      "agentRuns": "Agent 运行次数",
+      "shareOfAll": "占比",
+      "sessionsOnModel": "使用该模型的会话数",
+      "totalTokens": "总 Token 数",
+      "family": {
+        "opus": "Opus 级模型：能力最强，成本最高，通常用于复杂推理。",
+        "sonnet": "Sonnet 级模型：在较强推理能力与较低延迟/成本间取得平衡。",
+        "haiku": "Haiku 级模型：快速且经济高效，适合常规 Subagent 任务。",
+        "other": "第三方或自定义模型。"
+      },
+      "lines": {
+        "main": "通过委派连接到 Subagent 模型。",
+        "sub": "接收来自主模型委派的任务。"
+      }
+    }
+  },
+  "errorPropagation": {
+    "title": "错误传播图",
+    "subtitle": "按深度、Agent 类型与类别的错误聚集",
+    "depthLabels": {
+      "sessionMain": "会话 / 主 Agent",
+      "directSubagent": "直接 Subagent",
+      "nested": "嵌套",
+      "deep": "深层"
+    },
+    "noErrors": "未检测到错误",
+    "allSuccess": "所有会话均无错误完成。",
+    "sessionsErrorSummary": "{{totalSessions}} 个会话中有 {{errorSessions}} 个出现错误",
+    "agentErrors": " 个 Agent 错误",
+    "sessionErrorsOnly": "仅限会话级错误",
+    "errorsByDepth": "按深度统计的错误"
+  },
+  "concurrency": {
+    "title": "并发时间线",
+    "subtitle": "Agent 类型在会话时间线中的活跃时段",
+    "noData": "暂无并发数据",
+    "noDataDesc": "当处理了包含 Subagent 活动的会话后，并发数据将在此显示。",
+    "sessions": "会话数",
+    "max": " 最大值",
+    "timing": "时序",
+    "tooltip": {
+      "lane": "Agent 时序",
+      "sessionsWith": "包含此 Agent 的会话数",
+      "avgStart": "平均开始",
+      "avgEnd": "平均结束",
+      "barHint": "条形宽度与会话数成正比。",
+      "timing": {
+        "wholeSession": "此 Agent 在整个会话期间均处于活跃状态。",
+        "frontLoadedFmt": "前段加载：集中在会话的前 {{end}}%。",
+        "backLoadedFmt": "后段加载：集中在会话的后 {{start}}%。",
+        "tightFmt": "紧凑窗口：在会话的 {{start}}% 至 {{end}}% 之间活跃。",
+        "midSessionFmt": "中段活跃：在会话的 {{start}}% 至 {{end}}% 之间活跃。"
+      }
+    }
+  },
+  "complexity": {
+    "title": "会话复杂度散点",
+    "subtitle": "每会话的时长、Agent 数、Token 与状态",
+    "tooltip": {
+      "duration": "时长：",
+      "agents": "Agent 数：",
+      "subagents": "Subagent 数：",
+      "tokens": "Token 数：",
+      "model": "模型："
+    }
+  },
   "runs": {
     "title": "动态工作流",
     "subtitle": "由 Workflow 工具派生的 Agent 群组，依据磁盘上的运行日志重建",

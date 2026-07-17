@@ -385,29 +385,6 @@ export interface SessionStats {
 
 // ── Workflow types ──
 
-/** Headline metrics card data for the Workflows page - aggregated across
- *  sessions matching the optional status filter. From `getWorkflowStats` in
- *  server/routes/workflows.js. */
-export interface WorkflowStats {
-  totalSessions: number;
-  totalAgents: number;
-  totalSubagents: number;
-  /** Mean subagents spawned per session. */
-  avgSubagents: number;
-  /** Percent of finished (completed+error) agents that completed successfully. */
-  successRate: number;
-  /** Mean maximum parent→child agent nesting depth per session. */
-  avgDepth: number;
-  /** Mean session duration in seconds, across ended sessions. */
-  avgDurationSec: number;
-  totalCompactions: number;
-  /** Mean compactions per session. */
-  avgCompactions: number;
-  /** The single most common two-tool sequence across all sessions, or null
-   *  if no session has at least two tool calls. */
-  topFlow: { source: string; target: string; count: number } | null;
-}
-
 /** One directed delegation edge in the orchestration graph: `source` subagent
  *  type (or "main") spawned `target` subagent type `weight` times. */
 export interface OrchestrationEdge {
@@ -573,7 +550,6 @@ export interface CompactionImpactData {
  *  workflow-intelligence panels shown on the Workflows page, all computed
  *  against the same optional session-status filter. */
 export interface WorkflowData {
-  stats: WorkflowStats;
   orchestration: OrchestrationData;
   toolFlow: ToolFlowData;
   effectiveness: SubagentEffectivenessItem[];

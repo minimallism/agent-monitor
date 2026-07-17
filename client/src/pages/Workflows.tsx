@@ -18,7 +18,6 @@ import { api } from "../lib/api";
 import { eventBus } from "../lib/eventBus";
 import type { WorkflowData, WSMessage } from "../lib/types";
 
-import { WorkflowStats } from "../components/workflows/WorkflowStats";
 import { OrchestrationDAG } from "../components/workflows/OrchestrationDAG";
 import { ToolExecutionFlow } from "../components/workflows/ToolExecutionFlow";
 import { AgentCollaborationNetwork } from "../components/workflows/AgentCollaborationNetwork";
@@ -144,9 +143,6 @@ export function Workflows() {
         onExport={handleExport}
         lastUpdated={lastUpdated}
       />
-
-      {/* Stats Row */}
-      <WorkflowStats stats={data.stats} />
 
       {/* Workflow-tool runs (issue #167) - fleets ingested from on-disk journals */}
       <div className="card p-4 space-y-3">

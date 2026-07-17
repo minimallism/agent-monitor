@@ -21,7 +21,6 @@ router.get("/", (req, res) => {
     // Optional status filter: "active", "completed", or omit for all
     const statusFilter = req.query.status || null;
     const data = {
-      stats: getWorkflowStats(statusFilter),
       orchestration: getOrchestrationData(statusFilter),
       toolFlow: getToolFlowData(statusFilter),
       effectiveness: getSubagentEffectiveness(statusFilter),
@@ -61,94 +60,6 @@ function sessionIdFilter(statusFilter) {
   return {
     clause: " AND session_id IN (SELECT id FROM sessions WHERE status = ?)",
     params: [statusFilter],
-  };
-}
-
-function getWorkflowStats(statusFilter) {
-  const sf = sessionIdFilter(statusFilter);
-  const ss = statusClause(statusFilter);
-  const totalSessions = db
-    .prepare(`SELECT COUNT(*) as c FROM sessions s WHERE 1=1${ss.clause}`)
-    .get(...ss.params).c;
-  const totalAgents = db
-    .prepare(`SELECT COUNT(*) as c FROM agents WHERE 1=1${sf.clause}`)
-    .get(...sf.params).c;
-  const totalSubagents = db
-    .prepare(`SELECT COUNT(*) as c FROM agents WHERE type = 'subagent'${sf.clause}`)
-    .get(...sf.params).c;
-
-  // Average subagents per session
-  const avgSubagents = totalSessions > 0 ? +(totalSubagents / totalSessions).toFixed(1) : 0;
-
-  // Agent success rate
-  const completedAgents = db
-    .prepare(`SELECT COUNT(*) as c FROM agents WHERE status = 'completed'${sf.clause}`)
-    .get(...sf.params).c;
-  const errorAgents = db
-    .prepare(`SELECT COUNT(*) as c FROM agents WHERE status = 'error'${sf.clause}`)
-    .get(...sf.params).c;
-  const finishedAgents = completedAgents + errorAgents;
-  const successRate =
-    finishedAgents > 0 ? +((completedAgents / finishedAgents) * 100).toFixed(1) : 100;
-
-  // Average max depth per session
-  const depthRows = db
-    .prepare(
-      `WITH RECURSIVE agent_depth AS (
-        SELECT id, session_id, parent_agent_id, 0 as depth FROM agents WHERE parent_agent_id IS NULL
-        UNION ALL
-        SELECT a.id, a.session_id, a.parent_agent_id, ad.depth + 1
-        FROM agents a JOIN agent_depth ad ON a.parent_agent_id = ad.id
-      )
-      SELECT session_id, MAX(depth) as max_depth FROM agent_depth
-      WHERE 1=1${sf.clause}
-      GROUP BY session_id`
-    )
-    .all(...sf.params);
-  const avgDepth =
-    depthRows.length > 0
-      ? +(depthRows.reduce((s, r) => s + r.max_depth, 0) / depthRows.length).toFixed(1)
-      : 0;
-
-  // Average session duration
-  const sessions = db
-    .prepare(`SELECT started_at, ended_at FROM sessions s WHERE ended_at IS NOT NULL${ss.clause}`)
-    .all(...ss.params);
-  const totalDuration = sessions.reduce((s, sess) => s + durationSec(sess), 0);
-  const avgDurationSec = sessions.length > 0 ? Math.round(totalDuration / sessions.length) : 0;
-
-  // Total compactions
-  const totalCompactions = db
-    .prepare(`SELECT COUNT(*) as c FROM agents WHERE subagent_type = 'compaction'${sf.clause}`)
-    .get(...sf.params).c;
-  const avgCompactions = totalSessions > 0 ? +(totalCompactions / totalSessions).toFixed(1) : 0;
-
-  // Most common tool flow (top 2-tool sequence)
-  const topFlow = db
-    .prepare(
-      `SELECT e1.tool_name as source, e2.tool_name as target, COUNT(*) as c
-       FROM events e1
-       JOIN events e2 ON e2.session_id = e1.session_id AND e2.id = (
-         SELECT MIN(e3.id) FROM events e3
-         WHERE e3.session_id = e1.session_id AND e3.id > e1.id AND e3.tool_name IS NOT NULL
-       )
-       WHERE e1.tool_name IS NOT NULL AND e2.tool_name IS NOT NULL${sf.clause.replace("session_id", "e1.session_id")}
-       GROUP BY e1.tool_name, e2.tool_name
-       ORDER BY c DESC LIMIT 1`
-    )
-    .get(...sf.params);
-
-  return {
-    totalSessions,
-    totalAgents,
-    totalSubagents,
-    avgSubagents,
-    successRate,
-    avgDepth,
-    avgDurationSec,
-    totalCompactions,
-    avgCompactions,
-    topFlow: topFlow ? { source: topFlow.source, target: topFlow.target, count: topFlow.c } : null,
   };
 }
 

@@ -9,6 +9,224 @@
   "allSessions": "All Sessions",
   "activeOnly": "Active Only",
   "completed": "Completed",
+  "orchestration": {
+    "title": "Agent Orchestration DAG",
+    "subtitle": "Session spawning, subagent types, compactions, and outcomes",
+    "sessions": "Sessions",
+    "mainAgent": "Main Agent",
+    "otherTypes": "+{{count}} other types",
+    "compactions": "Compactions",
+    "layers": {
+      "origin": "Origin",
+      "mainAgent": "Main Agent",
+      "subagentTypes": "Subagent Types",
+      "compactions": "Compactions",
+      "outcomes": "Outcomes"
+    },
+    "noData": "No orchestration data yet",
+    "noDataDesc": "Orchestration data appears once Claude Code starts spawning subagents in your sessions.",
+    "ariaLabel": "Agent orchestration DAG showing session spawning, subagent types, compactions, and outcomes",
+    "legend": "Legend",
+    "edgeWeight": "Edge weight = transition frequency",
+    "count": "Count",
+    "tooltip": {
+      "tipClickToFilter": "Click to filter the rest of the page by this node",
+      "layer": {
+        "session": "Session Layer",
+        "main": "Main Agent Layer",
+        "subagent": "Subagent Layer",
+        "subagentOverflow": "Overflow (other subagent types)",
+        "nested": "Nested Layer",
+        "outcome": "Outcome Layer"
+      },
+      "desc": {
+        "session": "All Claude Code sessions in scope. Each session starts a main agent that may spawn subagents.",
+        "main": "The top-level agent that orchestrates the session. It can delegate tasks to subagents and manage context.",
+        "subagent": "A subagent spawned by the main agent to perform a specific task. ",
+        "subagentOverflow": "Additional subagent types beyond the top displayed nodes. ",
+        "subagentClean": "All runs completed without errors.",
+        "subagentAllError": "All runs ended with errors.",
+        "subagentSomeErrors": "{{count}} runs ended with errors.",
+        "nested": "Context compression events triggered when the session context window fills up.",
+        "outcomeCompleted": "Sessions that completed successfully.",
+        "outcomeError": "Sessions that terminated with an error.",
+        "outcomeAbandoned": "Sessions that were abandoned before completion.",
+        "outcomeFallback": "Sessions with this outcome."
+      }
+    }
+  },
+  "toolFlow": {
+    "title": "Tool Execution Flow",
+    "subtitle": "Consecutive tool-call transitions across sessions",
+    "noData": "No tool execution data yet",
+    "tooltip": {
+      "node": "Tool Usage",
+      "totalCalls": "Total calls",
+      "shareOfAll": "Share of all",
+      "nodeDescFmt": "{{name}} accounts for this share of all tool calls across every session.",
+      "link": "Tool Transition",
+      "transitionsObserved": "Transitions observed",
+      "shareOfSourceFmt": "Share of {{source}}",
+      "shareOfTargetFmt": "Share of {{target}}",
+      "linkDescFmt": "{{source}} was followed by {{target}} this many times across all sessions."
+    }
+  },
+  "pipeline": {
+    "title": "Agent Collaboration Network",
+    "subtitle": "Co-occurrence and delegation between agent types",
+    "spawned": "Spawned",
+    "spawns": " times",
+    "inSessions": "In sessions",
+    "noData": "No collaboration data yet",
+    "noDataDesc": "Collaboration data appears once multiple agent types are observed in your sessions.",
+    "ariaLabel": "Agent collaboration network showing co-occurrence and delegation between agent types",
+    "legend": "Nodes",
+    "legendDesc": "Arrows = sequential pairing",
+    "tooltip": {
+      "agentType": "Agent Type",
+      "shareOfAllSpawns": "Share of spawns",
+      "health": {
+        "perfect": "near-perfect success rate",
+        "healthy": "healthy success rate",
+        "shaky": "shaky success rate",
+        "failing": "failing success rate"
+      },
+      "nodeDescFmt": "{{id}} has been spawned {{total}} times across {{sessions}} sessions with a {{rate}}% success rate ({{health}}).",
+      "edge": "Connection",
+      "sequentialPairs": "Sequential pairs",
+      "shareOfSrcFmt": "Share of {{source}}",
+      "shareOfTgtFmt": "Share of {{target}}",
+      "totalSpawnsFmt": "Total spawns of {{id}}",
+      "edgeDescFmt": "{{source}} was followed by {{target}} in {{count}} sequential pairs."
+    }
+  },
+  "effectiveness": {
+    "title": "Subagent Effectiveness",
+    "subtitle": "Success rate, duration, and activity per agent type",
+    "success": "Success rate",
+    "successRateAria": "Success rate: {{rate}}%",
+    "weeklyActivityAria": "Weekly activity sparkline",
+    "sessionCount": "{{count}} sessions",
+    "sessions": "Sessions",
+    "avgDuration": "Avg duration",
+    "weeklyActivity": "Weekly activity",
+    "noData": "No subagent data yet"
+  },
+  "patterns": {
+    "title": "Workflow Patterns",
+    "subtitle": "Recurring agent-orchestration sequences",
+    "label": "Common Patterns",
+    "noData": "No workflow patterns found",
+    "noDataDesc": "Patterns appear once enough sessions with subagent activity have been processed.",
+    "solo": "Solo Session (no subagents)",
+    "detail": {
+      "clickHint": "Click for details",
+      "stepsHeading": "Full step sequence",
+      "stepsCount": "{{count}} steps",
+      "uniqueAgents": "Unique agents",
+      "occurrences": "Occurrences",
+      "shareOfSessions": "Share of sessions",
+      "narrativeHeading": "What this means",
+      "suggestionHeading": "Suggestion",
+      "narrative": {
+        "soloFmt": "Solo agent: {{first}} handles the entire session alone.",
+        "twoStepFmt": "Two-step pipeline: {{first}} → {{last}}.",
+        "shortFmt": "{{count}}-step pipeline starting with {{first}} and ending with {{last}}.",
+        "longFmt": "Long {{count}}-step pipeline starting with {{first}} and ending with {{last}}.",
+        "loopHintFmt": " Contains a loop around {{agent}}.",
+        "dominant": " This pattern is dominant.",
+        "common": " This pattern is common.",
+        "regular": " This pattern occurs regularly.",
+        "niche": " This pattern is niche."
+      },
+      "suggestion": {
+        "loop": "The loop may be intentional; consider codifying it as a named workflow if it appears frequently.",
+        "solo": "Solo sessions may benefit from delegation to subagents for complex tasks.",
+        "shortChain": "This short pipeline could be a good candidate for formalization.",
+        "mediumChain": "Consider whether all steps are necessary or if some could be consolidated.",
+        "longChain": "Long pipelines risk context pressure. Consider splitting into separate sessions or workflows."
+      }
+    }
+  },
+  "modelDelegation": {
+    "title": "Model Delegation Flow",
+    "subtitle": "Main model to subagent model pairings",
+    "mainModels": "Main Models",
+    "subagentModels": "Subagent Models",
+    "agentsCount": "{{count}} agents",
+    "tokensCount": "{{tokens}} tokens",
+    "sessionsCount": "{{count}} sessions",
+    "noData": "No model delegation data yet",
+    "ariaLabel": "Model delegation flow showing main to subagent model pairings",
+    "tooltip": {
+      "mainModel": "Main Model",
+      "subagentModel": "Subagent Model",
+      "agentRuns": "Agent runs",
+      "shareOfAll": "Share of all",
+      "sessionsOnModel": "Sessions on model",
+      "totalTokens": "Total tokens",
+      "family": {
+        "opus": "Opus-class model: highest capability, highest cost. Typically used for complex reasoning.",
+        "sonnet": "Sonnet-class model: strong reasoning balanced with lower latency and cost.",
+        "haiku": "Haiku-class model: fast and cost-effective, ideal for routine subagent tasks.",
+        "other": "Third-party or custom model."
+      },
+      "lines": {
+        "main": "Connects to subagent models via delegation.",
+        "sub": "Receives tasks delegated from the main model."
+      }
+    }
+  },
+  "errorPropagation": {
+    "title": "Error Propagation Map",
+    "subtitle": "Error clustering by depth, agent type, and category",
+    "depthLabels": {
+      "sessionMain": "Session / Main",
+      "directSubagent": "Direct Subagent",
+      "nested": "Nested",
+      "deep": "Deep"
+    },
+    "noErrors": "No errors detected",
+    "allSuccess": "All sessions completed without errors.",
+    "sessionsErrorSummary": "{{errorSessions}} of {{totalSessions}} sessions had errors",
+    "agentErrors": " agent errors",
+    "sessionErrorsOnly": "Session-level errors only",
+    "errorsByDepth": "Errors by depth"
+  },
+  "concurrency": {
+    "title": "Concurrency Timeline",
+    "subtitle": "Agent type activity timing relative to session timeline",
+    "noData": "No concurrency data yet",
+    "noDataDesc": "Concurrency data appears once sessions with subagent activity are processed.",
+    "sessions": "Sessions",
+    "max": " max",
+    "timing": "Timing",
+    "tooltip": {
+      "lane": "Agent Timing",
+      "sessionsWith": "Sessions with this agent",
+      "avgStart": "Avg start",
+      "avgEnd": "Avg end",
+      "barHint": "Bar width is proportional to session count.",
+      "timing": {
+        "wholeSession": "This agent is active throughout the entire session.",
+        "frontLoadedFmt": "Front-loaded: concentrated in the first {{end}}% of the session.",
+        "backLoadedFmt": "Back-loaded: concentrated in the last {{start}}% of the session.",
+        "tightFmt": "Tight window: active between {{start}}% and {{end}}% of the session.",
+        "midSessionFmt": "Mid-session: active between {{start}}% and {{end}}% of the session."
+      }
+    }
+  },
+  "complexity": {
+    "title": "Session Complexity Scatter",
+    "subtitle": "Duration, agent count, tokens, and status per session",
+    "tooltip": {
+      "duration": "Duration:",
+      "agents": "Agents:",
+      "subagents": "Subagents:",
+      "tokens": "Tokens:",
+      "model": "Model:"
+    }
+  },
   "runs": {
     "title": "Dynamic Workflows",
     "subtitle": "Fleets spawned by the Workflow tool, reconstructed from on-disk run journals",
