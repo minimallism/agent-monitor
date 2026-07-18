@@ -1,10 +1,10 @@
-/**
- * @file toolStyle.ts
- * @description Per-tool visual styling - icon component, accent colour, and tinted
- * surface classes. Keeps the conversation viewer's tool blocks visually distinct so
- * users can scan a long transcript quickly.
 
- */
+
+
+
+
+
+
 
 import {
   Wrench,
@@ -24,16 +24,16 @@ import {
 
 export interface ToolStyle {
   Icon: LucideIcon;
-  /** Tailwind text colour for the icon and tool name. */
+  
   text: string;
-  /** Tailwind tinted background for the icon chip (15% opacity - sits behind
-   *  the icon glyph; staying low-saturation keeps the icon legible). */
+  
+
   chip: string;
-  /** Tailwind background for solid fills like progress bars (60% opacity -
-   *  high enough to read at a glance against the dark surface, distinct
-   *  from the chip used for the icon backdrop). */
+  
+
+
   bar: string;
-  /** Tailwind border colour for the tool block when not in error state. */
+  
   border: string;
 }
 

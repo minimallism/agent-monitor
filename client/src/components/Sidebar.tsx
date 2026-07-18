@@ -1,8 +1,8 @@
-/**
- * @file Sidebar.tsx
- * @description Defines the Sidebar component that provides navigation links to different sections of the application, and includes a toggle button for collapsing or expanding the sidebar. The component uses React Router's NavLink for navigation and Lucide icons for visual representation. The collapsed state of the sidebar is stored in localStorage to persist user preferences across sessions.
 
- */
+
+
+
+
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
@@ -111,7 +111,6 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         collapsed ? "w-[4.25rem]" : "w-60"
       }`}
     >
-      {/* Brand */}
       <div className="px-3 py-4 border-b border-border flex-shrink-0">
         <div className={`flex items-center ${collapsed ? "justify-center" : "gap-3 px-2"}`}>
           <div className="w-8 h-8 rounded-lg bg-accent/20 flex items-center justify-center flex-shrink-0">
@@ -126,10 +125,10 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         </div>
       </div>
 
-      {/* Nav - only this section scrolls when its items overflow; the rest of
-          the sidebar (brand, language, collapse toggle, footer) stays pinned.
-          Chevron buttons appear at the edges when content is clipped, so the
-          user knows there's more to reach without inspecting the scrollbar. */}
+      {
+
+
+}
       <div className="flex-1 min-h-0 relative flex">
         <nav ref={navRef} className="flex-1 overflow-y-auto overflow-x-hidden px-2 py-3 space-y-1">
           {NAV_KEYS.map(({ to, icon: Icon, key }) => {
@@ -180,7 +179,6 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         )}
       </div>
 
-      {/* Language controls */}
       <div className="px-2 pb-2 flex-shrink-0">
         {collapsed ? (
           <button
@@ -224,7 +222,6 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         )}
       </div>
 
-      {/* Collapse toggle */}
       <div className="px-2 py-2 flex-shrink-0">
         <button
           onClick={onToggle}

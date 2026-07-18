@@ -1,15 +1,15 @@
-/**
- * @file OrchestrationDAG.tsx
- * @description Defines the OrchestrationDAG React component that visualizes orchestration data as a directed acyclic graph (DAG) using D3.js. The component takes in orchestration data, processes it to build a graph structure with nodes and edges, and renders it as an SVG. It includes interactive features such as tooltips on hover and click handlers for nodes. The graph is styled with gradients and colors to differentiate between different types of nodes and outcomes, providing a clear visual representation of the orchestration process.
 
- */
+
+
+
+
 
 import { useRef, useEffect, useMemo, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import * as d3 from "d3";
 import type { OrchestrationData } from "../../lib/types";
 
-// ── Types ─────────────────────────────────────────────────────────────────────
+
 
 interface OrchestrationDAGProps {
   data: OrchestrationData;
@@ -45,7 +45,7 @@ interface DAGEdge {
 
 type TFn = (key: string, options?: Record<string, unknown>) => string;
 
-// ── Constants ─────────────────────────────────────────────────────────────────
+
 
 const NODE_W = 136;
 const NODE_H = 44;
@@ -61,7 +61,7 @@ const MIN_EDGE_STROKE = 1.5;
 const BADGE_W = 28;
 const BADGE_H = 14;
 
-// Layer labels are now computed via i18n inside the component
+
 
 const OUTCOME_COLORS: Record<string, { fill: string; stroke: string; text: string }> = {
   completed: { fill: "#052e16", stroke: "#16a34a", text: "#4ade80" },
@@ -110,7 +110,7 @@ const KIND_GRADIENTS: Record<
   },
 };
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
+
 
 function isEmpty(data: OrchestrationData): boolean {
   return (
@@ -130,7 +130,7 @@ function outcomeColorSet(status: string) {
   return OUTCOME_COLORS[status] ?? { fill: "#1a1a28", stroke: "#363650", text: "#9ca3af" };
 }
 
-// ── Layout builder ────────────────────────────────────────────────────────────
+
 
 function buildGraph(
   data: OrchestrationData,
@@ -143,7 +143,7 @@ function buildGraph(
 } {
   const rawNodes: Omit<DAGNode, "x" | "y">[] = [];
 
-  // Layer 0 - sessions
+  
   rawNodes.push({
     id: "sessions",
     label: t("orchestration.sessions"),
@@ -154,7 +154,7 @@ function buildGraph(
     height: NODE_H,
   });
 
-  // Layer 1 - main agent
+  
   rawNodes.push({
     id: "main",
     label: t("orchestration.mainAgent"),
@@ -165,7 +165,7 @@ function buildGraph(
     height: NODE_H,
   });
 
-  // Layer 2 - subagent types (deduplicated, capped at MAX_SUBAGENT_NODES)
+  
   const subagentMap = new Map<string, { count: number; completed: number; errors: number }>();
   for (const s of data.subagentTypes) {
     const key = s.subagent_type || "unknown";
@@ -178,7 +178,7 @@ function buildGraph(
       subagentMap.set(key, { count: s.count, completed: s.completed, errors: s.errors });
     }
   }
-  // Sort by count desc, take top N
+  
   const sortedSubagents = [...subagentMap.entries()].sort((a, b) => b[1].count - a[1].count);
   const visible = sortedSubagents.slice(0, MAX_SUBAGENT_NODES);
   const overflow = sortedSubagents.slice(MAX_SUBAGENT_NODES);
@@ -213,7 +213,7 @@ function buildGraph(
     });
   }
 
-  // Layer 3 - compactions (context compressions)
+  
   const compactions = (data as unknown as { compactions?: { total: number; sessions: number } })
     .compactions;
   const compTotal = compactions?.total ?? 0;
@@ -241,7 +241,7 @@ function buildGraph(
     });
   }
 
-  // Layer 4 - outcomes
+  
   const outcomeMap = new Map<string, number>();
   for (const o of data.outcomes) {
     outcomeMap.set(o.status, (outcomeMap.get(o.status) ?? 0) + o.count);
@@ -262,13 +262,13 @@ function buildGraph(
     });
   }
 
-  // Compute per-layer node lists
+  
   const layers: Omit<DAGNode, "x" | "y">[][] = [[], [], [], [], []];
   for (const n of rawNodes) {
     layers[n.layer]?.push(n);
   }
 
-  // Compute SVG dimensions
+  
   const numLayers = layers.length;
   const maxNodesInLayer = Math.max(...layers.map((l) => l.length));
   const svgWidth = PADDING_X * 2 + numLayers * NODE_W + (numLayers - 1) * LAYER_GAP;
@@ -279,7 +279,7 @@ function buildGraph(
     Math.max(0, maxNodesInLayer - 1) * NODE_V_GAP;
   const svgHeight = Math.min(naturalHeight, 520);
 
-  // Assign x/y positions
+  
   const nodes: DAGNode[] = [];
   for (let li = 0; li < layers.length; li++) {
     const layer = layers[li] ?? [];
@@ -297,10 +297,10 @@ function buildGraph(
     }
   }
 
-  // Build nodeMap for edge lookup
+  
   const nodeMap = new Map<string, DAGNode>(nodes.map((n) => [n.id, n]));
 
-  // Build edges from data.edges + synthetic structural edges
+  
   const edgeSet = new Set<string>();
   const rawEdges: DAGEdge[] = [];
 
@@ -315,16 +315,16 @@ function buildGraph(
     }
   };
 
-  // Sessions → Main
+  
   addEdge("sessions", "main", data.mainCount || 1);
 
-  // Main → each subagent type (use data.edges if available, else uniform)
+  
   const subagentIds = nodes.filter((n) => n.kind === "subagent").map((n) => n.id);
   const compactionIds = nodes.filter((n) => n.kind === "nested").map((n) => n.id);
   const outcomeIds = nodes.filter((n) => n.kind === "outcome").map((n) => n.id);
 
   for (const edge of data.edges) {
-    // Map source/target names to node IDs
+    
     const srcId =
       edge.source === "main"
         ? "main"
@@ -343,7 +343,7 @@ function buildGraph(
     addEdge(srcId, tgtId, edge.weight);
   }
 
-  // Structural fallbacks: main → subagents if no data edges cover them
+  
   for (const sid of subagentIds) {
     const hasEdge = rawEdges.some((e) => e.target === sid);
     if (!hasEdge) {
@@ -352,17 +352,17 @@ function buildGraph(
     }
   }
 
-  // Subagents → compaction nodes
+  
   for (const cid of compactionIds) {
     const cNode = nodeMap.get(cid);
     const weight = Math.max(1, cNode?.count ?? 1);
-    // Connect from each subagent to compaction
+    
     for (const sid of subagentIds) {
       addEdge(sid, cid, Math.max(0.5, Math.round(weight / Math.max(subagentIds.length, 1))));
     }
   }
 
-  // Compaction → outcomes
+  
   for (const cid of compactionIds) {
     for (const oid of outcomeIds) {
       const outcomeNode = nodeMap.get(oid);
@@ -374,7 +374,7 @@ function buildGraph(
     }
   }
 
-  // Also connect subagents directly to outcomes
+  
   for (const sid of subagentIds) {
     for (const oid of outcomeIds) {
       const outcomeNode = nodeMap.get(oid);
@@ -389,7 +389,7 @@ function buildGraph(
   return { nodes, edges: rawEdges, svgWidth, svgHeight };
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
+
 
 export function OrchestrationDAG({ data, onNodeClick, selectedNode }: OrchestrationDAGProps) {
   const { t } = useTranslation("workflows");
@@ -398,7 +398,7 @@ export function OrchestrationDAG({ data, onNodeClick, selectedNode }: Orchestrat
   const tipRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
 
-  // Imperative tooltip helpers - bypass React entirely so hover never re-renders the chart.
+  
   const hideTip = useCallback(() => {
     const tip = tipRef.current;
     if (tip) tip.style.opacity = "0";
@@ -410,24 +410,24 @@ export function OrchestrationDAG({ data, onNodeClick, selectedNode }: Orchestrat
       const container = containerRef.current;
       if (!tip || !container) return;
 
-      // Build content
+      
       buildDAGTooltipContent(tip, node, t);
 
-      // Anchor the tooltip above the hovered node, clamped to the viewport.
+      
       const nodeRect = anchorEl.getBoundingClientRect();
-      // Show first so we can measure
+      
       tip.style.opacity = "0";
       tip.style.display = "block";
       const tipW = tip.offsetWidth || 260;
       const tipH = tip.offsetHeight || 160;
 
       const margin = 8;
-      // Default: center horizontally above the node
+      
       let left = nodeRect.left + nodeRect.width / 2 - tipW / 2;
-      // Clamp to viewport horizontally
+      
       if (left < margin) left = margin;
       if (left + tipW > window.innerWidth - margin) left = window.innerWidth - tipW - margin;
-      // Vertical: prefer above the node, flip below if no space
+      
       let top = nodeRect.top - tipH - 10;
       if (top < margin) top = nodeRect.bottom + 10;
 
@@ -455,7 +455,7 @@ export function OrchestrationDAG({ data, onNodeClick, selectedNode }: Orchestrat
     [onNodeClick]
   );
 
-  // Fade-in on mount
+  
   useEffect(() => {
     const id = requestAnimationFrame(() => setMounted(true));
     return () => cancelAnimationFrame(id);
@@ -471,11 +471,11 @@ export function OrchestrationDAG({ data, onNodeClick, selectedNode }: Orchestrat
     const root = d3.select(svg);
     root.selectAll("*").remove();
 
-    // ── Defs ──────────────────────────────────────────────────────────────────
+    
 
     const defs = root.append("defs");
 
-    // Gradients
+    
     for (const kind of Object.keys(KIND_GRADIENTS) as DAGNode["kind"][]) {
       const g = KIND_GRADIENTS[kind];
       const grad = defs
@@ -490,7 +490,7 @@ export function OrchestrationDAG({ data, onNodeClick, selectedNode }: Orchestrat
       }
     }
 
-    // Outcome-specific gradients
+    
     for (const [status, colors] of Object.entries(OUTCOME_COLORS)) {
       const grad = defs
         .append("linearGradient")
@@ -506,7 +506,7 @@ export function OrchestrationDAG({ data, onNodeClick, selectedNode }: Orchestrat
         .attr("stop-color", colors.stroke + "55");
     }
 
-    // Glow filter for selected node
+    
     const glowFilter = defs
       .append("filter")
       .attr("id", "glow")
@@ -519,7 +519,7 @@ export function OrchestrationDAG({ data, onNodeClick, selectedNode }: Orchestrat
     feMerge.append("feMergeNode").attr("in", "blur");
     feMerge.append("feMergeNode").attr("in", "SourceGraphic");
 
-    // Edge shadow filter
+    
     const edgeFilter = defs
       .append("filter")
       .attr("id", "edge-glow")
@@ -532,7 +532,7 @@ export function OrchestrationDAG({ data, onNodeClick, selectedNode }: Orchestrat
     edgeMerge.append("feMergeNode").attr("in", "blur");
     edgeMerge.append("feMergeNode").attr("in", "SourceGraphic");
 
-    // ── Layer labels ──────────────────────────────────────────────────────────
+    
 
     const labelLayer = root.append("g").attr("class", "layer-labels");
     const layerXPositions = [0, 1, 2, 3, 4].map(
@@ -553,7 +553,7 @@ export function OrchestrationDAG({ data, onNodeClick, selectedNode }: Orchestrat
       .attr("text-transform", "uppercase")
       .text((d) => d.toUpperCase());
 
-    // ── Layer separator lines ──────────────────────────────────────────────────
+    
 
     const sepLayer = root.append("g").attr("class", "layer-separators");
     for (let li = 1; li < 5; li++) {
@@ -569,7 +569,7 @@ export function OrchestrationDAG({ data, onNodeClick, selectedNode }: Orchestrat
         .attr("stroke-dasharray", "4 4");
     }
 
-    // ── Edges ─────────────────────────────────────────────────────────────────
+    
 
     const weightExtent = d3.extent(edges, (e) => e.weight) as [number, number];
     const strokeScale = d3
@@ -595,7 +595,7 @@ export function OrchestrationDAG({ data, onNodeClick, selectedNode }: Orchestrat
       const stroke = strokeScale(edge.weight);
       const isZero = edge.weight <= 0.5;
 
-      // Shadow pass
+      
       edgeLayer
         .append("path")
         .attr("d", path)
@@ -605,7 +605,7 @@ export function OrchestrationDAG({ data, onNodeClick, selectedNode }: Orchestrat
         .attr("stroke-opacity", isZero ? 0 : 0.08)
         .attr("filter", "url(#edge-glow)");
 
-      // Main edge
+      
       edgeLayer
         .append("path")
         .attr("d", path)
@@ -616,7 +616,7 @@ export function OrchestrationDAG({ data, onNodeClick, selectedNode }: Orchestrat
         .attr("stroke-linecap", "round");
     }
 
-    // ── Nodes ─────────────────────────────────────────────────────────────────
+    
 
     const nodeLayer = root.append("g").attr("class", "nodes");
 
@@ -643,11 +643,11 @@ export function OrchestrationDAG({ data, onNodeClick, selectedNode }: Orchestrat
         const opacity = selectedNode === d.id ? 0.9 : 0.4;
         d3.select(event.currentTarget as SVGGElement)
           .select("rect.node-bg")
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          
           .attr("stroke-opacity", opacity as any);
       });
 
-    // Outer glow ring for selected node
+    
     nodeGroups
       .filter((d) => d.id === selectedNode)
       .append("rect")
@@ -662,7 +662,7 @@ export function OrchestrationDAG({ data, onNodeClick, selectedNode }: Orchestrat
       .attr("filter", "url(#glow)")
       .attr("opacity", 0.8);
 
-    // Background rect - outcome nodes use per-status fill
+    
     nodeGroups
       .append("rect")
       .attr("class", "node-bg")
@@ -685,7 +685,7 @@ export function OrchestrationDAG({ data, onNodeClick, selectedNode }: Orchestrat
       .attr("stroke-width", (d) => (d.id === selectedNode ? 1.5 : 1))
       .attr("stroke-opacity", (d) => (d.id === selectedNode ? 0.9 : 0.4));
 
-    // Label text
+    
     nodeGroups
       .append("text")
       .attr("x", 10)
@@ -700,7 +700,7 @@ export function OrchestrationDAG({ data, onNodeClick, selectedNode }: Orchestrat
       .attr("font-family", "Inter, sans-serif")
       .text((d) => d.label);
 
-    // Count badge background
+    
     nodeGroups
       .append("rect")
       .attr("x", (d) => d.width - (BADGE_W + 8))
@@ -711,7 +711,7 @@ export function OrchestrationDAG({ data, onNodeClick, selectedNode }: Orchestrat
       .attr("fill", (d) => badgeBgForKind(d.kind, d.meta?.status))
       .attr("opacity", 0.9);
 
-    // Count badge text
+    
     nodeGroups
       .append("text")
       .attr("x", (d) => d.width - (BADGE_W / 2 + 8))
@@ -727,7 +727,7 @@ export function OrchestrationDAG({ data, onNodeClick, selectedNode }: Orchestrat
       .attr("font-family", "Inter, sans-serif")
       .text((d) => fmtCount(d.count));
 
-    // Hide any stale tooltip when the chart re-renders so it cannot get stuck.
+    
     hideTip();
   }, [graph, selectedNode, handleNodeClick, layerLabels, showTipForNode, hideTip]);
 
@@ -765,7 +765,6 @@ export function OrchestrationDAG({ data, onNodeClick, selectedNode }: Orchestrat
       }}
       onMouseLeave={hideTip}
     >
-      {/* SVG DAG */}
       <div className="w-full overflow-x-auto" onMouseLeave={hideTip}>
         <svg
           ref={svgRef}
@@ -782,7 +781,6 @@ export function OrchestrationDAG({ data, onNodeClick, selectedNode }: Orchestrat
         />
       </div>
 
-      {/* Legend */}
       <div className="flex flex-wrap items-center gap-x-5 gap-y-2 px-1 mt-4">
         <span className="text-[10px] text-gray-600 uppercase tracking-widest font-medium mr-1">
           {t("orchestration.legend")}
@@ -805,7 +803,6 @@ export function OrchestrationDAG({ data, onNodeClick, selectedNode }: Orchestrat
         </div>
       </div>
 
-      {/* Tooltip - fixed-positioned, DOM-mutated to avoid React re-renders on hover */}
       <div
         ref={tipRef}
         role="tooltip"
@@ -825,11 +822,11 @@ export function OrchestrationDAG({ data, onNodeClick, selectedNode }: Orchestrat
   );
 }
 
-// ── Tooltip DOM builder ───────────────────────────────────────────────────────
-// Builds the tooltip's content imperatively to avoid React state on hover.
+
+
 
 function buildDAGTooltipContent(el: HTMLDivElement, node: DAGNode, t: TFn) {
-  // Clear existing children
+  
   while (el.firstChild) el.removeChild(el.firstChild);
 
   const meta = describeNode(node, t);
@@ -844,7 +841,7 @@ function buildDAGTooltipContent(el: HTMLDivElement, node: DAGNode, t: TFn) {
   subtitle.textContent = meta.layer;
   el.appendChild(subtitle);
 
-  // Stat rows
+  
   const rows: Array<[string, string]> = [[t("orchestration.count"), String(node.count)]];
 
   if (node.kind === "subagent" && node.meta) {
@@ -902,11 +899,11 @@ function buildDAGTooltipContent(el: HTMLDivElement, node: DAGNode, t: TFn) {
   el.appendChild(hint);
 }
 
-/**
- * Layer-aware description for a DAG node. Pure function of the node - no I/O,
- * no randomness, deterministic across renders. Returns translated strings via
- * the supplied i18n function so all locales render correctly.
- */
+
+
+
+
+
 function describeNode(node: DAGNode, t: TFn): { layer: string; description: string } {
   switch (node.kind) {
     case "session":
@@ -967,7 +964,7 @@ function describeNode(node: DAGNode, t: TFn): { layer: string; description: stri
   }
 }
 
-// ── Utility functions ─────────────────────────────────────────────────────────
+
 
 function borderColorForKind(kind: DAGNode["kind"]): string {
   switch (kind) {
@@ -1023,7 +1020,7 @@ function fmtCount(n: number): string {
   return String(Math.round(n));
 }
 
-// ── Legend data ───────────────────────────────────────────────────────────────
+
 
 const LEGEND_ITEMS = [
   { label: "Sessions", color: "#312e81", border: "#6366f1" },

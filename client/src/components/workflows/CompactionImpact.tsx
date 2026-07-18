@@ -1,20 +1,20 @@
-/**
- * @file CompactionImpact.tsx
- * @description Visualizes how context compaction is spread across sessions.
- * Compaction is when Claude Code compresses older conversation history into a
- * summary once a session's context window fills up. This panel surfaces the
- * at-a-glance stats (total events, sessions affected, average and peak per
- * session) and a histogram answering "how many sessions compacted N times?"
- * so the distribution is legible regardless of how many sessions exist.
 
- */
+
+
+
+
+
+
+
+
+
 
 import { useRef, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import * as d3 from "d3";
 import type { CompactionImpactData } from "../../lib/types";
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
+
 
 function fmtTokens(n: number): string {
   if (n >= 1_000_000_000) return `${(n / 1_000_000_000).toFixed(1)}B`;
@@ -23,8 +23,8 @@ function fmtTokens(n: number): string {
   return String(n);
 }
 
-/** Roll the per-session list into a histogram: for each compaction count k
- *  (1..peak), how many sessions compacted exactly k times. */
+
+
 function toHistogram(perSession: CompactionImpactData["perSession"]): Array<{
   count: number;
   sessions: number;
@@ -37,12 +37,12 @@ function toHistogram(perSession: CompactionImpactData["perSession"]): Array<{
   return buckets;
 }
 
-// ── Chart constants ───────────────────────────────────────────────────────────
+
 
 const MARGIN = { top: 18, right: 16, bottom: 46, left: 48 };
 const CHART_HEIGHT = 200;
 
-// ── D3 renderer ───────────────────────────────────────────────────────────────
+
 
 interface HistogramBucket {
   count: number;
@@ -94,7 +94,7 @@ function renderHistogram(svg: SVGSVGElement, histo: HistogramBucket[], opts: His
 
   const yScale = d3.scaleLinear().domain([0, maxSessions]).nice().range([innerH, 0]);
 
-  // Horizontal grid lines (integer session counts)
+  
   const yTicks = yScale.ticks(Math.min(4, maxSessions)).filter((d) => Number.isInteger(d));
   g.selectAll<SVGLineElement, number>(".grid-line")
     .data(yTicks)
@@ -107,7 +107,7 @@ function renderHistogram(svg: SVGSVGElement, histo: HistogramBucket[], opts: His
     .attr("stroke", "#2a2a3d")
     .attr("stroke-width", 1);
 
-  // Y axis (sessions)
+  
   g.append("g")
     .call(
       d3
@@ -123,7 +123,7 @@ function renderHistogram(svg: SVGSVGElement, histo: HistogramBucket[], opts: His
     .attr("font-size", 10)
     .attr("font-family", "Inter, sans-serif");
 
-  // X axis (compactions per session - one tick per bucket)
+  
   g.append("g")
     .attr("transform", `translate(0,${innerH})`)
     .call(d3.axisBottom(xScale).tickSize(0).tickPadding(8))
@@ -133,7 +133,7 @@ function renderHistogram(svg: SVGSVGElement, histo: HistogramBucket[], opts: His
     .attr("font-size", 10)
     .attr("font-family", "Inter, sans-serif");
 
-  // Axis titles
+  
   g.append("text")
     .attr("x", innerW / 2)
     .attr("y", innerH + 38)
@@ -155,8 +155,8 @@ function renderHistogram(svg: SVGSVGElement, histo: HistogramBucket[], opts: His
     .attr("font-family", "Inter, sans-serif")
     .text(opts.y);
 
-  // Bars + count labels + rich hover tooltip (full-height hit-area so every
-  // column - including empty buckets - responds, matching the other charts).
+  
+  
   histo.forEach((d) => {
     const bx = xScale(d.count);
     if (bx === undefined) return;
@@ -189,7 +189,7 @@ function renderHistogram(svg: SVGSVGElement, histo: HistogramBucket[], opts: His
         .attr("pointer-events", "none")
         .text(d.sessions);
     } else {
-      // Empty bucket: faint baseline tick so the gap reads as "zero", not missing
+      
       bg.append("rect")
         .attr("x", bx)
         .attr("y", innerH - 1)
@@ -198,7 +198,7 @@ function renderHistogram(svg: SVGSVGElement, histo: HistogramBucket[], opts: His
         .attr("fill", "#2a2a3d");
     }
 
-    // Transparent, full-height hover target on top of the bar.
+    
     bg.append("rect")
       .attr("x", bx)
       .attr("y", 0)
@@ -218,7 +218,7 @@ function renderHistogram(svg: SVGSVGElement, histo: HistogramBucket[], opts: His
   });
 }
 
-// ── Stat box ──────────────────────────────────────────────────────────────────
+
 
 interface StatBoxProps {
   label: string;
@@ -239,7 +239,7 @@ function StatBox({ label, value, sub, accent = "text-accent" }: StatBoxProps) {
   );
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
+
 
 export interface CompactionImpactProps {
   data: CompactionImpactData;
@@ -303,10 +303,8 @@ export function CompactionImpact({ data }: CompactionImpactProps) {
 
   return (
     <div className="flex flex-col gap-5">
-      {/* What compaction is - one line so the numbers below make sense */}
       <p className="text-xs text-gray-500 leading-relaxed">{t("compaction.help")}</p>
 
-      {/* Stat tiles */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <StatBox
           label={t("compaction.totalCompactions")}
@@ -331,7 +329,6 @@ export function CompactionImpact({ data }: CompactionImpactProps) {
         />
       </div>
 
-      {/* Histogram: sessions by compaction count */}
       <div className="w-full overflow-hidden">
         <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
           {t("compaction.distribution")}
@@ -345,7 +342,6 @@ export function CompactionImpact({ data }: CompactionImpactProps) {
         />
       </div>
 
-      {/* Plain-English summary + (when present) tokens freed */}
       <p className="text-xs text-gray-500 leading-relaxed">
         {t("compaction.summary", {
           affected: affected.toLocaleString(),
@@ -357,7 +353,6 @@ export function CompactionImpact({ data }: CompactionImpactProps) {
         )}
       </p>
 
-      {/* Hover tooltip (matches the app's other chart tooltips) */}
       {tip && (
         <div
           className="fixed z-50 pointer-events-none rounded-md border border-[#2a2a4a] bg-[#12121f] px-2.5 py-1.5 text-xs shadow-xl"

@@ -1,12 +1,12 @@
-/**
- * @file EventFilters.tsx
- * @description Filter toolbar for the event list. Surfaces every filter the
- * backend supports on /api/events - event_type, tool_name, agent_id,
- * session_id, free-text search, and an ISO date range - as a single
- * controlled component. Parent owns the filter state; this component only
- * renders the inputs and emits change events.
 
- */
+
+
+
+
+
+
+
+
 
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -49,10 +49,10 @@ export function isEmptyFilters(f: EventFiltersValue): boolean {
   );
 }
 
-// Status preset → event_type values. Mirrors the status badges shown on event
-// rows (see ActivityFeed/SessionDetail statusFromEventType). "Idle" is handled
-// as everything not covered by the other presets, which translates to an empty
-// preset that doesn't restrict the query (same as no selection).
+
+
+
+
 export const STATUS_TO_EVENT_TYPES: Record<string, string[]> = {
   working: ["PreToolUse"],
   waiting: ["PostToolUse", "Stop"],
@@ -62,10 +62,10 @@ export const STATUS_TO_EVENT_TYPES: Record<string, string[]> = {
 
 export const STATUS_OPTIONS = ["working", "waiting", "completed", "error"] as const;
 
-// Expand the selected status presets into a union of event_type values. The
-// consumer merges this with any explicit event_type selection so both layers
-// can be combined (selecting "Working" AND a specific event_type still works
-// as an OR inside the single `event_type` API param).
+
+
+
+
 export function expandStatusToEventTypes(statuses: string[]): string[] {
   const out = new Set<string>();
   for (const s of statuses) {
@@ -78,13 +78,13 @@ export function expandStatusToEventTypes(statuses: string[]): string[] {
 type EventFiltersProps = {
   value: EventFiltersValue;
   onChange: (next: EventFiltersValue) => void;
-  // If set, hides the session filter - useful inside SessionDetail where the
-  // session is already implicit.
+  
+  
   hideSessionFilter?: boolean;
-  // Optional pre-known agent ids (SessionDetail passes the agents from its
-  // parent query instead of fetching /agents again).
+  
+  
   agentOptions?: Array<{ id: string; label: string }>;
-  // Optional pre-known session ids (ActivityFeed passes session options).
+  
   sessionOptions?: Array<{ id: string; label: string }>;
 };
 
@@ -102,7 +102,7 @@ export function EventFilters({
   });
   const [searchDraft, setSearchDraft] = useState(value.q);
 
-  // Debounce text search - only push up after 300ms of inactivity.
+  
   const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
     if (searchTimer.current) clearTimeout(searchTimer.current);
@@ -112,13 +112,13 @@ export function EventFilters({
     return () => {
       if (searchTimer.current) clearTimeout(searchTimer.current);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, [searchDraft]);
 
-  // Keep draft in sync when parent clears filters.
+  
   useEffect(() => {
     if (value.q !== searchDraft) setSearchDraft(value.q);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, [value.q]);
 
   useEffect(() => {
@@ -129,7 +129,7 @@ export function EventFilters({
         if (!cancelled) setFacets(data);
       })
       .catch(() => {
-        // Non-fatal: filters still work via text input.
+        
       });
     return () => {
       cancelled = true;
@@ -253,7 +253,7 @@ function ChipGroup({
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  // Click-outside dismiss.
+  
   useEffect(() => {
     if (!open) return;
     const handler = (e: MouseEvent) => {

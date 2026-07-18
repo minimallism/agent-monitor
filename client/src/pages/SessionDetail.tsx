@@ -1,8 +1,8 @@
-/**
- * @file SessionDetail.tsx
- * @description Displays detailed information about a specific session, including its agents, events, and cost breakdown, with real-time updates and an expandable agent hierarchy view.
 
- */
+
+
+
+
 import { useEffect, useState, useCallback, useMemo, useRef, type ReactNode } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -69,7 +69,7 @@ type DetailTab = "agents" | "conversation" | "timeline";
 
 const EVENTS_INITIAL_BATCH = 50;
 const EVENTS_MORE_BATCH = 500;
-// Live-refresh bounds - see ActivityFeed for rationale.
+
 const EVENTS_MAX_REFRESH = 500;
 const EVENTS_REFRESH_DEBOUNCE_MS = 500;
 
@@ -92,8 +92,8 @@ export function SessionDetail() {
     return new Set<string>();
   });
   const [activeTab, setActiveTab] = useState<DetailTab>("agents");
-  // Keep tabs mounted once visited so switching between them doesn't unmount/
-  // remount their subtrees (which causes a perceptible flash on click).
+  
+  
   const [visitedTabs, setVisitedTabs] = useState<Set<DetailTab>>(() => new Set(["agents"]));
   useEffect(() => {
     setVisitedTabs((prev) => (prev.has(activeTab) ? prev : new Set(prev).add(activeTab)));
@@ -113,7 +113,7 @@ export function SessionDetail() {
     });
   }
 
-  // Refs let the websocket handler access latest state without re-subscribing.
+  
   const eventApiParamsRef = useRef<Record<string, unknown> | null>(null);
   const eventsLoadedCountRef = useRef(0);
   const eventsRefreshTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -128,7 +128,7 @@ export function SessionDetail() {
     navigate("/sessions");
   }, [navigate]);
 
-  // Auto-dismiss not-found warning after 8 seconds
+  
   useEffect(() => {
     if (transcriptNotFound) {
       notFoundTimerRef.current = setTimeout(() => setTranscriptNotFound(false), 8000);
@@ -162,7 +162,7 @@ export function SessionDetail() {
     load();
   }, [load]);
 
-  // Load transcripts list (for Agent → Conversation navigation ID mapping)
+  
   useEffect(() => {
     if (!id) return;
     let cancelled = false;
@@ -177,21 +177,21 @@ export function SessionDetail() {
     };
   }, [id]);
 
-  // Navigate to Conversation tab and select the matching transcript when clicking an agent
+  
   const navigateToAgentConversation = useCallback(
     (agent: Agent) => {
-      // Clear any previous not-found warning
+      
       setTranscriptNotFound(false);
 
       const findTranscriptId = (ts: TranscriptInfo[]): string | null => {
-        // 1. Exact match via db_agent_id (most reliable)
+        
         const exactMatch = ts.find((t) => t.db_agent_id === agent.id);
         if (exactMatch) return exactMatch.id;
 
-        // 2. Main agent fallback
+        
         if (agent.type === "main") return "main";
 
-        // 3. Fallback: match by subagent_type or type, then narrow by name
+        
         let candidates = ts.filter((t) => t.type !== "main");
         if (agent.subagent_type) {
           const byType = candidates.filter(
@@ -208,9 +208,9 @@ export function SessionDetail() {
         return null;
       };
 
-      // Always switch to the conversation tab - the user clicked a leaf agent
-      // and expects to see its conversation. If no exact transcript match is
-      // found, the tab still opens and the not-found banner explains why.
+      
+      
+      
       setActiveTab("conversation");
 
       const transcriptId = findTranscriptId(transcripts);
@@ -218,8 +218,8 @@ export function SessionDetail() {
       if (transcriptId) {
         setPendingTranscriptId(transcriptId);
       } else if (transcripts.length === 0 && id) {
-        // Transcripts not loaded yet - fetch them and retry. The tab is
-        // already showing; this just selects the right transcript when ready.
+        
+        
         api.sessions
           .transcripts(id)
           .then((result) => {
@@ -235,14 +235,14 @@ export function SessionDetail() {
             setTranscriptNotFound(true);
           });
       } else {
-        // Transcripts are loaded but no specific match for this agent.
+        
         setTranscriptNotFound(true);
       }
     },
     [transcripts, id]
   );
 
-  // Compute compaction labels: "#1", "#2", etc. based on started_at order
+  
   const compactionLabels = useMemo(() => {
     const map = new Map<string, string>();
     const compactions = agents
@@ -260,10 +260,10 @@ export function SessionDetail() {
     return map;
   }, [agents]);
 
-  // Event list is fetched separately from the session metadata so it can
-  // respect the user's filters and use the server-driven pagination. Status
-  // presets expand into event_type values and merge with any explicit
-  // event_type selection.
+  
+  
+  
+  
   const eventApiParams = useMemo(() => {
     if (!id) return null;
     const statusExpanded = expandStatusToEventTypes(filters.status);
@@ -281,8 +281,8 @@ export function SessionDetail() {
 
   eventApiParamsRef.current = eventApiParams;
 
-  // Build an AgentInfo map from the already-fetched agents list so rows can
-  // render the subagent pill (subagent_type) without an extra fetch.
+  
+  
   const agentInfoById = useMemo(() => {
     const map = new Map<string, AgentInfo>();
     for (const a of agents) {
@@ -296,10 +296,10 @@ export function SessionDetail() {
     return map;
   }, [agents]);
 
-  // Single-entry session-name lookup so EventDetail can surface the session
-  // label above the raw id, mirroring the agentInfoById pattern. Falls back
-  // to "Session abcdefgh" when session.name is null/empty so the row always
-  // shows *something* identifiable - matches the header's display logic.
+  
+  
+  
+  
   const sessionNameById = useMemo(() => {
     const map = new Map<string, string>();
     if (session?.id) {
@@ -309,7 +309,7 @@ export function SessionDetail() {
     return map;
   }, [session?.id, session?.name]);
 
-  // Precompute project per event so flat-row rendering doesn't re-parse JSON.
+  
   const projectByEventId = useMemo(() => {
     const map = new Map<number, string | null>();
     for (const e of events) map.set(e.id, projectFromEvent(e));
@@ -352,7 +352,7 @@ export function SessionDetail() {
       setEventsLoadingMore(false);
     }
   }, [eventApiParams, events.length]);
-  // Auto-expand agents that have working subagents (at any depth)
+  
   useEffect(() => {
     const parentsWithActiveChildren = new Set<string>();
     for (const a of agents) {
@@ -375,7 +375,7 @@ export function SessionDetail() {
     }
   }, [agents]);
 
-  // Pagination-preserving filtered refresh, mirrors ActivityFeed's behavior.
+  
   const refreshEventsWithPagination = useCallback(async () => {
     const params = eventApiParamsRef.current;
     if (!params) return;
@@ -407,8 +407,8 @@ export function SessionDetail() {
         load();
       }
       if (msg.type === "new_event") {
-        // Debounce bursts into one filter-aware refetch that preserves the
-        // current "Load more" pagination size.
+        
+        
         if (eventsRefreshTimerRef.current) clearTimeout(eventsRefreshTimerRef.current);
         eventsRefreshTimerRef.current = setTimeout(() => {
           eventsRefreshTimerRef.current = null;
@@ -475,7 +475,6 @@ export function SessionDetail() {
 
   return (
     <div className="animate-fade-in space-y-8">
-      {/* Header */}
       <div className="flex items-start gap-4">
         <button onClick={goBack} className="btn-ghost mt-1">
           <ArrowLeft className="w-4 h-4" />
@@ -525,7 +524,6 @@ export function SessionDetail() {
         </button>
       </div>
 
-      {/* Tab Navigation */}
       <div className="flex items-center gap-1 border-b border-border">
         <button
           onClick={() => {
@@ -571,7 +569,6 @@ export function SessionDetail() {
         </button>
       </div>
 
-      {/* Tab Content */}
       {transcriptNotFound && (
         <div className="flex items-center gap-2 px-4 py-2.5 mb-3 text-sm text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded-lg">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
@@ -614,7 +611,7 @@ export function SessionDetail() {
               </h3>
               <div className="space-y-2" data-testid="agent-tree">
                 {(() => {
-                  // Build parent→children map for the full tree (works at any depth)
+                  
                   const agentMap = new Map(agents.map((a) => [a.id, a]));
                   const childrenByParent = new Map<string, Agent[]>();
                   const rootAgents: Agent[] = [];
@@ -627,7 +624,7 @@ export function SessionDetail() {
                       rootAgents.push(a);
                     }
                   }
-                  // Sort roots and children by started_at ascending (chronological order)
+                  
                   rootAgents.sort((a, b) => (a.started_at || "").localeCompare(b.started_at || ""));
                   for (const key of childrenByParent.keys()) {
                     childrenByParent
@@ -635,9 +632,9 @@ export function SessionDetail() {
                       .sort((a, b) => (a.started_at || "").localeCompare(b.started_at || ""));
                   }
 
-                  // Count all descendants (recursive) for collapsed badge.
-                  // `seen` guards against a cyclic parent_agent_id (corrupt data)
-                  // that would otherwise recurse forever and crash the page.
+                  
+                  
+                  
                   function countDescendants(id: string, seen = new Set<string>()): number {
                     if (seen.has(id)) return 0;
                     seen.add(id);
@@ -645,8 +642,8 @@ export function SessionDetail() {
                     return kids.reduce((sum, k) => sum + 1 + countDescendants(k.id, seen), 0);
                   }
 
-                  // Recursive agent node renderer. `ancestors` guards against a
-                  // cyclic parent_agent_id so a bad link can't stack-overflow.
+                  
+                  
                   function renderAgentNode(
                     agent: Agent,
                     depth: number,
@@ -691,30 +688,29 @@ export function SessionDetail() {
                           <div className="flex-1 min-w-0">
                             <AgentCard
                               agent={agent}
-                              // The /api/sessions/:id session row has no `cost`
-                              // column (cost is loaded separately into `cost`
-                              // state), so inject the computed session total here
-                              // — otherwise the MAIN agent card, which shows
-                              // session.cost, renders no cost on this page.
-                              // Subagent cards ignore session.cost (they use
-                              // agent.cost), so this only affects the main card.
+                              
+                              
+                              
+                              
+                              
+                              
+                              
                               session={
                                 session
                                   ? { ...session, cost: cost?.total_cost ?? session.cost }
                                   : undefined
                               }
                               label={compactionLabels.get(agent.id)}
-                              // Card click always opens the agent conversation —
-                              // same behavior whether or not it has children.
-                              // Expand/collapse of the subagent list is handled
-                              // solely by the chevron button, so clicking a
-                              // parent (incl. the main agent) no longer toggles.
+                              
+                              
+                              
+                              
+                              
                               onClick={() => navigateToAgentConversation(agent)}
                             />
                           </div>
                         </div>
 
-                        {/* Recursive children (collapsible) */}
                         {hasChildren && isExpanded && (
                           <div className="ml-6 mt-1 space-y-1 border-l-2 border-violet-500/20 pl-3">
                             {children.map((child) =>
@@ -723,7 +719,6 @@ export function SessionDetail() {
                           </div>
                         )}
 
-                        {/* Descendant count badge when collapsed */}
                         {hasChildren && !isExpanded && (
                           <button
                             onClick={() =>
@@ -738,7 +733,7 @@ export function SessionDetail() {
                     );
                   }
 
-                  // Separate true orphans (subagent whose parent_agent_id references a missing agent)
+                  
                   const orphans = rootAgents.filter(
                     (a) =>
                       a.type === "subagent" && a.parent_agent_id && !agentMap.has(a.parent_agent_id)
@@ -756,7 +751,6 @@ export function SessionDetail() {
                     <>
                       {roots.map((agent) => renderAgentNode(agent, 0))}
 
-                      {/* Orphaned subagents */}
                       {orphans.length > 0 && (
                         <div className="mt-4">
                           <p className="text-[11px] text-gray-500 mb-2 uppercase tracking-wider">
@@ -774,7 +768,6 @@ export function SessionDetail() {
             </>
           )}
 
-          {/* Cost Breakdown - shown under Agents tab */}
           {cost && cost.breakdown.length > 0 && cost.total_cost > 0 && (
             <div className="mt-8">
               <h3 className="text-sm font-medium text-gray-300 mb-4 flex items-center gap-2">
@@ -895,11 +888,11 @@ export function SessionDetail() {
                         </div>
                         <AgentStatusBadge status={statusFromEventType(event.event_type)} />
                         {(() => {
-                          // Session is implicit on this page - project is
-                          // still shown so the row identifies the working
-                          // directory when you share / search. Events without
-                          // their own cwd (e.g. TurnDuration) fall back to the
-                          // session's cwd so every row carries the dir prefix.
+                          
+                          
+                          
+                          
+                          
                           const project =
                             projectByEventId.get(event.id) ?? projectFromCwd(session?.cwd) ?? null;
                           const origin = buildOriginLabel(

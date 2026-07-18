@@ -1,8 +1,8 @@
-/**
- * @file index.css
- * @description Global styles and Tailwind CSS configuration for the application.
 
- */
+
+
+
+
 
 @tailwind base;
 @tailwind components;
@@ -81,8 +81,8 @@
 }
 
 @layer utilities {
-  /* Hide the scrollbar on horizontally scrollable strips (e.g. the Settings
-     TOC) where chevron affordances replace it. */
+  
+
   .no-scrollbar {
     scrollbar-width: none;
   }

@@ -1,13 +1,13 @@
-/**
- * @file main.tsx
- * @description The entry point of the React application that renders the main App component into the root DOM element. It uses React's StrictMode for highlighting potential problems in the application and ensures that the app is rendered in a way that adheres to best practices.
 
- */
+
+
+
+
 
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-// Latin-only subset (matches the app's previous Google Fonts request) so Vite
-// bundles just the latin WOFF2 per weight instead of every subset.
+
+
 import "@fontsource/inter/latin-400.css";
 import "@fontsource/inter/latin-500.css";
 import "@fontsource/inter/latin-600.css";

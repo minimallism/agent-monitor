@@ -1,10 +1,10 @@
-/**
- * @file CodeBlock.tsx
- * @description Reusable, syntax-highlighted code block with a chrome bar (language pill,
- * optional filename, copy-to-clipboard, line count) and optional gutter line numbers.
- * Used by MarkdownContent for fenced code blocks and by ToolCallBlock for tool I/O.
 
- */
+
+
+
+
+
+
 
 import { useMemo, useState } from "react";
 import { Check, Copy, FileCode } from "lucide-react";
@@ -13,17 +13,17 @@ import { canonicalLang, highlight, tokenClass, type Token } from "../../lib/high
 interface CodeBlockProps {
   code: string;
   lang?: string;
-  /** Optional filename to display in the chrome bar. */
+  
   filename?: string;
-  /** Render compact (no chrome bar). */
+  
   compact?: boolean;
-  /** Override for the right-side label (e.g. "Output", "Error"). */
+  
   label?: string;
-  /** Tone - "default" matches the surface, "danger" tints red, "success" tints emerald. */
+  
   tone?: "default" | "danger" | "success";
-  /** Cap the rendered height; pass null to disable. Default 24rem. */
+  
   maxHeight?: string | null;
-  /** Show a left gutter with line numbers. Default true for >= 4 lines. */
+  
   showLineNumbers?: boolean;
 }
 
@@ -46,10 +46,10 @@ function langDisplay(lang: string): string {
   return LANG_DISPLAY[canon] ?? (lang || "Text");
 }
 
-/**
- * Split tokens that span multiple lines so we can render one line at a time
- * (necessary for the gutter line-number column to align).
- */
+
+
+
+
 function splitTokensByLine(tokens: Token[]): Token[][] {
   const lines: Token[][] = [[]];
   for (const t of tokens) {
@@ -88,7 +88,7 @@ export function CodeBlock({
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1500);
     } catch {
-      // Clipboard may be unavailable in some contexts - fail silently.
+      
     }
   };
 
@@ -120,7 +120,6 @@ export function CodeBlock({
     >
       {!compact && (
         <div className={`flex items-center gap-2 px-3 py-1.5 text-[11px] ${palette.chrome}`}>
-          {/* Language pill */}
           <span
             className={`inline-flex items-center gap-1 font-mono uppercase tracking-wider ${palette.label}`}
           >
@@ -128,7 +127,6 @@ export function CodeBlock({
             {filename ?? label ?? langDisplay(lang)}
           </span>
 
-          {/* Filename + lang together when both are set */}
           {filename && !label && (
             <span className="text-gray-600 font-mono lowercase">{langDisplay(lang)}</span>
           )}
@@ -136,7 +134,6 @@ export function CodeBlock({
             <span className={`font-mono uppercase tracking-wider ${palette.label}`}>· {label}</span>
           )}
 
-          {/* Right side: line count + copy */}
           <div className="ml-auto flex items-center gap-3">
             {totalLines > 1 && (
               <span className="text-gray-600 font-mono">

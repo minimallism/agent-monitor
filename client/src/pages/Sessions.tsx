@@ -1,8 +1,8 @@
-/**
- * @file Sessions.tsx
- * @description Displays a list of all recorded sessions with filtering, searching, and pagination features. Sessions are updated in real-time based on events received from the event bus.
 
- */
+
+
+
+
 
 import { useEffect, useState, useCallback, useSyncExternalStore } from "react";
 import { useNavigate } from "react-router-dom";
@@ -33,9 +33,9 @@ export function Sessions() {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [total, setTotal] = useState(0);
   const [filter, setFilter] = useState("");
-  // `searchInput` is what the user types; `search` is the debounced value
-  // actually sent to the server. Without debouncing, every keystroke would
-  // hit /api/sessions.
+  
+  
+  
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
@@ -56,8 +56,8 @@ export function Sessions() {
     { label: t("filterAbandoned"), value: "abandoned" },
   ];
 
-  // Debounce the search input → 300 ms after the user stops typing, the
-  // committed value flips and triggers a fresh fetch.
+  
+  
   useEffect(() => {
     const id = window.setTimeout(() => setSearch(searchInput.trim()), 300);
     return () => window.clearTimeout(id);
@@ -72,20 +72,20 @@ export function Sessions() {
       .catch(console.error);
   }, []);
 
-  // Server-side pagination: only the visible page is fetched. Cost
-  // computation on the server scales with PAGE_SIZE, not with the total
-  // session count, so this stays cheap regardless of how many sessions
-  // exist in the database.
+  
+  
+  
+  
   const load = useCallback(async () => {
     try {
-      // The "waiting" filter is a UI-only overlay derived from the
-      // awaiting_input_since column - the underlying SessionStatus is
-      // still "active". Map it to a client-side filter on top of the
-      // active set so paging/totals stay consistent with the visible rows.
+      
+      
+      
+      
       if (filter === "waiting" || filter === "active") {
-        // Both "waiting" and "active" are derived from the same underlying
-        // status `active` — the `awaiting_input_since` column discriminates.
-        // Fetch all active sessions and filter client-side, matching kanban.
+        
+        
+        
         const res = await api.sessions.list({
           status: "active",
           q: search || undefined,
@@ -131,7 +131,7 @@ export function Sessions() {
     load();
   }, [load]);
 
-  // Reset to page 0 whenever filters or sort changes.
+  
   useEffect(() => {
     setPage(0);
   }, [filter, search, cwd, sortBy, sortDesc]);
@@ -153,9 +153,9 @@ export function Sessions() {
   
 
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
-  // The server already paginates, so the rendered page IS the loaded list.
+  
   const paged = sessions;
-  const filtered = sessions; // kept for empty-state checks below
+  const filtered = sessions; 
 
   const wsConnected = useSyncExternalStore(eventBus.onConnection, () => eventBus.connected);
 
@@ -192,9 +192,7 @@ export function Sessions() {
         </button>
       </div>
 
-      {/* Filters */}
       <div className="flex flex-wrap lg:flex-nowrap items-center gap-3 mb-6 bg-surface-2/40 p-2 rounded-xl border border-border w-full">
-        {/* Search */}
         <div className="relative flex-1 min-w-[180px] max-w-[340px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
           <input
@@ -206,7 +204,6 @@ export function Sessions() {
           />
         </div>
 
-        {/* Directory Selector */}
         <div className="relative shrink-0 w-[180px]">
           <select
             value={cwd}
@@ -223,7 +220,6 @@ export function Sessions() {
           <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-500 pointer-events-none" />
         </div>
 
-        {/* Sort Controls */}
         <div className="flex items-center gap-1.5 bg-surface-1 px-1.5 py-1 rounded-lg border border-border h-[38px] flex-1 min-w-[180px]">
           <div className="relative flex-1">
             <select
@@ -249,7 +245,6 @@ export function Sessions() {
           </button>
         </div>
 
-        {/* Status Filters */}
         <div className="flex gap-1 bg-surface-1 rounded-lg p-1 border border-border ml-auto shrink-0">
           {FILTER_OPTIONS.map((opt) => (
             <button

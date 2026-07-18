@@ -1,8 +1,8 @@
-/**
- * @file SubagentEffectiveness.tsx
- * @description Defines the SubagentEffectiveness React component that visualizes the effectiveness of subagents in a workflow. It displays a success rate as a circular progress ring, key metrics such as total sessions and average duration, and a sparkline showing weekly activity trends. The component is designed to handle cases with no data gracefully and uses a consistent color scheme for clarity.
 
- */
+
+
+
+
 
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
@@ -57,7 +57,6 @@ function SuccessRing({ rate, color }: SuccessRingProps) {
         aria-label={t("effectiveness.successRateAria", { rate: clampedRate.toFixed(1) })}
         role="img"
       >
-        {/* Track */}
         <circle
           cx={center}
           cy={center}
@@ -66,7 +65,6 @@ function SuccessRing({ rate, color }: SuccessRingProps) {
           stroke="#2a2a3d"
           strokeWidth={RING_STROKE}
         />
-        {/* Arc */}
         <circle
           cx={center}
           cy={center}
@@ -79,7 +77,6 @@ function SuccessRing({ rate, color }: SuccessRingProps) {
           transform={`rotate(-90 ${center} ${center})`}
           style={{ transition: "stroke-dasharray 0.6s ease" }}
         />
-        {/* Percentage label */}
         <text
           x={center}
           y={center}
@@ -107,7 +104,7 @@ interface SparklineProps {
 
 interface SparklineTooltipState {
   index: number;
-  /** Bounding rect of the hovered bar (in viewport coordinates). */
+  
   rect: DOMRect;
 }
 
@@ -129,7 +126,6 @@ function Sparkline({ data, color }: SparklineProps) {
 
   return (
     <div aria-label={t("effectiveness.weeklyActivityAria")}>
-      {/* Bars */}
       <div className="flex items-end gap-1 h-8 relative" onMouseLeave={() => setTip(null)}>
         {bars.map((value, i) => {
           const heightPct = Math.max((value / max) * 100, value > 0 ? 8 : 4);
@@ -142,7 +138,6 @@ function Sparkline({ data, color }: SparklineProps) {
                 setTip({ index: i, rect: e.currentTarget.getBoundingClientRect() })
               }
             >
-              {/* Bar (anchored to bottom) */}
               <div
                 className="absolute bottom-0 left-0 right-0 rounded-sm transition-all duration-300"
                 style={{
@@ -155,7 +150,6 @@ function Sparkline({ data, color }: SparklineProps) {
           );
         })}
       </div>
-      {/* Day labels */}
       <div className="flex gap-1 mt-1">
         {bars.map((_, i) => (
           <span
@@ -178,13 +172,13 @@ function Sparkline({ data, color }: SparklineProps) {
   );
 }
 
-/**
- * Tooltip is rendered into `document.body` via a portal so the parent
- * ScoreCard's `overflow-hidden` (and hover-transform that would otherwise
- * become its containing block) cannot clip it. Coordinates are computed
- * from the hovered bar's bounding rect and clamped to the viewport with an
- * 8 px margin, so the tooltip can never be cut off on any day of the week.
- */
+
+
+
+
+
+
+
 function SparklineTooltip({
   rect,
   label,
@@ -210,12 +204,12 @@ function SparklineTooltip({
     const h = el.offsetHeight;
     const margin = 8;
 
-    // Center horizontally over the bar, then clamp to viewport.
+    
     let left = rect.left + rect.width / 2 - w / 2;
     if (left < margin) left = margin;
     if (left + w > window.innerWidth - margin) left = window.innerWidth - w - margin;
 
-    // Default above the bar; flip below if there isn't room.
+    
     let top = rect.top - h - 8;
     if (top < margin) top = rect.bottom + 8;
 
@@ -277,7 +271,6 @@ function ScoreCard({ item, colorIndex }: ScoreCardProps) {
         hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/30 hover:border-border-light
       "
     >
-      {/* Header */}
       <div className="flex items-center gap-2 min-w-0">
         <span
           className="w-2 h-2 rounded-full flex-shrink-0"
@@ -289,12 +282,10 @@ function ScoreCard({ item, colorIndex }: ScoreCardProps) {
         </span>
       </div>
 
-      {/* Success ring */}
       <div className="flex justify-center">
         <SuccessRing rate={item.successRate} color={color} />
       </div>
 
-      {/* Metric boxes */}
       <div className="flex gap-2">
         <MetricBox label={t("effectiveness.sessions")} value={String(item.sessions)} />
         <MetricBox
@@ -303,7 +294,6 @@ function ScoreCard({ item, colorIndex }: ScoreCardProps) {
         />
       </div>
 
-      {/* Sparkline */}
       <div className="flex flex-col gap-1">
         <span className="text-[10px] text-gray-500 uppercase tracking-wider">
           {t("effectiveness.weeklyActivity")}

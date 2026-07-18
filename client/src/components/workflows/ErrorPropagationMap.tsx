@@ -1,8 +1,8 @@
-/**
- * @file ErrorPropagationMap.tsx
- * @description A React component that visualizes error propagation across agent hierarchies in a workflow system. It displays the distribution of errors by hierarchy depth, identifies error-prone agent types, and highlights API and session errors. The component uses horizontal bars to represent error counts at different depths and types, providing an intuitive overview of where errors are occurring within the agent structure.
 
- */
+
+
+
+
 
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -10,7 +10,7 @@ import type { ErrorPropagationData } from "../../lib/types";
 
 const DEPTH_COLORS = ["#ef4444", "#f97316", "#eab308", "#a855f7"];
 
-// ── Component ─────────────────────────────────────────────────────────────────
+
 
 export interface ErrorPropagationMapProps {
   data: ErrorPropagationData;
@@ -70,7 +70,6 @@ export function ErrorPropagationMap({ data }: ErrorPropagationMapProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      {/* Error rate summary bar */}
       <div className="flex items-center gap-3 p-3 rounded-xl bg-red-500/5 border border-red-500/15">
         <div className="flex-shrink-0 min-w-[2.75rem] h-10 px-2 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center">
           <span className="text-[13px] font-bold text-red-400 tabular-nums whitespace-nowrap">
@@ -92,7 +91,6 @@ export function ErrorPropagationMap({ data }: ErrorPropagationMapProps) {
         </div>
       </div>
 
-      {/* Errors by depth - horizontal bars */}
       {hasDepthData && (
         <div>
           <p className="text-[10px] font-medium text-gray-500 uppercase tracking-wider mb-2.5">
@@ -138,7 +136,6 @@ export function ErrorPropagationMap({ data }: ErrorPropagationMapProps) {
         </div>
       )}
 
-      {/* Error-prone agent types */}
       {topTypes.length > 0 && (
         <div>
           <p className="text-[10px] font-medium text-gray-500 uppercase tracking-wider mb-2.5">
@@ -176,7 +173,6 @@ export function ErrorPropagationMap({ data }: ErrorPropagationMapProps) {
         </div>
       )}
 
-      {/* API & session errors */}
       {data.eventErrors && data.eventErrors.length > 0 && (
         <div>
           <p className="text-[10px] font-medium text-gray-500 uppercase tracking-wider mb-2.5">

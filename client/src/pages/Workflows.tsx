@@ -1,8 +1,8 @@
-/**
- * @file Workflows.tsx
- * @description Displays comprehensive analytics on agent orchestration patterns, including DAGs of agent spawning, tool usage flows, collaboration networks, and session complexity metrics, with real-time updates and interactive filtering.
 
- */
+
+
+
+
 
 import {
   useCallback,
@@ -58,7 +58,7 @@ export function Workflows() {
     fetchData();
   }, [fetchData]);
 
-  // Auto-refresh on WebSocket events
+  
   useEffect(() => {
     let debounceTimer: ReturnType<typeof setTimeout>;
     const handler = (_msg: WSMessage) => {
@@ -122,7 +122,6 @@ export function Workflows() {
 
   return (
     <div className="space-y-6">
-      {/* Page Header */}
       <PageHeader
         statusFilter={statusFilter}
         onStatusFilterChange={setStatusFilter}
@@ -130,7 +129,6 @@ export function Workflows() {
         lastUpdated={lastUpdated}
       />
 
-      {/* Workflow-tool runs (issue #167) - fleets ingested from on-disk journals */}
       <div className="card p-4 space-y-3">
         <div>
           <h2 className="text-sm font-semibold text-gray-200 flex items-center gap-2">
@@ -142,7 +140,6 @@ export function Workflows() {
         <WorkflowRunsPanel statusFilter={statusFilter} />
       </div>
 
-      {/* Section 1: Agent Orchestration DAG */}
       <Section
         number={1}
         title={t("orchestration.title")}
@@ -170,7 +167,6 @@ export function Workflows() {
         )}
       </Section>
 
-      {/* Section 2: Tool Execution Flow */}
       <Section
         number={2}
         title={t("toolFlow.title")}
@@ -180,7 +176,6 @@ export function Workflows() {
         <ToolExecutionFlow data={data.toolFlow} filterAgentType={selectedNode} />
       </Section>
 
-      {/* Section 3: Agent Collaboration Network */}
       <Section
         number={3}
         title={t("pipeline.title")}
@@ -190,7 +185,6 @@ export function Workflows() {
         <AgentCollaborationNetwork effectiveness={data.effectiveness} edges={data.cooccurrence} />
       </Section>
 
-      {/* Section 4 + 5: Two Column */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Section
           number={4}
@@ -211,7 +205,6 @@ export function Workflows() {
         </Section>
       </div>
 
-      {/* Section 6 + 7: Two Column */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Section
           number={6}
@@ -232,7 +225,6 @@ export function Workflows() {
         </Section>
       </div>
 
-      {/* Section 8: Agent Concurrency Timeline */}
       <Section
         number={8}
         title={t("concurrency.title")}
@@ -242,7 +234,6 @@ export function Workflows() {
         <ConcurrencyTimeline data={data.concurrency} />
       </Section>
 
-      {/* Section 9 + 10: Two Column */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Section
           number={9}
@@ -266,7 +257,7 @@ export function Workflows() {
   );
 }
 
-// ── Section wrapper ──
+
 function Section({
   number,
   title,
@@ -277,15 +268,15 @@ function Section({
   number: number;
   title: string;
   subtitle: string;
-  /** Key under workflows.chartInfo.* - drives the structured popover content. */
+  
   infoKey: string;
   children: React.ReactNode;
 }) {
   return (
-    // Flex column + a flex-1 card so that, when two Sections share a grid row
-    // (lg:grid-cols-2), the grid's default row-stretch reaches the card itself —
-    // otherwise a shorter chart (e.g. the Session Complexity Scatter) leaves its
-    // card shorter than a taller companion (Compaction Impact) in the same row.
+    
+    
+    
+    
     <div className="flex flex-col h-full">
       <div className="flex items-center justify-between gap-4 mb-3">
         <div className="flex items-center gap-2.5 min-w-0">
@@ -295,9 +286,9 @@ function Section({
           <h2 className="text-sm font-semibold text-gray-100">{title}</h2>
           <ChartInfoPopover infoKey={infoKey} title={title} />
         </div>
-        {/* Quick descriptor; the full explanation lives in the ⓘ popover, so we
-            keep this to a single clamped line (ellipsis + hover title) so a long
-            translation never wraps and unbalances the header row. */}
+        {
+
+}
         <span
           className="hidden lg:block flex-shrink-0 max-w-[20rem] xl:max-w-sm truncate text-right text-[11px] text-gray-600"
           title={subtitle}
@@ -310,18 +301,18 @@ function Section({
   );
 }
 
-/**
- * Structured info popover for a Workflows chart section. Hover or focus the
- * `i` icon to read three short paragraphs sourced from i18n:
- *
- *   1. What this shows  - what data the chart visualizes
- *   2. How to read it   - visual encoding (axes, sizes, colors, etc.)
- *   3. Why it matters   - what insights the user can extract
- *
- * The popover uses fixed positioning and is clamped to the viewport so it
- * never gets clipped by the sidebar or screen edges. Auto-flips above the
- * trigger when there's no room below.
- */
+
+
+
+
+
+
+
+
+
+
+
+
 function ChartInfoPopover({ infoKey, title }: { infoKey: string; title: string }) {
   const { t } = useTranslation("workflows");
   const [open, setOpen] = useState(false);
@@ -341,13 +332,13 @@ function ChartInfoPopover({ infoKey, title }: { infoKey: string; title: string }
       const r = btn.getBoundingClientRect();
       const popH = pop?.offsetHeight ?? 280;
 
-      // Center horizontally over the icon, clamp to viewport.
+      
       let left = r.left + r.width / 2 - POPOVER_W / 2;
       if (left < MARGIN) left = MARGIN;
       if (left + POPOVER_W > window.innerWidth - MARGIN) {
         left = window.innerWidth - POPOVER_W - MARGIN;
       }
-      // Default below the icon; flip above if not enough room.
+      
       const spaceBelow = window.innerHeight - r.bottom;
       const placeAbove = spaceBelow < popH + MARGIN && r.top > popH + MARGIN;
       const top = placeAbove ? Math.max(MARGIN, r.top - popH - 8) : r.bottom + 8;
@@ -420,7 +411,7 @@ function ChartInfoPopover({ infoKey, title }: { infoKey: string; title: string }
   );
 }
 
-// ── Page Header ──
+
 function PageHeader({
   statusFilter,
   onStatusFilterChange,
@@ -466,7 +457,6 @@ function PageHeader({
       </div>
 
       <div className="flex items-center gap-2 flex-wrap">
-        {/* Status filter tabs */}
         <div className="flex bg-surface-2 rounded-lg p-0.5 border border-border">
           {filters.map((f) => (
             <button
@@ -483,7 +473,6 @@ function PageHeader({
           ))}
         </div>
 
-        {/* Actions */}
         <button
           onClick={onRefresh}
           className="p-2 rounded-lg text-gray-500 hover:text-gray-300 hover:bg-surface-3 transition-colors"

@@ -1,11 +1,11 @@
-/**
- * @file FieldHelp.tsx
- * @description A small "(?)" info trigger that reveals a rich popover explaining
- * how to fill in a form field - description, optional copy-able examples, and an
- * optional note. Hover/focus/click to open; the popover is portal'd to <body>
- * and clamped to the viewport so it never clips inside scrolling cards.
 
- */
+
+
+
+
+
+
+
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
@@ -41,7 +41,7 @@ export function FieldHelp({
     if (left < pad) left = pad;
     if (left + w > window.innerWidth - pad) left = window.innerWidth - w - pad;
     let top = r.bottom + 8;
-    if (top + h > window.innerHeight - pad) top = r.top - h - 8; // flip up
+    if (top + h > window.innerHeight - pad) top = r.top - h - 8; 
     setPos({ left, top });
   }, []);
 

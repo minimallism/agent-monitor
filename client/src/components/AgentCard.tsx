@@ -1,8 +1,8 @@
-/**
- * @file AgentCard.tsx
- * @description Defines the AgentCard component that displays a summary of an agent's information, including its name, status, task, current tool, and timestamps. The card is clickable and navigates to the agent's session details when clicked. It also visually distinguishes active agents with a border highlight.
 
- */
+
+
+
+
 import { useTranslation } from "react-i18next";
 import { Bot, GitBranch, Clock, Wrench, Cpu, Coins } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -11,15 +11,15 @@ import { effectiveAgentStatus, isAgentAwaitingInput } from "../lib/types";
 import type { Agent, Session } from "../lib/types";
 import { formatDuration, timeAgo, formatModelName, pathBasename, fmtCost } from "../lib/format";
 
-/**
- * Display name for a main agent, swapping its auto-generated placeholder for the
- * real session title when one exists. Main agents are created as
- * `<prefix> - <placeholder>`, where the placeholder is either `Session <id8>`
- * (live hooks) or `<cwd-folder> - <id8>` (import / background sync). Replacing
- * everything after the first ` - ` covers BOTH formats — the older
- * `replace(/Session [0-9a-f]{8}/)` only matched the hook form, so imported
- * sessions kept showing `<folder> - <id8>` even after their title was known.
- */
+
+
+
+
+
+
+
+
+
 function mainAgentDisplayName(agentName: string, realSessionName: string): string {
   if (!realSessionName) return agentName;
   const sep = agentName.indexOf(" - ");
@@ -28,9 +28,9 @@ function mainAgentDisplayName(agentName: string, realSessionName: string): strin
 
 interface AgentCardProps {
   agent: Agent;
-  /** Optional session data for richer main-agent rendering (model, cwd,
-   *  cost). Subagent display ignores this. When omitted, the card falls
-   *  back to the original minimal layout. */
+  
+
+
   session?: Session;
   label?: string;
   onClick?: () => void;
@@ -44,19 +44,19 @@ export function AgentCard({ agent, session, label, onClick }: AgentCardProps) {
   const isActive = agent.status === "working";
   const isMain = agent.type === "main";
 
-  // Session-level metadata applies to every card in the session - main and
-  // subagents alike. Subtitle differs by type: main uses model+cwd (its
-  // auto-generated name carries no info), subagents stick with their
-  // subagent_type label (more useful than repeating the session model).
+  
+  
+  
+  
   const model = formatModelName(session?.model);
   const cwdBase = pathBasename(session?.cwd);
-  // Cost shown on the card is scoped to what the card represents: a main agent's
-  // card stands in for the whole session, so it shows the session total; a
-  // subagent's card shows that subagent's OWN cost (server-computed from its
-  // token buckets). Showing the session total on a subagent card is misleading —
-  // it reads as if that one subagent cost the whole session's spend. A subagent
-  // with no recorded usage shows no cost (the cost > 0 guard below hides it),
-  // which is truthful rather than misleading.
+  
+  
+  
+  
+  
+  
+  
   const cost = isMain
     ? typeof session?.cost === "number"
       ? session.cost
@@ -64,14 +64,14 @@ export function AgentCard({ agent, session, label, onClick }: AgentCardProps) {
     : typeof agent.cost === "number"
       ? agent.cost
       : 0;
-  // Real (user-given) session name - the auto-generated "Session <id8>"
-  // fallback carries no extra info next to the ID, so it is suppressed.
+  
+  
   const sessionName = session?.name?.trim() || "";
   const realSessionName = /^Session [0-9a-f]{8}$/i.test(sessionName) ? "" : sessionName;
-  // A subagent's own model lives in its metadata (resolved from its transcript,
-  // not the parent session's — see issue #185). Use it everywhere this card
-  // shows a model so a Haiku QA agent under an Opus orchestrator reads as
-  // Haiku, not Opus. Falls back to the session model only for the main agent.
+  
+  
+  
+  
   let subagentModel: string | null = null;
   if (!isMain && agent.metadata) {
     try {
@@ -81,20 +81,20 @@ export function AgentCard({ agent, session, label, onClick }: AgentCardProps) {
       subagentModel = null;
     }
   }
-  // The model badge (footer) must reflect THIS card's agent: the session model
-  // for main, the subagent's own model for subagents.
+  
+  
   const displayModel = isMain ? model : subagentModel;
-  // Model now lives in the footer badge, so the subtitle carries project
-  // context instead: main shows cwd + how many agents the session spawned +
-  // how many turns it has run; subagents show their type + the project they ran
-  // in. (No model here — that would duplicate the footer badge, which is what
-  // main cards used to do.)
+  
+  
+  
+  
+  
   const agentCount = typeof session?.agent_count === "number" ? session.agent_count : 0;
-  // agent_count includes the main agent itself. Show how many SUBAGENTS the
-  // session spawned instead, so this reconciles with the "Active Subagents"
-  // dashboard stat (which excludes main agents) — otherwise a card reading
-  // "29 agents" looks like it should equal a 29-subagent stat when the session
-  // actually has 28 subagents + 1 main.
+  
+  
+  
+  
+  
   const subagentCount = Math.max(0, agentCount - 1);
   let sessionTurns = 0;
   if (isMain && session?.metadata) {
@@ -145,10 +145,10 @@ export function AgentCard({ agent, session, label, onClick }: AgentCardProps) {
           </div>
           <div className="min-w-0 overflow-hidden">
             <p className="text-sm font-medium text-gray-200 truncate">
-              {/* Auto-generated main-agent titles (e.g. "Main Agent - Session
-                  229d93fd" or "Main Agent - work - e3f8e613") swap the
-                  placeholder for the real session name when one exists; custom
-                  (sub)agent names are left untouched. */}
+              {
+
+
+}
               {isMain ? mainAgentDisplayName(agent.name, realSessionName) : agent.name}
             </p>
             {subtitle && <p className="text-[11px] text-gray-500 truncate">{subtitle}</p>}
@@ -168,10 +168,10 @@ export function AgentCard({ agent, session, label, onClick }: AgentCardProps) {
             {agent.current_tool}
           </span>
         )}
-        {/* Model badge - shown on every card when no tool is currently
-            running (avoids clutter on actively-running agents that already
-            display the running tool name). Uses the agent's OWN model:
-            session model for main, the subagent's resolved model otherwise. */}
+        {
+
+
+}
         {displayModel && !agent.current_tool && (
           <span className="flex items-center gap-1 flex-shrink-0">
             <Cpu className="w-3 h-3" />

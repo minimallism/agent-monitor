@@ -1,8 +1,8 @@
-/**
- * @file Dashboard.tsx
- * @description Main dashboard page showing real-time stats and active agents for Claude Code sessions.
 
- */
+
+
+
+
 
 import {
   useEffect,
@@ -51,7 +51,7 @@ export function Dashboard() {
   const [error, setError] = useState<string | null>(null);
   const [analytics, setAnalytics] = useState<Analytics | null>(null);
 
-  // ResizeObserver — fill available container height per screen size
+  
   const agentsRef = useRef<HTMLDivElement>(null);
   const [visibleAgentCount, setVisibleAgentCount] = useState(6);
 
@@ -91,7 +91,7 @@ export function Dashboard() {
       setAnalytics(analyticsRes);
       setError(null);
 
-      // Fetch all subagents for each active main agent's session
+      
       const activeSessionIds = [
         ...new Set(active.filter((a) => a.type === "main").map((a) => a.session_id)),
       ];
@@ -111,7 +111,7 @@ export function Dashboard() {
     return () => clearInterval(interval);
   }, [load]);
 
-  // Auto-expand agents with active subagents (walk up the full parent chain)
+  
   useEffect(() => {
     const parentsWithActive = new Set<string>();
     for (const a of allSubagents) {
@@ -119,7 +119,7 @@ export function Dashboard() {
         parentsWithActive.add(a.parent_agent_id);
       }
     }
-    if (parentsWithActive.size === 0) return; // No-op: skip state update entirely
+    if (parentsWithActive.size === 0) return; 
 
     const subMap = new Map(allSubagents.map((a) => [a.id, a]));
     const toExpand = new Set<string>();
@@ -132,9 +132,9 @@ export function Dashboard() {
       }
     }
     setExpandedAgents((prev) => {
-      // Only update if there are genuinely new IDs to add
+      
       const newIds = [...toExpand].filter((id) => !prev.has(id));
-      if (newIds.length === 0) return prev; // Stable reference - no re-render
+      if (newIds.length === 0) return prev; 
       return new Set([...prev, ...newIds]);
     });
   }, [allSubagents]);
@@ -148,7 +148,7 @@ export function Dashboard() {
         msg.type === "session_created" ||
         msg.type === "session_updated"
       ) {
-        // Debounce rapid-fire updates (e.g., 5 agents created in 100ms)
+        
         if (debounceRef.timer) clearTimeout(debounceRef.timer);
         debounceRef.timer = setTimeout(load, 300);
       }
@@ -157,7 +157,7 @@ export function Dashboard() {
 
   const wsConnected = useSyncExternalStore(eventBus.onConnection, () => eventBus.connected);
 
-  // Memoize agent tree structure to avoid recalculating on every render
+  
   const agentTree = useMemo(() => {
     const childrenByParent = new Map<string, Agent[]>();
     for (const a of allSubagents) {
@@ -168,12 +168,12 @@ export function Dashboard() {
       }
     }
 
-    // Pre-compute descendant counts with memoization (avoids exponential recursion)
+    
     const descendantCache = new Map<string, { total: number; active: number }>();
     function getDescendants(id: string): { total: number; active: number } {
       if (descendantCache.has(id)) return descendantCache.get(id)!;
-      // Seed a zero sentinel before recursing so a cyclic parent_agent_id
-      // (corrupt data) resolves to the cached value instead of looping forever.
+      
+      
       descendantCache.set(id, { total: 0, active: 0 });
       const kids = childrenByParent.get(id) || [];
       const result = kids.reduce(
@@ -189,7 +189,7 @@ export function Dashboard() {
       descendantCache.set(id, result);
       return result;
     }
-    // Pre-warm cache for all nodes
+    
     for (const a of allSubagents) getDescendants(a.id);
 
     return { childrenByParent, getDescendants };
@@ -323,8 +323,8 @@ export function Dashboard() {
                     depth: number,
                     ancestors: Set<string> = new Set()
                   ): ReactNode {
-                    // Guard against a cyclic parent_agent_id (corrupt data) so
-                    // the recursive render can't stack-overflow the page.
+                    
+                    
                     if (ancestors.has(agent.id)) return null;
                     const childAncestors = new Set(ancestors).add(agent.id);
                     const children = childrenByParent.get(agent.id) || [];
@@ -359,15 +359,15 @@ export function Dashboard() {
                               )}
                             </button>
                           )}
-                          {/* Reserve the chevron column even when this row
-                              has no chevron - without this, peer top-level
-                              mains would line up at different x positions
-                              depending on whether they have subagents,
-                              making chevron-having mains look indented
-                              like a subagent of the chevron-less main
-                              above them. A muted leaf-marker icon fills
-                              the slot so the column reads as deliberately
-                              empty rather than as a misalignment. */}
+                          {
+
+
+
+
+
+
+
+}
                           {!hasChildren && !isSubagent && (
                             <span
                               className="w-6 h-6 flex-shrink-0 flex items-center justify-center text-violet-400/70"
@@ -384,11 +384,11 @@ export function Dashboard() {
                             <AgentCard
                               agent={agent}
                               session={sessionsById.get(agent.session_id)}
-                              // Card click always navigates (AgentCard's
-                              // default → session details), whether or not it
-                              // has children. Expand/collapse is handled solely
-                              // by the chevron button, so clicking a parent
-                              // (incl. the main agent) no longer toggles.
+                              
+                              
+                              
+                              
+                              
                               onClick={undefined}
                             />
                           </div>
@@ -421,13 +421,13 @@ export function Dashboard() {
                     );
                   }
 
-                  // Build the set of agent ids that will be rendered as
-                  // descendants under the visible main-agent trees, so the
-                  // orphan-subagent block below doesn't render them a
-                  // second time at the root. Previously the orphan filter
-                  // was `a.type === "subagent"` with no parentage check,
-                  // which surfaced every nested subagent twice: once
-                  // indented under its main, and once flush at root level.
+                  
+                  
+                  
+                  
+                  
+                  
+                  
                   const visibleMains = activeAgents
                     .filter((a) => a.type === "main")
                     .slice(0, visibleAgentCount);
@@ -447,8 +447,8 @@ export function Dashboard() {
                   return (
                     <>
                       {visibleMains.map((main) => renderAgentNode(main, 0))}
-                      {/* Only true orphans: subagents whose ancestor chain
-                          isn't already shown in a tree above. */}
+                      {
+}
                       {activeAgents
                         .filter((a) => a.type === "subagent" && !renderedInTree.has(a.id))
                         .map((agent) => (

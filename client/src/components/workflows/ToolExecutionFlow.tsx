@@ -1,8 +1,8 @@
-/**
- * @file ToolExecutionFlow.tsx
- * @description Defines the ToolExecutionFlow component that visualizes the flow of tool usage in agent workflows using a Sankey diagram. It processes the provided tool flow data, constructs a Sankey graph, and renders it using D3.js. The component also includes interactive tooltips for links and a legend for tool types. It handles responsiveness and edge cases such as empty data gracefully.
 
- */
+
+
+
+
 
 import { useRef, useEffect, useState, useCallback } from "react";
 import * as d3 from "d3";
@@ -11,7 +11,7 @@ import type { SankeyGraph, SankeyNode, SankeyLink } from "d3-sankey";
 import { useTranslation } from "react-i18next";
 import type { ToolFlowData } from "../../lib/types";
 
-// ── Constants ─────────────────────────────────────────────────────────────────
+
 
 const MARGIN = { top: 24, right: 140, bottom: 24, left: 140 };
 const NODE_WIDTH = 14;
@@ -32,7 +32,7 @@ const TOOL_COLORS: Record<string, string> = {
 const COLOR_DEFAULT = "#64748b";
 
 function toolColor(name: string): string {
-  // Strip the _source / _target suffix we add internally
+  
   const base = name.replace(/_(source|target)$/, "");
   return TOOL_COLORS[base] ?? COLOR_DEFAULT;
 }
@@ -41,7 +41,7 @@ function toolLabel(name: string): string {
   return name.replace(/_(source|target)$/, "");
 }
 
-// ── Types ─────────────────────────────────────────────────────────────────────
+
 
 interface NodeExtra {
   id: string;
@@ -73,25 +73,25 @@ interface LinkTipPayload {
 
 type TipPayload = NodeTipPayload | LinkTipPayload;
 
-// ── Props ─────────────────────────────────────────────────────────────────────
+
 
 interface ToolExecutionFlowProps {
   data: ToolFlowData;
   filterAgentType?: string | null;
 }
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
 
-/**
- * d3-sankey collapses self-loops and duplicate node references. To represent a
- * tool appearing as both source and target we suffix the node id with
- * `_source` or `_target` and deduplicate at the label layer.
- *
- * Strategy:
- * - A node that ONLY appears as a source keeps its plain name.
- * - A node that ONLY appears as a target keeps its plain name.
- * - A node that appears on BOTH sides gets `_source` / `_target` copies.
- */
+
+
+
+
+
+
+
+
+
+
+
 function buildSankeyInput(data: ToolFlowData): {
   nodes: NodeExtra[];
   links: Array<{ source: string; target: string; value: number; uid: string }>;
@@ -102,7 +102,7 @@ function buildSankeyInput(data: ToolFlowData): {
   const sourcesSet = new Set(transitions.map((t) => t.source));
   const targetsSet = new Set(transitions.map((t) => t.target));
 
-  // Nodes that appear on both sides need splitting
+  
   const bothSides = new Set<string>();
   for (const s of sourcesSet) {
     if (targetsSet.has(s)) bothSides.add(s);
@@ -135,7 +135,7 @@ function buildSankeyInput(data: ToolFlowData): {
   return { nodes, links };
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
+
 
 export function ToolExecutionFlow({
   data,
@@ -147,7 +147,7 @@ export function ToolExecutionFlow({
   const tipRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 700, height: 420 });
 
-  // Track container width for responsiveness
+  
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -202,7 +202,7 @@ export function ToolExecutionFlow({
       if (!tip) return;
       buildToolFlowTooltip(tip, payload, localizeToolLabel, t);
 
-      // Position
+      
       const r = anchorEl.getBoundingClientRect();
       tip.style.opacity = "0";
       tip.style.display = "block";
@@ -234,18 +234,18 @@ export function ToolExecutionFlow({
 
     if (innerW <= 0 || innerH <= 0) return;
 
-    // Clear previous render
+    
     d3.select(svgEl).selectAll("*").remove();
 
     const { nodes: rawNodes, links: rawLinks } = buildSankeyInput(data);
     if (rawNodes.length === 0) return;
 
-    // Build sankey layout
+    
     const sankeyGen = sankey<NodeExtra, LinkExtra>()
       .nodeId((d) => d.id)
       .nodeWidth(NODE_WIDTH)
       .nodePadding(NODE_PADDING)
-      .nodeSort(null) // preserve insertion order
+      .nodeSort(null) 
       .extent([
         [0, 0],
         [innerW, innerH],
@@ -258,11 +258,11 @@ export function ToolExecutionFlow({
         links: rawLinks.map((l) => ({ ...l })),
       });
     } catch {
-      // If layout fails (e.g., cycles), bail gracefully
+      
       return;
     }
 
-    // Enforce minimum node height by adjusting y0/y1
+    
     for (const node of graph.nodes) {
       const n = node as SNode;
       if (n.y0 !== undefined && n.y1 !== undefined) {
@@ -275,7 +275,7 @@ export function ToolExecutionFlow({
       }
     }
 
-    // Re-run update step so links follow the adjusted node positions
+    
     sankeyGen.update(graph);
 
     const svg = d3
@@ -285,7 +285,7 @@ export function ToolExecutionFlow({
 
     const root = svg.append("g").attr("transform", `translate(${MARGIN.left},${MARGIN.top})`);
 
-    // ── Gradient defs ──────────────────────────────────────────────────────
+    
     const defs = svg.append("defs");
 
     (graph.links as SLink[]).forEach((link, i) => {
@@ -309,13 +309,13 @@ export function ToolExecutionFlow({
       (link as SLink & { _gradId: string })._gradId = gradId;
     });
 
-    // ── Links ──────────────────────────────────────────────────────────────
+    
     const linkPath = sankeyLinkHorizontal();
 
     const linkGroup = root.append("g").attr("class", "links");
 
-    // Pre-compute outgoing/incoming totals per node so we can show share-of-source
-    // and share-of-target percentages in the tooltip.
+    
+    
     const outgoingByNode = new Map<string, number>();
     const incomingByNode = new Map<string, number>();
     for (const link of graph.links as SLink[]) {
@@ -361,7 +361,7 @@ export function ToolExecutionFlow({
         hideTip();
       });
 
-    // ── Nodes ──────────────────────────────────────────────────────────────
+    
     const nodeGroup = root.append("g").attr("class", "nodes");
 
     const nodeGs = nodeGroup
@@ -399,7 +399,7 @@ export function ToolExecutionFlow({
         hideTip();
       });
 
-    // ── Node labels ────────────────────────────────────────────────────────
+    
     nodeGs.each(function (d: SNode) {
       const g = d3.select(this);
       const nodeX0 = d.x0 ?? 0;
@@ -413,7 +413,7 @@ export function ToolExecutionFlow({
       const label = localizeToolLabel(rawLabel);
       const isRightSide = (nodeX0 + nodeX1) / 2 > innerW / 2;
 
-      // Percentage of total
+      
       const countEntry = data.toolCounts.find((c) => c.tool_name === rawLabel);
       const pct =
         countEntry && totalUsage > 0
@@ -442,11 +442,11 @@ export function ToolExecutionFlow({
       }
     });
 
-    // Hide any stale tooltip when the chart re-renders so it cannot get stuck.
+    
     hideTip();
   }, [data, dimensions, isEmpty, localizeToolLabel, t, totalUsage, showTip, hideTip]);
 
-  // Adapt SVG height based on node count so tall graphs don't crush
+  
   useEffect(() => {
     const nodeCount = new Set(data.transitions.flatMap((t) => [t.source, t.target])).size;
     const estimatedH = Math.max(
@@ -496,7 +496,7 @@ export function ToolExecutionFlow({
   );
 }
 
-// ── Tooltip DOM builder ───────────────────────────────────────────────────────
+
 
 function fmtPct(v: number): string {
   if (v <= 0) return "-";
@@ -554,7 +554,7 @@ function buildToolFlowTooltip(
     return;
   }
 
-  // Link tooltip
+  
   const src = localizeToolLabel(payload.source);
   const tgt = localizeToolLabel(payload.target);
 
@@ -593,7 +593,7 @@ function buildToolFlowTooltip(
   el.appendChild(desc);
 }
 
-// ── Legend ────────────────────────────────────────────────────────────────────
+
 
 const LEGEND_ITEMS: Array<{ key: string; color: string }> = [
   { key: "read", color: "#3b82f6" },

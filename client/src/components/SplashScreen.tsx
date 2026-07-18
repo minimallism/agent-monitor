@@ -1,23 +1,23 @@
-/**
- * @file SplashScreen.tsx
- * @description Branding splash shown once per browser session on app load. A
- * dark-tech "constellation" overlay built around the node-graph brand mark:
- * a time-aware greeting, a bold (localized) tagline, and two subtexts reveal
- * in a staggered cascade. The tagline and the subtext pair are picked at
- * random (per mount) from localized pools in `splash.json`, so the copy is
- * fresh each session. The overlay holds for ~2.5s, then fades out and
- * unmounts. Clicking anywhere skips it; honors
- * `prefers-reduced-motion`. CSS-only animations (no extra deps).
 
- */
+
+
+
+
+
+
+
+
+
+
+
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const SESSION_KEY = "splash-shown-v1";
-const HOLD_MS = 2500; // visible dwell after the entrance settles
-const EXIT_MS = 600; // fade-out duration
+const HOLD_MS = 2500; 
+const EXIT_MS = 600; 
 
-/** Map the local hour to a greeting bucket. */
+
 function greetingKey(hour: number): "morning" | "afternoon" | "evening" | "night" {
   if (hour >= 5 && hour < 12) return "morning";
   if (hour >= 12 && hour < 17) return "afternoon";
@@ -27,8 +27,8 @@ function greetingKey(hour: number): "morning" | "afternoon" | "evening" | "night
 
 export function SplashScreen() {
   const { t } = useTranslation("splash");
-  // Show at most once per tab session. Read synchronously so we never flash an
-  // empty overlay on a repeat mount (StrictMode double-invoke, refresh, etc.).
+  
+  
   const [mounted, setMounted] = useState(() => {
     try {
       return !sessionStorage.getItem(SESSION_KEY);
@@ -40,9 +40,9 @@ export function SplashScreen() {
   const exitTimer = useRef<number | null>(null);
   const doneTimer = useRef<number | null>(null);
 
-  // Pick the tagline + subtext pair ONCE per mount from the localized pools.
-  // Falls back to the singular keys if a locale ships no array. Must run as an
-  // unconditional hook (before the early return below).
+  
+  
+  
   const [copy] = useState(() => {
     const pick = <T,>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)]!;
     const taglines = t("taglines", { returnObjects: true }) as unknown as string[];
@@ -67,14 +67,14 @@ export function SplashScreen() {
     try {
       sessionStorage.setItem(SESSION_KEY, "1");
     } catch {
-      /* sessionStorage may be unavailable (private mode) - show anyway */
+      
     }
     exitTimer.current = window.setTimeout(beginExit, HOLD_MS);
     return () => {
       if (exitTimer.current) window.clearTimeout(exitTimer.current);
       if (doneTimer.current) window.clearTimeout(doneTimer.current);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, [mounted]);
 
   if (!mounted) return null;
@@ -91,13 +91,11 @@ export function SplashScreen() {
     >
       <style>{SPLASH_CSS}</style>
 
-      {/* Atmosphere: layered radial glows + drifting constellation + grain */}
       <div className="splash-bg" aria-hidden="true" />
       <ConstellationField />
       <div className="splash-grain" aria-hidden="true" />
 
       <div className="splash-content">
-        {/* Brand mark - the node-graph hexagon, enlarged and animated */}
         <div className="splash-mark" aria-hidden="true">
           <span className="splash-mark-glow" />
           <BrandMark />
@@ -121,8 +119,8 @@ export function SplashScreen() {
   );
 }
 
-/** The hexagon node-graph brand mark (mirrors public/favicon.svg), scaled up
- *  with animated connector lines and pulsing outer nodes. */
+
+
 function BrandMark() {
   return (
     <svg viewBox="0 0 32 32" width="96" height="96" className="splash-svg">
@@ -191,8 +189,8 @@ function BrandMark() {
   );
 }
 
-/** Faint background constellation: a handful of nodes joined by thin lines that
- *  drift slowly behind the content for depth. Purely decorative. */
+
+
 function ConstellationField() {
   return (
     <svg
@@ -248,9 +246,9 @@ const SPLASH_CSS = `
   overflow: hidden;
   background: #06060a;
   cursor: pointer;
-  /* Opaque from the very first paint - the overlay must NOT fade in, or the
-     app rendered behind it flashes through for the fade duration. Only the
-     content cascades in (below); the dark backdrop is solid immediately. */
+  
+
+
 }
 .splash-root.splash-exit {
   animation: splashFadeOut ${EXIT_MS}ms cubic-bezier(0.4, 0, 0.2, 1) both;

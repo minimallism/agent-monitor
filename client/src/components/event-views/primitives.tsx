@@ -1,18 +1,18 @@
-/**
- * @file primitives.tsx
- * @description Presentational building blocks used by the per-tool input and
- * response renderers. Each primitive is a pure component with a narrow,
- * typed contract so they can be composed freely (Terminal + TerminalOutput for
- * Bash; Terminal + UnifiedDiff for Edit; LineNumberedCode for Read/Write;
- * FileList/MatchList for Grep/Glob; KeyValueCard for MCP tools).
 
- */
+
+
+
+
+
+
+
+
 
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Copy, Check } from "lucide-react";
 
-// ───────────────────────── Copy button ─────────────────────────
+
 
 export function CopyButton({ text }: { text: string }) {
   const { t } = useTranslation("common");
@@ -24,7 +24,7 @@ export function CopyButton({ text }: { text: string }) {
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     } catch {
-      // Clipboard API can fail in insecure contexts - silently ignore.
+      
     }
   }
 
@@ -41,7 +41,7 @@ export function CopyButton({ text }: { text: string }) {
   );
 }
 
-// ───────────────────────── Terminal (command) ─────────────────────────
+
 
 export function Terminal({ command, description }: { command: string; description?: string }) {
   return (
@@ -61,7 +61,7 @@ export function Terminal({ command, description }: { command: string; descriptio
   );
 }
 
-// ───────────────────────── Terminal output (stdout/stderr) ─────────────────────────
+
 
 export function TerminalOutput({
   stdout,
@@ -124,7 +124,7 @@ function OutputBlock({
   );
 }
 
-// ───────────────────────── Line-numbered code ─────────────────────────
+
 
 export function LineNumberedCode({
   text,
@@ -164,7 +164,7 @@ export function LineNumberedCode({
   );
 }
 
-// ───────────────────────── Unified diff ─────────────────────────
+
 
 export type DiffHunk = {
   oldStart: number;
@@ -232,7 +232,7 @@ function HunkView({ hunk }: { hunk: DiffHunk }) {
   );
 }
 
-// ───────────────────────── Key-value card ─────────────────────────
+
 
 export function KeyValueCard({
   data,
@@ -322,7 +322,7 @@ function safeStringify(value: unknown): string {
   }
 }
 
-// ───────────────────────── File list / match list ─────────────────────────
+
 
 export function FileList({ paths }: { paths: string[] }) {
   if (paths.length === 0) return <p className="text-[11px] text-gray-500 italic">no files</p>;

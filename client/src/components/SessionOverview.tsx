@@ -1,12 +1,12 @@
-/**
- * @file SessionOverview.tsx
- * @description Real-time stats panel rendered at the top of the Agents tab on the
- * Session detail page. Shows tile counters (events, tool calls, subagents, errors,
- * compactions, duration), top-tool usage bars, subagent-type breakdown, and a token
- * flow strip. Live-refreshes on `new_event` (debounced) so counters track the running
- * session without spamming the backend.
 
- */
+
+
+
+
+
+
+
+
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -30,10 +30,10 @@ interface SessionOverviewProps {
   agents: Agent[];
 }
 
-/** Debounce window for stats refresh - coalesces bursts of hook events into one fetch. */
+
 const REFRESH_DEBOUNCE_MS = 600;
 
-/** Compact tile used in the top stat row. */
+
 function StatTile({
   label,
   value,
@@ -116,7 +116,7 @@ export function SessionOverview({ session, agents }: SessionOverviewProps) {
   const refreshTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const fetchingRef = useRef(false);
 
-  // Tick clock every 30s so a still-active session's "duration" tile stays current.
+  
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
     if (session.status !== "active") return;
@@ -131,19 +131,19 @@ export function SessionOverview({ session, agents }: SessionOverviewProps) {
       const result = await api.sessions.stats(session.id);
       setStats(result);
     } catch {
-      // Non-fatal - overview just won't update this round.
+      
     } finally {
       fetchingRef.current = false;
     }
   };
 
-  // Initial load + reload when the session id changes.
+  
   useEffect(() => {
     fetchStats();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, [session.id]);
 
-  // Live refresh on websocket events (debounced).
+  
   useEffect(() => {
     const unsubscribe = eventBus.subscribe((msg) => {
       const isRelevant =
@@ -153,7 +153,7 @@ export function SessionOverview({ session, agents }: SessionOverviewProps) {
         msg.type === "session_updated";
       if (!isRelevant) return;
       const data = msg.data as { session_id?: string; id?: string };
-      // Match either by session_id (events) or by id (session_updated)
+      
       const matchesSession = data.session_id === session.id || data.id === session.id;
       if (!matchesSession) return;
       if (refreshTimerRef.current) clearTimeout(refreshTimerRef.current);
@@ -166,11 +166,11 @@ export function SessionOverview({ session, agents }: SessionOverviewProps) {
       unsubscribe();
       if (refreshTimerRef.current) clearTimeout(refreshTimerRef.current);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, [session.id]);
 
-  // Tool calls = sum of all tool counts (PreToolUse+PostToolUse events have a tool_name).
-  // We approximate "tool calls" as half of that (each call produces a Pre + Post event).
+  
+  
   const toolCallCount = useMemo(() => {
     if (!stats) return 0;
     const total = stats.tools_used.reduce((s, t) => s + t.count, 0);
@@ -182,17 +182,17 @@ export function SessionOverview({ session, agents }: SessionOverviewProps) {
     return stats.tools_used.reduce((m, t) => Math.max(m, t.count), 0);
   }, [stats]);
 
-  // Active agent (if any)
+  
   const activeAgent = useMemo(() => agents.find((a) => a.status === "working") ?? null, [agents]);
 
-  // Duration: ended_at - started_at, or now - started_at if active
+  
   const durationLabel = useMemo(() => {
     if (!session.started_at) return "-";
     const end = session.ended_at ?? new Date(now).toISOString();
     return formatDuration(session.started_at, end);
   }, [session.started_at, session.ended_at, now]);
 
-  // Avg event rate (events / minute)
+  
   const eventRate = useMemo(() => {
     if (!stats || !session.started_at) return null;
     const start = new Date(session.started_at).getTime();
@@ -224,7 +224,6 @@ export function SessionOverview({ session, agents }: SessionOverviewProps) {
 
   return (
     <div className="space-y-5 mb-6">
-      {/* Active-agent banner - only shows when session is running */}
       {activeAgent && (
         <div className="flex items-center gap-2.5 px-3 py-2 rounded-lg border border-emerald-500/20 bg-emerald-500/5">
           <span className="relative flex h-2 w-2 flex-shrink-0">
@@ -249,7 +248,6 @@ export function SessionOverview({ session, agents }: SessionOverviewProps) {
         </div>
       )}
 
-      {/* Stat tiles */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
         <StatTile
           label="Events"
@@ -296,9 +294,7 @@ export function SessionOverview({ session, agents }: SessionOverviewProps) {
         />
       </div>
 
-      {/* Two-column layout: tools + subagent breakdown */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Tool usage */}
         <div className="lg:col-span-2 rounded-lg border border-surface-3 bg-surface-2/60 p-3.5">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-xs font-semibold text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
@@ -325,18 +321,18 @@ export function SessionOverview({ session, agents }: SessionOverviewProps) {
           )}
         </div>
 
-        {/* Subagent breakdown.
-         *
-         * The /api/sessions/:id/stats endpoint deliberately strips compaction
-         * agents from `subagent_types` so the workflow analytics don't lump
-         * them in. But on this overview a session with only compactions still
-         * has *something* to show - surfacing zero subagents while the agents
-         * tab below clearly lists "Context Compaction" cards is confusing.
-         *
-         * We synthesize a compaction row from `stats.agents.compaction` and
-         * render it alongside any real subagent types, distinguished by an
-         * amber bar (matching the compaction iconography elsewhere in the
-         * app) instead of cyan. */}
+        {
+
+
+
+
+
+
+
+
+
+
+}
         <div className="rounded-lg border border-surface-3 bg-surface-2/60 p-3.5">
           {(() => {
             type SubRow = { key: string; label: string; count: number; isCompaction: boolean };
@@ -405,7 +401,6 @@ export function SessionOverview({ session, agents }: SessionOverviewProps) {
         </div>
       </div>
 
-      {/* Token flow strip */}
       {totalTokens > 0 && (
         <div className="rounded-lg border border-surface-3 bg-surface-2/60 p-3.5">
           <div className="flex items-center justify-between mb-2.5">
@@ -419,7 +414,6 @@ export function SessionOverview({ session, agents }: SessionOverviewProps) {
         </div>
       )}
 
-      {/* Event-type breakdown - secondary, only top 6 */}
       {stats.events_by_type.length > 0 && (
         <div className="rounded-lg border border-surface-3 bg-surface-2/60 p-3.5">
           <h3 className="text-xs font-semibold text-gray-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">

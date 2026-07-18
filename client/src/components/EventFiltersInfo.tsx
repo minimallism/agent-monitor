@@ -1,13 +1,13 @@
-/**
- * @file EventFiltersInfo.tsx
- * @description Accordion-style help panel that explains the Event Timeline's
- * status badges, the Pre/Post lifecycle, how filters compose, and what each
- * filter dropdown accepts. Rendered above the EventFilters toolbar on both
- * ActivityFeed and SessionDetail so users can discover the model without
- * leaving the page. Native <details> / <summary> - no popover primitive
- * required and keyboard-accessible out of the box.
 
- */
+
+
+
+
+
+
+
+
+
 
 import { useTranslation } from "react-i18next";
 import { Info } from "lucide-react";

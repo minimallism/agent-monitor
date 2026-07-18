@@ -1,11 +1,11 @@
-/**
- * @file ConfirmModal.tsx
- * @description Reusable centered confirmation dialog used for destructive
- * actions (e.g. deleting a webhook target) in place of inline
- * confirms or the native window.confirm. Click-outside and Escape cancel; the
- * confirm button is styled destructive by default.
 
- */
+
+
+
+
+
+
+
 
 import { useEffect } from "react";
 import { AlertTriangle, X } from "lucide-react";

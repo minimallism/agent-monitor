@@ -1,8 +1,8 @@
-/**
- * @file Settings.tsx
- * @description Provides a settings page for managing system information, data, and hooks with real-time updates and actionable controls.
 
- */
+
+
+
+
 
 import { useEffect, useState, useCallback, useSyncExternalStore } from "react";
 import { useTranslation } from "react-i18next";
@@ -27,7 +27,7 @@ import type { WSMessage } from "../lib/types";
 
 
 
-// ─── Helpers ───
+
 
 interface SystemInfo {
   db: { path: string; size: number; counts: Record<string, number> };
@@ -63,7 +63,7 @@ function formatUptime(seconds: number): string {
   return `${m}m`;
 }
 
-// ─── Toggle component ───
+
 
 function Toggle({
   checked,
@@ -101,7 +101,7 @@ function Toggle({
   );
 }
 
-// ─── Main component ───
+
 
 export function Settings() {
   const { t } = useTranslation("settings");
@@ -269,7 +269,6 @@ export function Settings() {
 
   return (
     <div className="animate-fade-in space-y-8">
-      {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-accent/15 flex items-center justify-center">
@@ -303,7 +302,6 @@ export function Settings() {
 
 
 
-      {/* ─── HOOK CONFIGURATION ─── */}
       <section id="hooks" className="scroll-mt-24">
         <h3 className="text-sm font-medium text-gray-300 flex items-center gap-2 mb-1">
           <Plug className="w-4 h-4 text-gray-500" />
@@ -363,7 +361,6 @@ export function Settings() {
         </div>
       </section>
 
-      {/* ─── DATA MANAGEMENT ─── */}
       <section id="data" className="scroll-mt-24">
         <h3 className="text-sm font-medium text-gray-300 flex items-center gap-2 mb-1">
           <Database className="w-4 h-4 text-gray-500" />
@@ -372,7 +369,6 @@ export function Settings() {
         <p className="text-xs text-gray-500 mb-4">{t("data.description")}</p>
 
         <div className="space-y-4">
-          {/* Session Cleanup */}
           <div className="card p-5 space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
@@ -444,7 +440,6 @@ export function Settings() {
             {actionBanner(["cleanup"])}
           </div>
 
-          {/* Danger zone */}
           <div className="card p-5 space-y-4 border-red-500/10">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center">

@@ -1,13 +1,13 @@
-/**
- * @file Select.tsx
- * @description Custom styled dropdown that replaces the native <select> for
- * consistent rendering across the app. Native macOS / Chromium selects reserve
- * checkmark space inconsistently, making rows look ragged; this generic dropdown
- * (Tailwind + lucide) aligns labels, supports keyboard navigation, flips above
- * the trigger when there's no room below, and marks the selected option with an
- * accent + check. Used by the Run Claude page and the webhook settings form.
 
- */
+
+
+
+
+
+
+
+
+
 
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, Check } from "lucide-react";
@@ -50,9 +50,9 @@ export function Select<T extends string>({
     return () => document.removeEventListener("mousedown", onClick);
   }, [open]);
 
-  // When opening, decide whether to render the popover above the trigger if
-  // the viewport doesn't have room below (common when this select sits at
-  // the bottom of a form). 288 px = `max-h-72`.
+  
+  
+  
   useEffect(() => {
     if (!open || !buttonRef.current) return;
     const rect = buttonRef.current.getBoundingClientRect();
@@ -61,7 +61,7 @@ export function Select<T extends string>({
     setOpenUp(below < 288 && above > below);
   }, [open]);
 
-  // Sync active highlight with current value when reopening
+  
   useEffect(() => {
     if (open) {
       const idx = options.findIndex((o) => o.value === value);

@@ -1,14 +1,14 @@
-/**
- * @file AgentCollaborationNetwork.tsx
- * @description Defines the AgentCollaborationNetwork React component that visualizes the collaboration between different agent types in a directed graph format using D3.js. The component takes in effectiveness data for each agent type and the edges representing their interactions, and renders an interactive force-directed graph where nodes represent agent types and edges represent the frequency of sequential runs. The graph includes tooltips for detailed information on hover and a legend for clarity.
 
- */
+
+
+
+
 
 import { useRef, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import * as d3 from "d3";
 
-// ── Types ──────────────────────────────────────────────────────────────────────
+
 
 export interface AgentCollaborationNetworkProps {
   effectiveness: Array<{
@@ -35,7 +35,7 @@ interface PipelineLink extends d3.SimulationLinkDatum<PipelineNode> {
   label: string;
 }
 
-// ── Constants ──────────────────────────────────────────────────────────────────
+
 
 const PALETTE = [
   "#6366f1",
@@ -66,7 +66,7 @@ const STROKE_PALETTE = [
 const MIN_R = 20;
 const MAX_R = 44;
 
-// ── Safe tooltip DOM builder ──
+
 
 function appendTooltipRow(parent: HTMLElement, label: string, value: string) {
   const row = document.createElement("div");
@@ -148,18 +148,18 @@ function showTooltip(
   positionTooltipAt(el, x, y);
 }
 
-/**
- * Position a tooltip so its top-right corner sits near (x, y), but clamped to
- * the viewport so it never disappears behind the sidebar or the right edge.
- * Sets opacity to 1 to fade the tooltip in via its CSS transition.
- */
+
+
+
+
+
 function positionTooltipAt(el: HTMLDivElement, x: number, y: number) {
   el.style.opacity = "0";
   const w = el.offsetWidth || 280;
   const h = el.offsetHeight || 160;
   const margin = 8;
 
-  // Default: place just below-right of the cursor
+  
   let left = x + 14;
   let top = y + 14;
 
@@ -171,13 +171,13 @@ function positionTooltipAt(el: HTMLDivElement, x: number, y: number) {
   el.style.left = `${left}px`;
   el.style.top = `${top}px`;
   el.style.transform = "";
-  // Trigger fade-in on the next frame for a smooth transition.
+  
   requestAnimationFrame(() => {
     el.style.opacity = "1";
   });
 }
 
-// ── Component ──────────────────────────────────────────────────────────────────
+
 
 export function AgentCollaborationNetwork({
   effectiveness,
@@ -189,7 +189,7 @@ export function AgentCollaborationNetwork({
   const simulationRef = useRef<d3.Simulation<PipelineNode, PipelineLink> | null>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
-  // Memoize so D3 effect only reruns when props change, not on every render
+  
   const { nodes, links, isEmpty } = useMemo(() => {
     const nodeMap = new Map<string, PipelineNode>();
     effectiveness.forEach((item, i) => {
@@ -222,7 +222,7 @@ export function AgentCollaborationNetwork({
     return { nodes, links, isEmpty: nodes.length === 0 || links.length === 0 };
   }, [effectiveness, edges]);
 
-  // D3 simulation - only depends on memoized data
+  
   useEffect(() => {
     const svg = svgRef.current;
     const container = containerRef.current;
@@ -240,7 +240,7 @@ export function AgentCollaborationNetwork({
     const root = d3.select(svg);
     root.selectAll("*").remove();
 
-    // Arrow marker
+    
     const defs = root.append("defs");
     defs
       .append("marker")
@@ -255,7 +255,7 @@ export function AgentCollaborationNetwork({
       .attr("d", "M0,0 L10,3 L0,6 Z")
       .attr("fill", "#64748b");
 
-    // Clone data
+    
     const simNodes = nodes.map((n) => ({ ...n }));
     const nodeById = new Map(simNodes.map((n) => [n.id, n]));
     const simLinks: PipelineLink[] = links.map((l) => ({
@@ -264,7 +264,7 @@ export function AgentCollaborationNetwork({
       target: nodeById.get(l.target as string) ?? (l.target as string),
     }));
 
-    // Scales
+    
     const ext = d3.extent(simNodes, (n) => n.total) as [number, number];
     const rScale = d3
       .scaleSqrt()
@@ -279,7 +279,7 @@ export function AgentCollaborationNetwork({
       .range([1.5, 5])
       .clamp(true);
 
-    // ── Links (paths for curves) ──
+    
     const linkGroup = root.append("g");
     const linkEls = linkGroup
       .selectAll<SVGPathElement, PipelineLink>("path")
@@ -291,7 +291,7 @@ export function AgentCollaborationNetwork({
       .attr("stroke-width", (d) => Math.max(1.5, strokeScale(d.weight)))
       .attr("marker-end", "url(#arrowhead)");
 
-    // ── Edge labels ──
+    
     const labelGroup = root.append("g");
     const edgeLabels = labelGroup
       .selectAll<SVGTextElement, PipelineLink>("text")
@@ -305,7 +305,7 @@ export function AgentCollaborationNetwork({
       .attr("pointer-events", "none")
       .text((d) => d.label);
 
-    // ── Nodes ──
+    
     const nodeGroup = root.append("g");
     const nodeEls = nodeGroup
       .selectAll<SVGGElement, PipelineNode>("g")
@@ -332,7 +332,7 @@ export function AgentCollaborationNetwork({
       .attr("pointer-events", "none")
       .text((d) => (d.id.length > 16 ? d.id.slice(0, 14) + "\u2026" : d.id));
 
-    // ── Invisible wider hit areas for edge hover ──
+    
     const hitGroup = root.append("g");
     const linkHits = hitGroup
       .selectAll<SVGPathElement, PipelineLink>("path")
@@ -343,17 +343,17 @@ export function AgentCollaborationNetwork({
       .attr("stroke-width", 16)
       .attr("cursor", "pointer");
 
-    // ── Hover - pure DOM, zero React re-renders ──
+    
     const tipEl = tooltipRef.current;
 
-    // Edge hover
+    
     const totalSpawns = simNodes.reduce((s, n) => s + n.total, 0);
 
     linkHits
       .on("mouseenter", (event: MouseEvent, d: PipelineLink) => {
         const src = d.source as PipelineNode;
         const tgt = d.target as PipelineNode;
-        // Highlight this edge
+        
         linkEls
           .attr("stroke-opacity", (l) => (l === d ? 1 : 0.1))
           .attr("stroke-width", (l) =>
@@ -409,7 +409,7 @@ export function AgentCollaborationNetwork({
         if (tipEl) tipEl.style.opacity = "0";
       });
 
-    // Node hover
+    
     nodeEls
       .on("mouseenter", (event: MouseEvent, d: PipelineNode) => {
         linkEls.attr("stroke-opacity", (l) => {
@@ -434,7 +434,7 @@ export function AgentCollaborationNetwork({
         if (tipEl) tipEl.style.opacity = "0";
       });
 
-    // ── Drag ──
+    
     const drag = d3
       .drag<SVGGElement, PipelineNode>()
       .on("start", (event, d) => {
@@ -453,7 +453,7 @@ export function AgentCollaborationNetwork({
       });
     nodeEls.call(drag);
 
-    // ── Simulation ──
+    
     const simulation = d3
       .forceSimulation<PipelineNode>(simNodes)
       .force(
@@ -473,14 +473,14 @@ export function AgentCollaborationNetwork({
       .force("y", d3.forceY(height / 2).strength(0.03))
       .alpha(0.5)
       .on("tick", () => {
-        // Clamp nodes inside viewBox
+        
         for (const n of simNodes) {
           const r = rScale(n.total) + 16;
           n.x = Math.max(r, Math.min(width - r, n.x ?? width / 2));
           n.y = Math.max(r, Math.min(height - r, n.y ?? height / 2));
         }
 
-        // Build path for each edge (shared by visible + hit area)
+        
         const pathFor = (d: PipelineLink) => {
           const s = d.source as PipelineNode;
           const t = d.target as PipelineNode;

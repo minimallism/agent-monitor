@@ -1,13 +1,13 @@
-/**
- * @file ConversationView.tsx
- * @description Conversation tab on the Session detail page. Loads a session
- * (or sub-agent) JSONL transcript, paginates it incrementally, and renders
- * the message stream via MessageList. Combines a WebSocket subscription, a
- * visibility-gated polling fallback, and a manual refresh button so the view
- * stays caught up even when hooks miss frames or the user is mid-text-only
- * turn (no PreToolUse fires until Stop).
 
- */
+
+
+
+
+
+
+
+
+
 import { useEffect, useState, useCallback, useRef } from "react";
 import { ChevronDown, Loader2, ArrowDown, MessagesSquare, RefreshCw } from "lucide-react";
 import { api } from "../../lib/api";
@@ -15,14 +15,14 @@ import { eventBus } from "../../lib/eventBus";
 import { MessageList } from "./MessageList";
 import type { TranscriptMessage, TranscriptInfo, WSMessage } from "../../lib/types";
 
-// Catch-up poll interval. Claude Code only fires hooks on PreToolUse /
-// PostToolUse / Stop, which means a user-typed message (no hook) and any
-// assistant text written between two hook fires is invisible until the next
-// hook event. A short visibility-gated poll closes that gap and also rescues
-// the conversation from missed/late WebSocket frames.
+
+
+
+
+
 const POLL_INTERVAL_MS = 3000;
-// Rescan the transcripts list periodically so new subagents that spawn
-// mid-session appear in the dropdown without a page reload.
+
+
 const TRANSCRIPTS_REFRESH_MS = 15000;
 
 interface ConversationViewProps {
@@ -43,22 +43,22 @@ export function ConversationView({ sessionId, initialTranscriptId }: Conversatio
   const [transcripts, setTranscripts] = useState<TranscriptInfo[]>([]);
   const [showNewMsg, setShowNewMsg] = useState(false);
 
-  // Track JSONL line numbers for incremental requests and history loading
+  
   const lastLineRef = useRef(0);
   const firstLineRef = useRef(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const isAtBottomRef = useRef(true);
   const fetchingRef = useRef(false);
-  // When a fetch is in flight and a new trigger arrives (WS event, poll,
-  // manual refresh), we queue exactly one re-fetch so events that landed
-  // during the in-flight request aren't silently dropped.
+  
+  
+  
   const pendingFetchRef = useRef(false);
-  // Refresh-button spinner state - separate from initial `loading` so the
-  // existing skeleton doesn't blink during a manual refresh.
+  
+  
   const [refreshing, setRefreshing] = useState(false);
 
-  // Load available transcript list (also rescanned on a short interval so
-  // newly-spawned subagents appear in the dropdown without a page reload).
+  
+  
   useEffect(() => {
     let cancelled = false;
     async function loadTranscripts() {
@@ -67,7 +67,7 @@ export function ConversationView({ sessionId, initialTranscriptId }: Conversatio
         if (cancelled) return;
         setTranscripts(result.transcripts);
       } catch {
-        // Non-fatal
+        
       }
     }
     loadTranscripts();
@@ -78,14 +78,14 @@ export function ConversationView({ sessionId, initialTranscriptId }: Conversatio
     };
   }, [sessionId]);
 
-  // Sync external initialTranscriptId to internal state
+  
   useEffect(() => {
     if (initialTranscriptId != null) {
       setSelectedTranscript(initialTranscriptId);
     }
   }, [initialTranscriptId]);
 
-  // Initial load: fetch the latest N messages
+  
   useEffect(() => {
     let cancelled = false;
 
@@ -120,17 +120,17 @@ export function ConversationView({ sessionId, initialTranscriptId }: Conversatio
     };
   }, [sessionId, selectedTranscript]);
 
-  // Incrementally load new messages. Two modes:
-  //   - bootstrap (lastLineRef === 0): the initial load saw an empty
-  //     transcript, so we pull the latest 50 to seed the view. This unblocks
-  //     fresh sessions where the JSONL hadn't been written yet at mount.
-  //   - incremental (lastLineRef > 0): tail-fetch lines after the highest
-  //     parsed message we've seen. The server already de-overlaps via
-  //     afterLine, so we can safely append.
+  
+  
+  
+  
+  
+  
+  
   const fetchNewMessages = useCallback(async () => {
     if (fetchingRef.current) {
-      // Coalesce: remember a trigger arrived during this fetch and re-run
-      // exactly once when the in-flight request settles.
+      
+      
       pendingFetchRef.current = true;
       return;
     }
@@ -149,8 +149,8 @@ export function ConversationView({ sessionId, initialTranscriptId }: Conversatio
       lastLineRef.current = result.last_line;
 
       if (wasBootstrap) {
-        // Seed the view in a single render so the user sees the whole
-        // catch-up batch instead of a blank panel followed by a partial one.
+        
+        
         setMessages(result.messages);
         firstLineRef.current = result.first_line;
         setHasMore(result.has_more);
@@ -159,29 +159,29 @@ export function ConversationView({ sessionId, initialTranscriptId }: Conversatio
       }
       setTotal(result.total);
 
-      // Auto-scroll if user is at bottom; otherwise show "new messages" indicator
+      
       if (isAtBottomRef.current) {
         scrollToBottom();
       } else {
         setShowNewMsg(true);
       }
     } catch {
-      // Non-fatal
+      
     } finally {
       fetchingRef.current = false;
-      // Drain a queued trigger if one arrived during the fetch.
+      
       if (pendingFetchRef.current) {
         pendingFetchRef.current = false;
-        // Defer one tick so React state updates from this call commit first.
+        
         setTimeout(() => fetchNewMessages(), 0);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, [sessionId, selectedTranscript]);
 
-  // WebSocket subscription: refetch on every new_event for this session.
-  // Hook coverage isn't complete (a user-typed message fires no hook), so we
-  // also poll below to catch what WS misses.
+  
+  
+  
   useEffect(() => {
     const unsubscribe = eventBus.subscribe((msg: WSMessage) => {
       if (msg.type !== "new_event") return;
@@ -192,20 +192,20 @@ export function ConversationView({ sessionId, initialTranscriptId }: Conversatio
     return unsubscribe;
   }, [sessionId, fetchNewMessages]);
 
-  // Resync on WebSocket reconnect: events that landed during a transient
-  // disconnect are gone from the bus, but the JSONL still has them, so a
-  // single tail-fetch on reconnect catches the conversation up.
+  
+  
+  
   useEffect(() => {
     return eventBus.onConnection((connected) => {
       if (connected) fetchNewMessages();
     });
   }, [fetchNewMessages]);
 
-  // Visibility-gated polling fallback. Covers:
-  //   1. User-typed messages (no Claude Code hook fires for those).
-  //   2. Long assistant turns where text streams between hook fires.
-  //   3. Late JSONL flushes that arrive after the triggering hook's fetch.
-  //   4. Dropped/missed WebSocket frames.
+  
+  
+  
+  
+  
   useEffect(() => {
     let interval: number | null = null;
     function start() {
@@ -222,9 +222,9 @@ export function ConversationView({ sessionId, initialTranscriptId }: Conversatio
     }
     function onVisibility() {
       if (document.visibilityState === "visible") {
-        // Tab just became visible - fire a one-shot catch-up immediately
-        // and resume polling. Backgrounded tabs throttle setInterval, so
-        // restarting on focus avoids a stale conversation.
+        
+        
+        
         fetchNewMessages();
         start();
       } else {
@@ -239,8 +239,8 @@ export function ConversationView({ sessionId, initialTranscriptId }: Conversatio
     };
   }, [fetchNewMessages]);
 
-  // Manual refresh - surfaces a control in the toolbar so users can force
-  // a sync without reloading the page.
+  
+  
   const refresh = useCallback(async () => {
     setRefreshing(true);
     try {
@@ -250,12 +250,12 @@ export function ConversationView({ sessionId, initialTranscriptId }: Conversatio
     }
   }, [fetchNewMessages]);
 
-  // Scroll-up to load history
+  
   const loadHistory = useCallback(async () => {
     if (loadingHistory || !hasMore) return;
-    // Need the first message's line number
-    // Since message objects don't have a _line field, we track it via firstLineRef
-    // firstLineRef is updated on initial load and each history load
+    
+    
+    
     try {
       setLoadingHistory(true);
       const container = scrollContainerRef.current;
@@ -268,20 +268,20 @@ export function ConversationView({ sessionId, initialTranscriptId }: Conversatio
       });
 
       if (result.messages.length === 0) {
-        // Nothing older exists - clear hasMore so the hint stops showing
-        // even if the server still claims more is available.
+        
+        
         setHasMore(false);
         setLoadingHistory(false);
         return;
       }
 
-      // Update firstLineRef to the oldest message's line number in the history batch
+      
       firstLineRef.current = result.first_line;
 
       setMessages((prev) => [...result.messages, ...prev]);
       setHasMore(result.has_more);
 
-      // Preserve scroll position (don't jump to top)
+      
       requestAnimationFrame(() => {
         if (container) {
           const newScrollHeight = container.scrollHeight;
@@ -289,13 +289,13 @@ export function ConversationView({ sessionId, initialTranscriptId }: Conversatio
         }
       });
     } catch {
-      // Non-fatal
+      
     } finally {
       setLoadingHistory(false);
     }
   }, [sessionId, selectedTranscript, loadingHistory, hasMore]);
 
-  // Scroll to bottom
+  
   const scrollToBottom = useCallback(() => {
     requestAnimationFrame(() => {
       const container = scrollContainerRef.current;
@@ -305,37 +305,37 @@ export function ConversationView({ sessionId, initialTranscriptId }: Conversatio
     });
   }, []);
 
-  // Listen for scroll events: detect bottom position + trigger history load
+  
   const handleScroll = useCallback(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
 
-    // Detect if at bottom
+    
     const atBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 100;
     isAtBottomRef.current = atBottom;
 
-    // Hide "new messages" indicator when scrolled to bottom
+    
     if (atBottom) {
       setShowNewMsg(false);
     }
 
-    // Load history when scrolled to top
+    
     if (container.scrollTop < 50 && hasMore && !loadingHistory) {
       loadHistory();
     }
   }, [hasMore, loadingHistory, loadHistory]);
 
-  // Auto-scroll to bottom after initial load
+  
   useEffect(() => {
     if (!loading && messages.length > 0) {
       scrollToBottom();
     }
-  }, [loading, scrollToBottom]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [loading, scrollToBottom]); 
 
   return (
     <div className="relative flex flex-col" style={{ minHeight: 0 }}>
-      {/* Toolbar - always rendered after the initial load so users can
-          refresh even when no messages have streamed yet. */}
+      {
+}
       {!loading && (
         <div className="flex items-center gap-3 mb-3 flex-shrink-0">
           {transcripts.length > 1 && (
@@ -372,21 +372,18 @@ export function ConversationView({ sessionId, initialTranscriptId }: Conversatio
         </div>
       )}
 
-      {/* Error alert */}
       {error && (
         <div className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-4 py-3 flex-shrink-0">
           {error}
         </div>
       )}
 
-      {/* Message list container */}
       <div
         ref={scrollContainerRef}
         onScroll={handleScroll}
         className="flex-1 overflow-y-auto"
         style={{ maxHeight: "calc(100vh - 320px)", minHeight: 200 }}
       >
-        {/* History loading indicator */}
         {loadingHistory && (
           <div className="flex justify-center py-3">
             <Loader2 className="w-4 h-4 text-gray-500 animate-spin" />
@@ -394,7 +391,6 @@ export function ConversationView({ sessionId, initialTranscriptId }: Conversatio
           </div>
         )}
 
-        {/* Scroll-up for history hint */}
         {hasMore && !loadingHistory && !loading && (
           <div className="flex justify-center py-2">
             <span className="text-[11px] text-gray-600">↑ Scroll up for older messages</span>
@@ -421,7 +417,6 @@ export function ConversationView({ sessionId, initialTranscriptId }: Conversatio
         )}
       </div>
 
-      {/* New messages indicator */}
       {showNewMsg && (
         <button
           onClick={() => {

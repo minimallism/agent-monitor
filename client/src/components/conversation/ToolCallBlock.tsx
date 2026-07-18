@@ -1,12 +1,12 @@
-/**
- * @file ToolCallBlock.tsx
- * @description Collapsible block rendered inside an assistant message for each
- * tool_use / tool_result pair. Shows tool icon + name in the header, with the
- * paired result inline when present. Per-tool styling comes from toolStyle.ts;
- * the tool's input/output payload is delegated to <CodeBlock /> for syntax
- * highlighting.
 
- */
+
+
+
+
+
+
+
+
 import { useState } from "react";
 import { ChevronRight, AlertCircle, FileText, CheckCircle2 } from "lucide-react";
 import type { TranscriptContent } from "../../lib/types";
@@ -18,7 +18,7 @@ interface ToolCallBlockProps {
   toolResult?: TranscriptContent | null;
 }
 
-/** Detect a likely language from a file path's extension. */
+
 function langFromPath(path: string): string {
   const ext = path.split(".").pop()?.toLowerCase() ?? "";
   const map: Record<string, string> = {
@@ -48,7 +48,7 @@ function langFromPath(path: string): string {
   return map[ext] ?? "plain";
 }
 
-/** Build a one-line summary of the tool call to show in the collapsed header. */
+
 function buildSummary(toolUse: TranscriptContent): string | null {
   const input = toolUse.input;
   if (!input || typeof input !== "object" || "_truncated" in input) return null;
@@ -63,12 +63,12 @@ function buildSummary(toolUse: TranscriptContent): string | null {
   return null;
 }
 
-/** Render the input pane with tool-aware formatting. */
+
 function renderInput(toolUse: TranscriptContent) {
   const input = toolUse.input;
   if (!input) return null;
 
-  // Truncated payload from the backend
+  
   if (typeof input === "object" && "_truncated" in input) {
     return (
       <CodeBlock
@@ -82,7 +82,7 @@ function renderInput(toolUse: TranscriptContent) {
   const obj = input as Record<string, unknown>;
   const tool = (toolUse.name ?? "").toLowerCase();
 
-  // Bash: show the command with shell highlighting
+  
   if (tool === "bash" && typeof obj.command === "string") {
     return (
       <div className="space-y-2">
@@ -94,7 +94,7 @@ function renderInput(toolUse: TranscriptContent) {
     );
   }
 
-  // Write: render new content as code with the file path as the chrome label
+  
   if (tool === "write" && typeof obj.file_path === "string" && typeof obj.content === "string") {
     return (
       <CodeBlock
@@ -106,7 +106,7 @@ function renderInput(toolUse: TranscriptContent) {
     );
   }
 
-  // Edit: side-by-side old/new
+  
   if (tool === "edit" && typeof obj.file_path === "string") {
     const lang = langFromPath(obj.file_path);
     return (
@@ -130,7 +130,7 @@ function renderInput(toolUse: TranscriptContent) {
     );
   }
 
-  // Read: just show the path with offset/limit
+  
   if (tool === "read" && typeof obj.file_path === "string") {
     return (
       <div className="flex items-center gap-1.5 text-xs text-gray-300 bg-surface-4/40 border border-surface-3 rounded-md px-3 py-2">
@@ -146,7 +146,7 @@ function renderInput(toolUse: TranscriptContent) {
     );
   }
 
-  // Grep: pattern + path
+  
   if (tool === "grep" && typeof obj.pattern === "string") {
     return (
       <div className="space-y-1.5">
@@ -178,11 +178,11 @@ function renderInput(toolUse: TranscriptContent) {
     );
   }
 
-  // Default: pretty JSON
+  
   return <CodeBlock code={JSON.stringify(obj, null, 2)} lang="json" label="Input" />;
 }
 
-/** Render the result pane: detect diff/json/text. */
+
 function renderResult(toolResult: TranscriptContent, toolName: string) {
   const text = toolResult.output ?? "";
   if (text.length === 0) return <div className="text-xs text-gray-500 italic px-1">(empty)</div>;
@@ -191,7 +191,7 @@ function renderResult(toolResult: TranscriptContent, toolName: string) {
   const tool = toolName.toLowerCase();
   const label = isError ? "Error" : "Output";
 
-  // Heuristics for language
+  
   let lang = "plain";
   const trimmed = text.trim();
   if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
@@ -199,7 +199,7 @@ function renderResult(toolResult: TranscriptContent, toolName: string) {
       JSON.parse(trimmed);
       lang = "json";
     } catch {
-      // fall through
+      
     }
   } else if (/^(\+\+\+|---|@@) /m.test(text) || /^diff --git /m.test(text)) {
     lang = "diff";
@@ -226,7 +226,6 @@ export function ToolCallBlock({ toolUse, toolResult }: ToolCallBlockProps) {
     <div
       className={`rounded-lg border ${wrapperBorder} ${wrapperBg} overflow-hidden transition-colors`}
     >
-      {/* Collapsed/expanded toggle */}
       <button
         onClick={() => setExpanded(!expanded)}
         className="w-full flex items-center gap-2.5 px-3 py-2 text-left hover:bg-surface-3/40 transition-colors"
@@ -268,7 +267,6 @@ export function ToolCallBlock({ toolUse, toolResult }: ToolCallBlockProps) {
         </span>
       </button>
 
-      {/* Expanded body */}
       {expanded && (
         <div className="border-t border-surface-3 bg-surface-1/40 px-3 py-3 space-y-2.5 animate-fade-in">
           {renderInput(toolUse)}

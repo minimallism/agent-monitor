@@ -1,8 +1,8 @@
-/**
- * @file SessionComplexityScatter.tsx
- * @description A React component that renders a scatter plot visualization of session complexity using D3.js. Each session is represented as a bubble, where the x-axis represents the session duration, the y-axis represents the number of agents involved, and the size of the bubble corresponds to the total tokens used. The color of each bubble indicates the session status (e.g., completed, active, error, abandoned). The component also includes tooltips for detailed information on hover and a legend for status colors. It is designed to be responsive and provides an empty state when no data is available.
 
- */
+
+
+
+
 
 import { useRef, useEffect, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
@@ -10,7 +10,7 @@ import * as d3 from "d3";
 import type { SessionComplexityItem } from "../../lib/types";
 import { formatModelName } from "../../lib/format";
 
-// ── Constants ─────────────────────────────────────────────────────────────────
+
 
 const MARGIN = { top: 20, right: 24, bottom: 60, left: 52 };
 const MIN_BUBBLE_R = 4;
@@ -27,7 +27,7 @@ function statusColor(status: string): string {
   return STATUS_COLOR[status] ?? "#6b7280";
 }
 
-// ── Duration formatting ───────────────────────────────────────────────────────
+
 
 function formatDurationSec(sec: number): string {
   if (sec < 60) return `${Math.round(sec)}s`;
@@ -53,7 +53,7 @@ function fmtTokens(n: number): string {
   return String(n);
 }
 
-// ── Tooltip ───────────────────────────────────────────────────────────────────
+
 
 interface TooltipState {
   x: number;
@@ -105,7 +105,7 @@ function Tooltip({ state }: { state: TooltipState }) {
   );
 }
 
-// ── Legend ────────────────────────────────────────────────────────────────────
+
 
 const LEGEND_STATUSES = ["completed", "active", "error", "abandoned"] as const;
 
@@ -128,7 +128,7 @@ function Legend() {
   );
 }
 
-// ── Empty state ───────────────────────────────────────────────────────────────
+
 
 function EmptyState() {
   const { t } = useTranslation("workflows");
@@ -153,7 +153,7 @@ function EmptyState() {
   );
 }
 
-// ── Main chart ────────────────────────────────────────────────────────────────
+
 
 export interface SessionComplexityScatterProps {
   data: SessionComplexityItem[];
@@ -167,7 +167,7 @@ export function SessionComplexityScatter({ data, onSessionClick }: SessionComple
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
   const [width, setWidth] = useState(600);
 
-  // Track container width for responsiveness
+  
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -195,7 +195,7 @@ export function SessionComplexityScatter({ data, onSessionClick }: SessionComple
 
     const g = svg.append("g").attr("transform", `translate(${MARGIN.left},${MARGIN.top})`);
 
-    // Scales
+    
     const xScale = d3
       .scaleLinear()
       .domain([0, d3.max(data, (d) => d.duration) ?? 1])
@@ -213,7 +213,7 @@ export function SessionComplexityScatter({ data, onSessionClick }: SessionComple
       .domain([0, d3.max(data, (d) => d.totalTokens) ?? 1])
       .range([MIN_BUBBLE_R, MAX_BUBBLE_R]);
 
-    // Grid lines
+    
     const gridColor = "#2a2a3d";
 
     g.append("g")
@@ -245,7 +245,7 @@ export function SessionComplexityScatter({ data, onSessionClick }: SessionComple
         sel.selectAll(".tick line").attr("stroke", gridColor).attr("stroke-dasharray", "3,3");
       });
 
-    // X axis
+    
     g.append("g")
       .attr("transform", `translate(0,${innerH})`)
       .call(
@@ -260,7 +260,7 @@ export function SessionComplexityScatter({ data, onSessionClick }: SessionComple
         sel.selectAll(".tick text").attr("fill", "#6b7280").attr("font-size", "11");
       });
 
-    // X axis label
+    
     g.append("text")
       .attr("x", innerW / 2)
       .attr("y", innerH + 44)
@@ -269,7 +269,7 @@ export function SessionComplexityScatter({ data, onSessionClick }: SessionComple
       .attr("font-size", "11")
       .text(t("complexity.duration"));
 
-    // Y axis
+    
     g.append("g")
       .call(d3.axisLeft(yScale).ticks(5).tickFormat(d3.format("d")))
       .call((sel) => {
@@ -278,7 +278,7 @@ export function SessionComplexityScatter({ data, onSessionClick }: SessionComple
         sel.selectAll(".tick text").attr("fill", "#6b7280").attr("font-size", "11");
       });
 
-    // Y axis label
+    
     g.append("text")
       .attr("transform", "rotate(-90)")
       .attr("x", -innerH / 2)
@@ -288,7 +288,7 @@ export function SessionComplexityScatter({ data, onSessionClick }: SessionComple
       .attr("font-size", "11")
       .text(t("complexity.agentCount"));
 
-    // Bubbles - sort largest to back so small ones are clickable
+    
     const sorted = [...data].sort((a, b) => b.totalTokens - a.totalTokens);
 
     g.selectAll<SVGCircleElement, SessionComplexityItem>("circle")

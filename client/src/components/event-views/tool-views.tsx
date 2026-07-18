@@ -1,24 +1,24 @@
-/**
- * @file tool-views.tsx
- * @description Per-tool renderers for `tool_input` and `tool_response` fields.
- * Dispatched from EventDetail when the event's `tool_name` is recognised.
- * Unknown tools fall back to the caller's generic JSON code view.
- *
- * Handled tools:
- *   - Bash / PowerShell  → Terminal + TerminalOutput
- *   - Edit / NotebookEdit → Terminal + UnifiedDiff (from old/new + structuredPatch)
- *   - Read                → Terminal + LineNumberedCode
- *   - Write               → Terminal + LineNumberedCode
- *   - Grep                → Terminal + MatchList
- *   - Glob                → Terminal + FileList
- *   - WebFetch            → Terminal + LineNumberedCode
- *   - Task / Agent        → metadata + prompt
- *   - mcp__*              → KeyValueCard with known semantic fields promoted
- *   - AskUserQuestion     → formatted Q with options
- *   - Any other           → returns null (caller falls back to generic JSON)
- *
 
- */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 import {
   FileList,
@@ -31,7 +31,7 @@ import {
 } from "./primitives";
 import type { DiffHunk, GrepMatch } from "./primitives";
 
-// ───────────────────────── Helpers ─────────────────────────
+
 
 function str(v: unknown): string {
   return typeof v === "string" ? v : "";
@@ -45,9 +45,9 @@ function isMcp(toolName: string): boolean {
   return toolName.startsWith("mcp__");
 }
 
-/** Builds a unified-diff hunk from a bare old_string / new_string pair. One
- *  hunk, minimal context - good enough for the input preview before the
- *  actual structuredPatch comes back in the response. */
+
+
+
 function diffFromStrings(oldStr: string, newStr: string): DiffHunk[] {
   if (!oldStr && !newStr) return [];
   const oldLines = oldStr ? oldStr.split(/\r?\n/) : [];
@@ -66,8 +66,8 @@ function diffFromStrings(oldStr: string, newStr: string): DiffHunk[] {
   ];
 }
 
-/** Normalises the `structuredPatch` array that shows up in Edit/NotebookEdit
- *  tool_response into DiffHunk shape. Tolerates missing fields. */
+
+
 function parseStructuredPatch(value: unknown): DiffHunk[] {
   if (!Array.isArray(value)) return [];
   const hunks: DiffHunk[] = [];
@@ -88,9 +88,9 @@ function parseStructuredPatch(value: unknown): DiffHunk[] {
   return hunks;
 }
 
-/** Best-effort match list from a Grep tool_response. Supports the common
- *  shapes: array of strings, array of {file,line,text}, or an object with
- *  `matches` / `files` keys. */
+
+
+
 function parseGrepMatches(value: unknown): GrepMatch[] {
   if (Array.isArray(value)) return value.map(toMatch).filter(Boolean) as GrepMatch[];
   const o = obj(value);
@@ -133,10 +133,10 @@ function parseFileList(value: unknown): string[] {
   return [];
 }
 
-// ───────────────────────── Top-level dispatchers ─────────────────────────
 
-/** Returns a rendered view for the tool's input, or null when the tool isn't
- *  specifically handled (caller renders JSON fallback). */
+
+
+
 export function ToolInputView({
   toolName,
   input,
@@ -148,7 +148,7 @@ export function ToolInputView({
   const i = obj(input);
   if (!i) return null;
 
-  // MCP tools - show the input as a key-value card with URL/query/id promoted.
+  
   if (isMcp(toolName)) {
     return (
       <KeyValueCard
@@ -284,8 +284,8 @@ export function ToolInputView({
   }
 }
 
-/** Returns a rendered view for the tool's response, or null when the tool
- *  isn't specifically handled (caller renders JSON fallback). */
+
+
 export function ToolResponseView({
   toolName,
   response,
@@ -315,7 +315,7 @@ export function ToolResponseView({
           ]}
         />
       );
-    // Non-object responses (string, array) fall through to generic.
+    
     return null;
   }
 

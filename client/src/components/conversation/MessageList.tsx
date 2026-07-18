@@ -1,12 +1,12 @@
-/**
- * @file MessageList.tsx
- * @description Renders the chronological message stream of a Claude Code
- * transcript: alternating user / assistant rows with collapsible thinking
- * blocks, inline ToolCallBlocks for tool_use / tool_result pairs, and
- * MarkdownContent for prose. Used by ConversationView as the main body of
- * the Conversation tab on the Session detail page.
 
- */
+
+
+
+
+
+
+
+
 import { useState, useMemo } from "react";
 import {
   ChevronDown,
@@ -24,10 +24,10 @@ import {
 } from "lucide-react";
 import type { TranscriptMessage, TranscriptContent, TranscriptSender } from "../../lib/types";
 
-/** Per-sender visual treatment for a transcript row. A JSONL `type:"user"` line
- *  is not always the human (tool results, harness task-notifications, the
- *  orchestrator's task to a subagent) — each sender gets its own label, icon,
- *  and accent so attribution is unambiguous. */
+
+
+
+
 const SENDER_STYLES: Record<
   TranscriptSender,
   { label: string; icon: typeof User; avatarRing: string; accentBar: string; headerText: string }
@@ -83,7 +83,7 @@ interface MessageListProps {
   loading: boolean;
 }
 
-/** Build a map from tool_use id → tool_result for matching */
+
 function buildToolResultMap(messages: TranscriptMessage[]): Map<string, TranscriptContent> {
   const map = new Map<string, TranscriptContent>();
   for (const msg of messages) {
@@ -97,17 +97,17 @@ function buildToolResultMap(messages: TranscriptMessage[]): Map<string, Transcri
   return map;
 }
 
-/** Detect if text is skill loading content (starts with "Base directory for this skill:") */
+
 function isSkillContent(text: string): boolean {
   return text.startsWith("Base directory for this skill:");
 }
 
-/** Detect if text is a task notification (contains <task-notification> tag) */
+
 function isTaskNotification(text: string): boolean {
   return text.includes("<task-notification>") || text.includes("<task-id>");
 }
 
-/** Format a timestamp as compact local time (e.g. "14:23:01"). */
+
 function formatLocalTime(iso: string): string {
   try {
     return new Date(iso).toLocaleTimeString();
@@ -116,9 +116,9 @@ function formatLocalTime(iso: string): string {
   }
 }
 
-/** Centered marker for a session rename (/rename, `claude -n`, picker Ctrl+R).
- *  These TUI-only commands write no conversation turn, so without this they're
- *  invisible in the transcript. */
+
+
+
 function SessionEventRow({ title, timestamp }: { title?: string; timestamp: string | null }) {
   return (
     <div className="flex items-center justify-center py-1">
@@ -136,7 +136,7 @@ function SessionEventRow({ title, timestamp }: { title?: string; timestamp: stri
   );
 }
 
-/** Compact pill for /command invocations parsed out of TUI markup. */
+
 function CommandPill({ display }: { display: string }) {
   return (
     <div className="inline-flex items-center gap-2 text-sm text-emerald-300 font-mono bg-emerald-500/10 border border-emerald-500/20 rounded-md px-3 py-1.5 max-w-full">
@@ -146,7 +146,7 @@ function CommandPill({ display }: { display: string }) {
   );
 }
 
-/** Terminal-style fenced block for stdout/stderr captured from local commands. */
+
 function TerminalBlock({ text, stream }: { text: string; stream: "stdout" | "stderr" }) {
   const cleaned = stripAnsi(text).replace(/^\n+|\n+$/g, "");
   const isErr = stream === "stderr";
@@ -169,7 +169,7 @@ function TerminalBlock({ text, stream }: { text: string; stream: "stdout" | "std
   );
 }
 
-/** Subtle inline note for the local-command-caveat banner. */
+
 function CaveatBlock({ text }: { text: string }) {
   return (
     <div className="flex items-start gap-2 rounded-md border border-amber-500/15 bg-amber-500/[0.05] px-3 py-1.5 text-[11px] text-amber-200/70">
@@ -179,7 +179,7 @@ function CaveatBlock({ text }: { text: string }) {
   );
 }
 
-/** Render a single segment produced by parseTuiSegments. */
+
 function renderSegment(seg: TuiSegment, key: number): React.ReactNode {
   switch (seg.kind) {
     case "command":
@@ -226,7 +226,7 @@ function renderSegment(seg: TuiSegment, key: number): React.ReactNode {
   }
 }
 
-/** Generic collapsible content block */
+
 function CollapsibleBlock({
   text,
   icon,
@@ -288,7 +288,7 @@ export function MessageList({ messages, loading }: MessageListProps) {
 
   const toolResultMap = buildToolResultMap(messages);
 
-  // Track which user messages are pure tool_result (no text) - we merge those into the preceding assistant message
+  
   const userMsgHasText = useMemo(() => {
     const map = new Map<number, boolean>();
     messages.forEach((msg, idx) => {
@@ -302,20 +302,20 @@ export function MessageList({ messages, loading }: MessageListProps) {
   return (
     <div className="space-y-3">
       {messages.map((msg, idx) => {
-        // Session lifecycle markers (e.g. /rename) render as a centered chip,
-        // not as a user/assistant row.
+        
+        
         if (msg.type === "session_event") {
           return <SessionEventRow key={idx} title={msg.title} timestamp={msg.timestamp} />;
         }
 
-        // Skip user messages that are purely tool_result - they're rendered inside ToolCallBlock
+        
         if (msg.type === "user" && !userMsgHasText.get(idx)) {
           return null;
         }
 
         const isAssistant = msg.type === "assistant";
-        // The true sender (classified server-side) drives the label + styling.
-        // Falls back to the coarse type for older payloads without `sender`.
+        
+        
         const sender: TranscriptSender = msg.sender ?? (isAssistant ? "assistant" : "user");
         const style = SENDER_STYLES[sender] ?? SENDER_STYLES.user;
         const SenderIcon = style.icon;
@@ -325,16 +325,13 @@ export function MessageList({ messages, loading }: MessageListProps) {
             key={idx}
             className={`relative flex gap-3 rounded-xl px-3 py-2.5 hover:bg-surface-2/30 transition-colors before:absolute before:left-0 before:top-3 before:bottom-3 before:w-0.5 before:rounded-full before:opacity-60 ${style.accentBar}`}
           >
-            {/* Avatar */}
             <div
               className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center mt-0.5 shadow-sm ${style.avatarRing}`}
             >
               <SenderIcon className="w-4 h-4" />
             </div>
 
-            {/* Message body */}
             <div className="flex-1 min-w-0 space-y-2">
-              {/* Header line */}
               <div className="flex items-center gap-2 flex-wrap">
                 <span className={`text-xs font-semibold tracking-wide ${style.headerText}`}>
                   {style.label}
@@ -358,10 +355,9 @@ export function MessageList({ messages, loading }: MessageListProps) {
                 )}
               </div>
 
-              {/* Content blocks */}
               {msg.content.map((block, bIdx) => {
                 if (block.type === "text" && block.text) {
-                  // Detect task notifications, collapsed by default
+                  
                   if (isTaskNotification(block.text)) {
                     return (
                       <CollapsibleBlock
@@ -376,7 +372,7 @@ export function MessageList({ messages, loading }: MessageListProps) {
                     );
                   }
 
-                  // Detect skill content, collapsed by default
+                  
                   if (isSkillContent(block.text)) {
                     const pathMatch = block.text.match(/^Base directory for this skill:\s*(\S+)/);
                     const skillPath = pathMatch ? pathMatch[1]! : "Skill";
@@ -393,9 +389,9 @@ export function MessageList({ messages, loading }: MessageListProps) {
                     );
                   }
 
-                  // Mixed TUI markup: caveat / command / stdout / stderr / system-reminder
-                  // can appear inline (sometimes interleaved with prose). Parse the text
-                  // into segments and render each with the appropriate visual treatment.
+                  
+                  
+                  
                   if (hasTuiTags(block.text)) {
                     const segments = parseTuiSegments(block.text);
                     return (
@@ -458,7 +454,7 @@ export function MessageList({ messages, loading }: MessageListProps) {
                   return <ToolCallBlock key={bIdx} toolUse={block} toolResult={matchedResult} />;
                 }
 
-                // tool_result blocks rendered inside ToolCallBlock, skip standalone
+                
                 return null;
               })}
             </div>

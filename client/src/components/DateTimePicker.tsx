@@ -1,14 +1,14 @@
-/**
- * @file DateTimePicker.tsx
- * @description A React component that provides a user-friendly interface for selecting both date and time. The component displays a button that shows the currently selected date and time in a human-readable format. When the button is clicked, a dropdown appears containing a calendar for date selection and an input for time selection. The component handles edge cases such as invalid dates and ensures that the dropdown is positioned correctly within the viewport. It also allows users to clear their selection easily. This component is designed to be reusable across the application wherever date and time input is required.
 
- */
+
+
+
+
 
 import React, { useState, useRef, useEffect } from "react";
 import { Calendar, Clock, ChevronLeft, ChevronRight, X } from "lucide-react";
 
 interface DateTimePickerProps {
-  value: string; // Expected format: YYYY-MM-DDTHH:mm
+  value: string; 
   onChange: (value: string) => void;
   placeholder?: string;
   className?: string;
@@ -28,7 +28,7 @@ export function DateTimePicker({
   const [alignment, setAlignment] = useState<"left" | "right">("left");
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Parse value
+  
   const dateObj = value ? new Date(value) : null;
   const [viewDate, setViewDate] = useState(dateObj || new Date());
 
@@ -74,7 +74,7 @@ export function DateTimePicker({
     if (dateObj && !isNaN(dateObj.getTime())) {
       newDate.setHours(dateObj.getHours(), dateObj.getMinutes());
     } else {
-      newDate.setHours(0, 0); // Default midnight
+      newDate.setHours(0, 0); 
     }
     updateValue(newDate);
   };
@@ -171,7 +171,6 @@ export function DateTimePicker({
         <div
           className={`absolute top-full mt-1 ${alignment === "right" ? "right-0" : "left-0"} z-50 bg-surface-1 border border-border rounded-lg shadow-xl p-3 w-[220px] flex flex-col gap-3`}
         >
-          {/* Calendar Header */}
           <div className="flex items-center justify-between">
             <button
               type="button"
@@ -196,7 +195,6 @@ export function DateTimePicker({
             </button>
           </div>
 
-          {/* Calendar Grid */}
           <div>
             <div className="grid grid-cols-7 gap-1 mb-1">
               {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
@@ -208,7 +206,6 @@ export function DateTimePicker({
             <div className="grid grid-cols-7 gap-1">{days}</div>
           </div>
 
-          {/* Time Picker */}
           <div className="pt-3 border-t border-border flex items-center justify-between">
             <div className="flex items-center gap-1.5 text-gray-400">
               <Clock className="w-3.5 h-3.5" />

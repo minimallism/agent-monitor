@@ -1,21 +1,21 @@
-/**
- * @file Skeleton.tsx
- * @description Loading skeleton primitives. Use these in place of "-", "0", or
- * empty bodies while data is still being fetched so the UI never flashes
- * placeholder values that the user might read as real zeros. All variants are
- * pure presentational and respect prefers-reduced-motion (animate-pulse is a
- * native Tailwind utility that already honors the OS setting).
 
- */
+
+
+
+
+
+
+
+
 
 import type { CSSProperties } from "react";
 
 interface SkeletonProps {
   className?: string;
   style?: CSSProperties;
-  /** Rounded shape variant. Defaults to "md". */
+  
   rounded?: "sm" | "md" | "lg" | "full";
-  /** Aria label for screen readers. Defaults to "Loading". */
+  
   label?: string;
 }
 
@@ -26,10 +26,10 @@ const ROUNDED_CLASS = {
   full: "rounded-full",
 } as const;
 
-/**
- * Base shimmer block. Compose with width/height utilities for any shape:
- *   <Skeleton className="h-6 w-24" />
- */
+
+
+
+
 export function Skeleton({
   className = "",
   style,
@@ -47,17 +47,17 @@ export function Skeleton({
   );
 }
 
-/**
- * Stat-card value placeholder. Sized to match the 2xl semibold number that
- * StatCard renders so layout doesn't jump when real data arrives.
- */
+
+
+
+
 export function StatValueSkeleton({ className = "" }: { className?: string }) {
   return <Skeleton className={`h-7 w-20 align-middle ${className}`} />;
 }
 
-/**
- * Single-line text placeholder. Good for trend/sub labels.
- */
+
+
+
 export function TextSkeleton({
   className = "",
   width = "w-16",
@@ -68,10 +68,10 @@ export function TextSkeleton({
   return <Skeleton className={`h-3 ${width} align-middle ${className}`} />;
 }
 
-/**
- * Full table-row skeleton for tabular pages. Caller passes the column count so
- * the skeleton lines up under existing headers.
- */
+
+
+
+
 export function TableRowSkeleton({ columns, widths }: { columns: number; widths?: string[] }) {
   return (
     <tr className="border-b border-border/40">
@@ -84,9 +84,9 @@ export function TableRowSkeleton({ columns, widths }: { columns: number; widths?
   );
 }
 
-/**
- * Block placeholder for card-shaped content (kanban cards, list items).
- */
+
+
+
 export function CardSkeleton({ className = "" }: { className?: string }) {
   return (
     <div className={`card p-4 space-y-3 ${className}`} aria-busy="true" aria-label="Loading">

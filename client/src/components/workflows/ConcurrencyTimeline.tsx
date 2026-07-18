@@ -1,28 +1,28 @@
-/**
- * @file ConcurrencyTimeline.tsx
- * @description Defines the ConcurrencyTimeline component that visualizes concurrency data for agent sessions using horizontal bars. Each lane represents an agent type (main or subagent) with the bar width proportional to the number of sessions and timing indicated as a percentage of the session duration. The component handles empty states gracefully and assigns distinct colors to different agent types for clarity.
 
- */
+
+
+
+
 import { useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import type { ConcurrencyData, ConcurrencyLane } from "../../lib/types";
 
-// ── Color palette ─────────────────────────────────────────────────────────────
 
-const MAIN_COLOR = "#6366f1"; // indigo
+
+const MAIN_COLOR = "#6366f1"; 
 
 const SUBAGENT_PALETTE = [
-  "#10b981", // emerald
-  "#3b82f6", // blue
-  "#f59e0b", // amber
-  "#f43f5e", // rose
-  "#06b6d4", // cyan
-  "#f97316", // orange
-  "#a855f7", // purple
-  "#84cc16", // lime
+  "#10b981", 
+  "#3b82f6", 
+  "#f59e0b", 
+  "#f43f5e", 
+  "#06b6d4", 
+  "#f97316", 
+  "#a855f7", 
+  "#84cc16", 
 ];
 
-// ── Lane row ──────────────────────────────────────────────────────────────────
+
 
 interface LaneRowProps {
   lane: ConcurrencyLane;
@@ -35,7 +35,7 @@ interface LaneRowProps {
 type TFn = (key: string, options?: Record<string, unknown>) => string;
 
 function describeLaneTiming(start: number, end: number, t: TFn): string {
-  // start/end are 0–1 fractions of session timeline.
+  
   const startPct = Math.round(start * 100);
   const endPct = Math.round(end * 100);
   const span = Math.max(0, endPct - startPct);
@@ -50,23 +50,21 @@ function describeLaneTiming(start: number, end: number, t: TFn): string {
 function LaneRow({ lane, color, maxCount, onShowTip, onHideTip }: LaneRowProps) {
   const { t } = useTranslation("workflows");
   const displayName = lane.name === "Main Agent" ? t("orchestration.mainAgent") : lane.name;
-  // Bar width proportional to session count (the metric with meaningful variance)
+  
   const barPct = maxCount > 0 ? (lane.count / maxCount) * 100 : 0;
 
-  // Duration as percentage of session (backend returns 0-1 fractions)
+  
   const startPct = (lane.avgStart * 100).toFixed(0);
   const endPct = (lane.avgEnd * 100).toFixed(0);
 
   return (
     <div className="flex items-center gap-3 py-1.5 group">
-      {/* Label column */}
       <div className="flex-shrink-0 w-[140px] text-right" title={displayName}>
         <span className="text-xs font-medium text-gray-400 truncate block group-hover:text-gray-200 transition-colors">
           {displayName}
         </span>
       </div>
 
-      {/* Bar area */}
       <div
         className="relative flex-1 h-6 bg-surface-3 rounded overflow-hidden"
         onMouseEnter={(e) => onShowTip(lane, color, e.currentTarget)}
@@ -81,7 +79,6 @@ function LaneRow({ lane, color, maxCount, onShowTip, onHideTip }: LaneRowProps) 
             opacity: 0.85,
           }}
         />
-        {/* Count label inside bar if wide enough, outside if not */}
         <span
           className="absolute top-0 bottom-0 flex items-center text-[11px] font-medium tabular-nums"
           style={{
@@ -93,7 +90,6 @@ function LaneRow({ lane, color, maxCount, onShowTip, onHideTip }: LaneRowProps) 
         </span>
       </div>
 
-      {/* Timing range */}
       <div className="flex-shrink-0 w-[72px] text-[11px] text-gray-600 tabular-nums">
         {startPct}%&ndash;{endPct}%
       </div>
@@ -161,7 +157,7 @@ function buildLaneTooltip(
   el.appendChild(hint);
 }
 
-// ── Empty state ───────────────────────────────────────────────────────────────
+
 
 function EmptyState() {
   const { t } = useTranslation("workflows");
@@ -186,7 +182,7 @@ function EmptyState() {
   );
 }
 
-// ── Public component ──────────────────────────────────────────────────────────
+
 
 export interface ConcurrencyTimelineProps {
   data: ConcurrencyData;
@@ -233,11 +229,11 @@ export function ConcurrencyTimeline({ data }: ConcurrencyTimelineProps) {
     return <EmptyState />;
   }
 
-  // Sort by session count descending so the most-used agent types are on top
+  
   const sorted = [...lanes].sort((a, b) => b.count - a.count);
   const maxCount = sorted[0]?.count ?? 1;
 
-  // Assign colors
+  
   let subagentIndex = 0;
   const coloredLanes = sorted.map((lane) => {
     const isMain = lane.name === "Main Agent";
@@ -250,7 +246,6 @@ export function ConcurrencyTimeline({ data }: ConcurrencyTimelineProps) {
 
   return (
     <div className="w-full" onMouseLeave={hideTip}>
-      {/* Header */}
       <div className="flex items-center gap-3 mb-2">
         <div className="flex-shrink-0 w-[140px]" />
         <div className="flex-1 flex items-center justify-between">
@@ -267,7 +262,6 @@ export function ConcurrencyTimeline({ data }: ConcurrencyTimelineProps) {
         </div>
       </div>
 
-      {/* Lane rows */}
       <div className="flex flex-col divide-y divide-surface-4">
         {coloredLanes.map(({ lane, color }) => (
           <LaneRow
@@ -303,7 +297,7 @@ export function ConcurrencyTimeline({ data }: ConcurrencyTimelineProps) {
   );
 }
 
-// Re-export helper so callers can import the color fn if needed
+
 export function laneColor(name: string, subagentIndex: number): string {
   if (name === "Main Agent") return MAIN_COLOR;
   return SUBAGENT_PALETTE[subagentIndex % SUBAGENT_PALETTE.length] ?? MAIN_COLOR;

@@ -1,8 +1,8 @@
-/**
- * @file WorkflowPatterns.tsx
- * @description Defines the WorkflowPatterns React component that visualizes common workflow patterns detected from session data. It displays a ranked list of patterns based on their frequency, showing the sequence of agent steps in each pattern along with an icon representing the type of workflow. The component also handles cases where no patterns are detected and includes a special item for solo sessions without subagents. Users can click on a pattern to trigger a callback with the pattern's steps for further analysis or filtering.
 
- */
+
+
+
+
 
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -12,11 +12,11 @@ import type { WorkflowPattern, WorkflowPatternsData } from "../../lib/types";
 
 type TFn = (key: string, options?: Record<string, unknown>) => string;
 
-// ── Constants ─────────────────────────────────────────────────────────────────
+
 
 const MAX_VISIBLE_STEPS = 4;
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
+
 
 function patternIcon(steps: string[]): LucideIcon {
   const joined = steps.join(" ").toLowerCase();
@@ -27,10 +27,10 @@ function patternIcon(steps: string[]): LucideIcon {
   return Zap;
 }
 
-/**
- * Find the first agent that appears more than once in the sequence (loop indicator).
- * Returns null if every step is unique.
- */
+
+
+
+
 function findRepeatedStep(steps: string[]): string | null {
   for (let i = 0; i < steps.length; i++) {
     const s = steps[i];
@@ -39,11 +39,11 @@ function findRepeatedStep(steps: string[]): string | null {
   return null;
 }
 
-/**
- * Build a deterministic, value-dependent narrative for a workflow pattern.
- * Pure rule-based mapping - same input always yields the same output, so the
- * UI never produces hallucinated descriptions for ambiguous patterns.
- */
+
+
+
+
+
 function describePattern(pattern: WorkflowPattern, t: TFn): string {
   const { steps, percentage } = pattern;
   if (steps.length === 0) return "";
@@ -52,7 +52,7 @@ function describePattern(pattern: WorkflowPattern, t: TFn): string {
   const last = steps[steps.length - 1] ?? first;
   const repeated = findRepeatedStep(steps);
 
-  // Shape of the chain
+  
   let core: string;
   if (steps.length === 1) {
     core = t("patterns.detail.narrative.soloFmt", { first });
@@ -68,7 +68,7 @@ function describePattern(pattern: WorkflowPattern, t: TFn): string {
     core += t("patterns.detail.narrative.loopHintFmt", { agent: repeated });
   }
 
-  // Frequency bucket
+  
   let freq: string;
   if (percentage > 50) freq = t("patterns.detail.narrative.dominant");
   else if (percentage > 25) freq = t("patterns.detail.narrative.common");
@@ -78,10 +78,10 @@ function describePattern(pattern: WorkflowPattern, t: TFn): string {
   return core + freq;
 }
 
-/**
- * Pick a suggestion bucket based on chain length and whether a loop exists.
- * Loop wins over length so the user is reminded to confirm intentional loops.
- */
+
+
+
+
 function suggestionForPattern(pattern: WorkflowPattern, t: TFn): string {
   const { steps } = pattern;
   if (findRepeatedStep(steps)) return t("patterns.detail.suggestion.loop");
@@ -91,7 +91,7 @@ function suggestionForPattern(pattern: WorkflowPattern, t: TFn): string {
   return t("patterns.detail.suggestion.longChain");
 }
 
-// ── Sub-components ────────────────────────────────────────────────────────────
+
 
 function StepPill({ label }: { label: string }) {
   return (
@@ -164,7 +164,6 @@ function PatternItem({ pattern, rank, isSelected, onClick }: PatternItemProps) {
         title={t("patterns.detail.clickHint")}
         className="w-full flex items-center gap-3 px-4 py-3 text-left"
       >
-        {/* Rank / icon */}
         <div className="flex-shrink-0 w-7 h-7 rounded-md bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
           {rank <= 3 ? (
             <span className="text-xs font-bold text-indigo-400">{rank}</span>
@@ -173,15 +172,12 @@ function PatternItem({ pattern, rank, isSelected, onClick }: PatternItemProps) {
           )}
         </div>
 
-        {/* Step flow */}
         <div className="flex-1 min-w-0 overflow-hidden">
           <StepFlow steps={pattern.steps} />
         </div>
 
-        {/* Frequency */}
         <PatternFrequency count={pattern.count} percentage={pattern.percentage} />
 
-        {/* Click affordance - visible only when not yet expanded so users know the row is interactive. */}
         {!isSelected && (
           <Info className="hidden sm:block w-3.5 h-3.5 text-gray-600 flex-shrink-0" />
         )}
@@ -200,7 +196,6 @@ function PatternDetail({ pattern }: { pattern: WorkflowPattern }) {
 
   return (
     <div className="border-t border-indigo-500/20 bg-surface-1/40 px-4 py-3.5 space-y-3.5">
-      {/* Full step sequence (no truncation) */}
       <div>
         <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-2">
           {t("patterns.detail.stepsHeading")}
@@ -220,7 +215,6 @@ function PatternDetail({ pattern }: { pattern: WorkflowPattern }) {
         </div>
       </div>
 
-      {/* Stats grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         <DetailStat
           label={t("patterns.detail.stepsCount", { count: pattern.steps.length })}
@@ -237,7 +231,6 @@ function PatternDetail({ pattern }: { pattern: WorkflowPattern }) {
         />
       </div>
 
-      {/* Narrative - what this means */}
       <div>
         <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
           <Info className="w-3 h-3 text-indigo-400" />
@@ -246,7 +239,6 @@ function PatternDetail({ pattern }: { pattern: WorkflowPattern }) {
         <p className="text-xs text-gray-300 leading-relaxed">{narrative}</p>
       </div>
 
-      {/* Suggestion */}
       <div className="bg-indigo-500/5 border border-indigo-500/15 rounded-md px-3 py-2.5">
         <p className="text-[10px] font-semibold text-indigo-300 uppercase tracking-wider mb-1 flex items-center gap-1.5">
           <Lightbulb className="w-3 h-3" />
@@ -302,7 +294,7 @@ function EmptyPatterns() {
   );
 }
 
-// ── Public component ──────────────────────────────────────────────────────────
+
 
 interface WorkflowPatternsProps {
   data: WorkflowPatternsData;

@@ -1,8 +1,8 @@
-/**
- * @file App.tsx
- * @description Defines the main application component that sets up routing for different pages and manages WebSocket connections for real-time updates. It uses React Router for navigation and a custom hook for WebSocket handling.
 
- */
+
+
+
+
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useCallback } from "react";

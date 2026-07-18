@@ -1,8 +1,8 @@
-/**
- * @file ModelDelegationFlow.tsx
- * @description Defines the ModelDelegationFlow React component that visualizes the relationships between main models and subagent models in a flow diagram using D3.js. The component takes model delegation data as input and renders an SVG diagram that shows how different models are connected based on their usage in agents and sessions. It categorizes models into families (opus, sonnet, haiku, other) for color-coding and provides a clear visual representation of model delegation patterns.
 
- */
+
+
+
+
 
 import { useRef, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
@@ -10,7 +10,7 @@ import * as d3 from "d3";
 import type { ModelDelegationData } from "../../lib/types";
 import { formatModelName } from "../../lib/format";
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
+
 
 function modelFamily(name: string): "opus" | "sonnet" | "haiku" | "other" {
   const lower = name.toLowerCase();
@@ -26,9 +26,9 @@ function fmtTokens(n: number): string {
   return String(n);
 }
 
-// Model formatting is handled by the shared formatModelName utility.
 
-// ── Color palette per model family ───────────────────────────────────────────
+
+
 
 const FAMILY_COLORS = {
   opus: {
@@ -57,7 +57,7 @@ const FAMILY_COLORS = {
   },
 } as const;
 
-// ── Types used internally ─────────────────────────────────────────────────────
+
 
 interface NodeDatum {
   id: string;
@@ -79,7 +79,7 @@ interface EdgeDatum {
 type ShowTipFn = (node: NodeDatum, anchor: SVGGraphicsElement) => void;
 type HideTipFn = () => void;
 
-// ── D3 chart renderer ─────────────────────────────────────────────────────────
+
 
 const NODE_W = 160;
 const NODE_H = 80;
@@ -109,7 +109,7 @@ function renderFlow(
 
   const defs = root.append("defs");
 
-  // Gradient defs per family
+  
   (["opus", "sonnet", "haiku", "other"] as const).forEach((fam) => {
     const colors = FAMILY_COLORS[fam];
     const grad = defs
@@ -125,7 +125,7 @@ function renderFlow(
 
   const g = root.append("g");
 
-  // Column labels
+  
   const labelY = PADDING.top - 16;
   g.append("text")
     .attr("x", PADDING.left + NODE_W / 2)
@@ -147,10 +147,10 @@ function renderFlow(
     .attr("letter-spacing", "0.08em")
     .text(t("modelDelegation.subagentModels"));
 
-  // Build lookup for node positions
+  
   const nodeMap = new Map<string, NodeDatum>(allNodes.map((n) => [n.id, n]));
 
-  // Draw edges (cubic bezier curves)
+  
   edges.forEach(({ sourceId, targetId }) => {
     const src = nodeMap.get(sourceId);
     const tgt = nodeMap.get(targetId);
@@ -170,7 +170,7 @@ function renderFlow(
       .attr("opacity", 0.7);
   });
 
-  // Draw nodes
+  
   allNodes.forEach((node) => {
     const colors = FAMILY_COLORS[node.family];
     const ng = g
@@ -182,7 +182,7 @@ function renderFlow(
       })
       .on("mouseleave", () => hideTip());
 
-    // Border glow rect (slightly larger)
+    
     ng.append("rect")
       .attr("x", -1)
       .attr("y", -1)
@@ -194,7 +194,7 @@ function renderFlow(
       .attr("stroke-width", 1)
       .attr("opacity", 0.25);
 
-    // Main rect with gradient
+    
     ng.append("rect")
       .attr("width", NODE_W)
       .attr("height", NODE_H)
@@ -204,7 +204,7 @@ function renderFlow(
       .attr("stroke", colors.stroke)
       .attr("stroke-width", 1);
 
-    // Model name
+    
     ng.append("text")
       .attr("x", 12)
       .attr("y", 22)
@@ -214,7 +214,7 @@ function renderFlow(
       .attr("font-family", "Inter, sans-serif")
       .text(formatModelName(node.label) ?? node.label);
 
-    // Agent count pill
+    
     ng.append("rect")
       .attr("x", 10)
       .attr("y", 32)
@@ -232,7 +232,7 @@ function renderFlow(
       .attr("font-family", "Inter, sans-serif")
       .text(t("modelDelegation.agentsCount", { count: node.agentCount }));
 
-    // Token count
+    
     if (node.totalTokens > 0) {
       ng.append("text")
         .attr("x", 12)
@@ -243,7 +243,7 @@ function renderFlow(
         .text(t("modelDelegation.tokensCount", { tokens: fmtTokens(node.totalTokens) }));
     }
 
-    // Session count (main nodes only)
+    
     if (node.side === "main" && node.sessionCount > 0) {
       ng.append("text")
         .attr("x", NODE_W - 10)
@@ -257,7 +257,7 @@ function renderFlow(
   });
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
+
 
 export interface ModelDelegationFlowProps {
   data: ModelDelegationData;
@@ -334,7 +334,7 @@ export function ModelDelegationFlow({ data }: ModelDelegationFlowProps) {
       y: PADDING.top + i * ROW_GAP,
     }));
 
-    // Connect all main models to all subagent models that share a family, or all if no match
+    
     const edges: EdgeDatum[] = [];
     mainNodes.forEach((mn) => {
       subNodes.forEach((sn) => {
@@ -397,7 +397,7 @@ export function ModelDelegationFlow({ data }: ModelDelegationFlowProps) {
   );
 }
 
-// ── Tooltip helpers ───────────────────────────────────────────────────────────
+
 
 function countTotalAgents(data: ModelDelegationData): number {
   const mainSum = data.mainModels.reduce((s, m) => s + m.agent_count, 0);

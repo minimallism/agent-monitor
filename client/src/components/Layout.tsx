@@ -1,8 +1,8 @@
-/**
- * @file Layout.tsx
- * @description Defines the Layout component that serves as the main structure for the application, including a collapsible sidebar and a main content area. The sidebar's collapsed state is stored in localStorage to persist user preferences across sessions. The component uses React Router's Outlet to render nested routes within the main content area and adjusts its layout based on the sidebar's state.
 
- */
+
+
+
+
 
 import { useState, useCallback } from "react";
 import { Outlet } from "react-router-dom";
@@ -31,9 +31,9 @@ export function Layout() {
           width: collapsed ? "calc(100% - 4.25rem)" : "calc(100% - 15rem)",
         }}
       >
-        {/* overflow-x-clip (not -hidden) clips horizontal overflow without
-            creating a scroll container, so descendant `position: sticky`
-            elements (e.g. the Settings page TOC) still pin to the window. */}
+        {
+
+}
         <div className="p-5 lg:p-6 max-w-full overflow-x-clip">
           <Outlet />
         </div>

@@ -1,12 +1,12 @@
-/**
- * @file tuiSegments.ts
- * @description Parses Claude TUI tag markup that appears in user messages -
- * caveats, command invocations, captured stdout/stderr, system reminders -
- * into a flat segment list the renderer can lay out inline. Also strips bare
- * ANSI/SGR escape sequences (e.g. "[1m...[22m") that survive the JSONL pipe
- * so messages render as plain text instead of leaking codes.
 
- */
+
+
+
+
+
+
+
+
 
 export type TuiSegment =
   | { kind: "caveat"; text: string }
@@ -31,9 +31,9 @@ const KNOWN_TAG_RE = new RegExp(
   `<(?:${[...Object.keys(SIMPLE_TAGS), ...COMMAND_TAGS].join("|")})\\b`
 );
 
-// Strip both real ESC-prefixed SGR codes and the bare "[Nm" forms that show up
-// when the ESC byte is dropped during JSON encoding. Only matches when followed
-// by `m` (the SGR terminator), so it does not eat ordinary bracketed text.
+
+
+
 const ANSI_RE = /\[[\d;]*m|\[\d+(?:;\d+)*m/g;
 
 export function stripAnsi(text: string): string {
@@ -63,9 +63,9 @@ function findSimpleTagMatches(input: string): MatchSpan[] {
 }
 
 function findCommandBlocks(input: string): MatchSpan[] {
-  // A command block is one or more <command-name|message|args> tags possibly
-  // separated by whitespace. Group them so a single pill renders even when
-  // the tags arrive in name -> message -> args order.
+  
+  
+  
   const re = /(?:<command-(?:name|message|args)>[^<]*<\/command-(?:name|message|args)>\s*){1,3}/g;
   const out: MatchSpan[] = [];
   let m: RegExpExecArray | null;
@@ -87,11 +87,11 @@ function findCommandBlocks(input: string): MatchSpan[] {
   return out;
 }
 
-/**
- * Walks a message text and splits out recognized TUI/command segments while
- * preserving the surrounding prose as `text` segments. Returns a single
- * `text` segment for inputs that contain no recognized markup.
- */
+
+
+
+
+
 export function parseTuiSegments(input: string): TuiSegment[] {
   if (!KNOWN_TAG_RE.test(input)) {
     return [{ kind: "text", text: input }];
@@ -122,7 +122,7 @@ export function parseTuiSegments(input: string): TuiSegment[] {
   return segments.length > 0 ? segments : [{ kind: "text", text: input }];
 }
 
-/** True if any recognized TUI tag would alter the rendering of this text. */
+
 export function hasTuiTags(input: string): boolean {
   return KNOWN_TAG_RE.test(input);
 }

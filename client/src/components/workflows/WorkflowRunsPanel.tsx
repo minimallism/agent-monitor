@@ -1,17 +1,17 @@
-/**
- * @file WorkflowRunsPanel.tsx
- * @description Surfaces dynamic Workflow-tool runs (issue #167) - fleets of
- * inner sub-agents spawned by the Claude Code "Workflow" tool, ingested from
- * on-disk run journals. Works in two modes: controlled (pass `runs`, e.g. from
- * SessionDetail) or self-fetching (pass a `statusFilter`, e.g. the Workflows
- * page) with live `workflow_upserted` updates. Each run expands to colored,
- * clickable phase filters, a per-agent metrics table, and an expandable list of
- * per-agent results. The collapsed row shows a short teaser from the run
- * journal; expanding an agent lazily fetches its full transcript (the journal
- * only carries server-truncated previews) and renders the complete prompt and
- * result, falling back to the teaser when the transcript is pruned/unavailable.
 
- */
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
@@ -30,13 +30,13 @@ import { fmt, formatMs, timeAgo, truncate } from "../../lib/format";
 type StatusFilter = "all" | "active" | "completed";
 
 interface Props {
-  /** Controlled mode: render exactly these runs (no fetch, no live updates). */
+  
   runs?: WorkflowRun[];
-  /** Self-fetch mode: page-level status filter (active → running). */
+  
   statusFilter?: StatusFilter;
-  /** Self-fetch mode: scope to one session. */
+  
   sessionId?: string;
-  /** Hide the parent-session link (e.g. when already on that session). */
+  
   hideSessionLink?: boolean;
 }
 
@@ -55,9 +55,9 @@ function statusClass(status: string): string {
   return STATUS_STYLES[status] || "bg-gray-500/15 text-gray-400 border-gray-500/30";
 }
 
-// Distinct per-phase chip colors, cycled by phase index so every phase
-// (e.g. Scout / Verify / Synthesize, or Explain / Interview / Gotcha) reads
-// as its own color in both the filter row and the result label chips.
+
+
+
 const PHASE_PALETTE = [
   "bg-violet-500/15 text-violet-300 border-violet-500/40",
   "bg-sky-500/15 text-sky-300 border-sky-500/40",
@@ -81,12 +81,12 @@ function hashStr(s: string): number {
   return h;
 }
 
-/**
- * Surface a human-readable excerpt from an agent's result preview, which is
- * often a (frequently truncated) JSON blob. Prefer a known content field, then
- * the first substantial quoted string, then a de-JSON'd snippet - so the panel
- * shows a sentence instead of raw `{"angle":"…","findings":[{"claim":"…`.
- */
+
+
+
+
+
+
 export function friendlyPreview(raw: unknown): string {
   if (!raw) return "";
   const s = String(raw).trim();
@@ -105,7 +105,7 @@ export function friendlyPreview(raw: unknown): string {
   return s;
 }
 
-/** Full, un-truncated content for the expanded view - pretty-printed if JSON. */
+
 export function fullPreview(raw: unknown): string {
   if (raw == null) return "";
   const s = String(raw);
@@ -116,7 +116,7 @@ export function fullPreview(raw: unknown): string {
   }
 }
 
-/** Join the text blocks of one transcript message into a single string. */
+
 function messageText(m: TranscriptMessage): string {
   return (m.content || [])
     .filter((b) => b.type === "text" && b.text)
@@ -125,13 +125,13 @@ function messageText(m: TranscriptMessage): string {
     .trim();
 }
 
-/**
- * Derive an agent's full prompt and result from its fetched transcript: the
- * first user message carries the task prompt; the last assistant message that
- * has text carries the returned result. Either is "" when absent (e.g. a
- * schema-mode agent whose final turn is a tool call rather than text) - callers
- * fall back to the journal teaser in that case.
- */
+
+
+
+
+
+
+
 export function extractPromptResult(messages: TranscriptMessage[]): {
   prompt: string;
   result: string;
@@ -144,13 +144,13 @@ export function extractPromptResult(messages: TranscriptMessage[]): {
       if (t) prompt = t;
     } else if (m.type === "assistant") {
       const t = messageText(m);
-      if (t) result = t; // keep the last non-empty assistant text
+      if (t) result = t; 
     }
   }
   return { prompt, result };
 }
 
-/** Per-agent transcript fetch state, keyed `${run_id}::${agentId}`. */
+
 interface AgentTranscriptState {
   loading: boolean;
   prompt?: string;
@@ -172,9 +172,9 @@ export function WorkflowRunsPanel({
   const [expanded, setExpanded] = useState<Set<string>>(() => new Set());
   const [phaseFilter, setPhaseFilter] = useState<Record<string, string | null>>({});
   const [openResults, setOpenResults] = useState<Set<string>>(() => new Set());
-  // Full agent transcripts fetched on demand when a result row is expanded,
-  // keyed `${run_id}::${agentId}`. The run journal only carries truncated
-  // previews; the complete text lives in the per-agent transcript file.
+  
+  
+  
   const [transcripts, setTranscripts] = useState<Record<string, AgentTranscriptState>>({});
   const inflightRef = useRef<Set<string>>(new Set());
 
@@ -210,7 +210,7 @@ export function WorkflowRunsPanel({
       const res = await api.workflows.runs({ status, session_id: sessionId, limit: 200 });
       setFetchedRuns(res.runs);
     } catch {
-      /* leave previous runs in place */
+      
     } finally {
       setLoading(false);
     }
@@ -221,7 +221,7 @@ export function WorkflowRunsPanel({
     fetchRuns();
   }, [controlled, fetchRuns]);
 
-  // Live updates: debounce a refetch when a workflow row changes.
+  
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
     if (controlled) return;
@@ -278,8 +278,8 @@ export function WorkflowRunsPanel({
       {runs.map((run) => {
         const isOpen = expanded.has(run.run_id);
         const running = run.status === "running" || run.status === "working";
-        // progress[] mixes phase markers and agents; only `workflow_agent`
-        // entries are real agents.
+        
+        
         const agentRows = (run.progress || []).filter((p) => p.type === "workflow_agent");
         const phaseTitles = (run.phases || []).map((p) => p.title || "").filter(Boolean);
         const sel = phaseFilter[run.run_id] || null;
@@ -341,7 +341,6 @@ export function WorkflowRunsPanel({
 
             {isOpen && (
               <div className="px-3 pb-3 pt-3 border-t border-gray-800/60 space-y-3">
-                {/* Clickable, colored phase filters */}
                 {phaseTitles.length > 0 && (
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <Layers className="w-3.5 h-3.5 text-gray-500" />
@@ -437,7 +436,6 @@ export function WorkflowRunsPanel({
                   <p className="text-[11px] text-gray-600">{t("runs.noAgents")}</p>
                 )}
 
-                {/* Clickable, colored, expandable results - full content on click */}
                 {resultRows.length > 0 && (
                   <div className="space-y-1.5">
                     <div className="text-[10px] font-medium uppercase tracking-wider text-gray-600">

@@ -1,17 +1,17 @@
-/**
- * @file MarkdownContent.tsx
- * @description Lightweight markdown renderer for conversation messages. Supports the
- * subset of CommonMark + GFM that actually appears in Claude Code transcripts:
- * fenced code blocks, ATX headings, ordered/unordered lists, task lists, blockquotes,
- * horizontal rules, simple tables, inline code, bold, italic, strikethrough, links,
- * and auto-linked URLs.
- *
- * Output is built as a React element tree (no dangerouslySetInnerHTML) so user content
- * is escaped by React. Code blocks delegate to <CodeBlock /> for syntax highlighting and
- * copy-to-clipboard.
- *
 
- */
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 import React from "react";
 import { CodeBlock } from "./CodeBlock";
@@ -39,11 +39,11 @@ const QUOTE_RE = /^\s*>\s?(.*)$/;
 const TABLE_DIVIDER_RE = /^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?\s*$/;
 
 function splitTableRow(line: string): string[] {
-  // Trim leading/trailing pipes, then split, respecting escaped pipes.
+  
   let s = line.trim();
   if (s.startsWith("|")) s = s.slice(1);
   if (s.endsWith("|")) s = s.slice(0, -1);
-  // Split on unescaped pipes
+  
   const parts: string[] = [];
   let cur = "";
   for (let i = 0; i < s.length; i++) {
@@ -81,7 +81,7 @@ function parseBlocks(src: string): Block[] {
   while (i < lines.length) {
     const line = lines[i]!;
 
-    // Fenced code block
+    
     const fence = line.match(FENCE_RE);
     if (fence) {
       const fenceMarker = fence[2]!;
@@ -101,13 +101,13 @@ function parseBlocks(src: string): Block[] {
       continue;
     }
 
-    // Blank line
+    
     if (line.trim() === "") {
       i++;
       continue;
     }
 
-    // ATX heading
+    
     const heading = line.match(HEADING_RE);
     if (heading) {
       blocks.push({ kind: "heading", level: heading[1]!.length, text: heading[2]! });
@@ -115,14 +115,14 @@ function parseBlocks(src: string): Block[] {
       continue;
     }
 
-    // Horizontal rule
+    
     if (HR_RE.test(line)) {
       blocks.push({ kind: "hr" });
       i++;
       continue;
     }
 
-    // Table: header line followed by an alignment divider
+    
     if (line.includes("|") && i + 1 < lines.length && TABLE_DIVIDER_RE.test(lines[i + 1]!)) {
       const header = splitTableRow(line);
       const aligns = parseAlignments(lines[i + 1]!);
@@ -136,7 +136,7 @@ function parseBlocks(src: string): Block[] {
       continue;
     }
 
-    // Lists
+    
     const ulMatch = line.match(UL_RE);
     const olMatch = line.match(OL_RE);
     if (ulMatch || olMatch) {
@@ -166,7 +166,7 @@ function parseBlocks(src: string): Block[] {
       continue;
     }
 
-    // Blockquote
+    
     if (QUOTE_RE.test(line)) {
       const qLines: string[] = [];
       while (i < lines.length) {
@@ -179,7 +179,7 @@ function parseBlocks(src: string): Block[] {
       continue;
     }
 
-    // Paragraph: collect until a blank line or the start of another block
+    
     const paraLines: string[] = [line];
     i++;
     while (i < lines.length) {
@@ -203,7 +203,7 @@ function parseBlocks(src: string): Block[] {
   return blocks;
 }
 
-/** Render inline markdown (bold/italic/code/strikethrough/links/auto-links). */
+
 function renderInline(text: string, baseKey = ""): React.ReactNode[] {
   const out: React.ReactNode[] = [];
   let i = 0;
@@ -223,7 +223,7 @@ function renderInline(text: string, baseKey = ""): React.ReactNode[] {
   while (i < text.length) {
     const rest = text.slice(i);
 
-    // Inline code: `...`
+    
     const codeM = rest.match(/^`([^`\n]+)`/);
     if (codeM) {
       push(
@@ -235,7 +235,7 @@ function renderInline(text: string, baseKey = ""): React.ReactNode[] {
       continue;
     }
 
-    // Bold: **...** or __...__
+    
     const boldM = rest.match(/^(\*\*|__)(.+?)\1/);
     if (boldM) {
       push(
@@ -247,7 +247,7 @@ function renderInline(text: string, baseKey = ""): React.ReactNode[] {
       continue;
     }
 
-    // Italic: *...* or _..._
+    
     const italicM = rest.match(/^(\*|_)([^*_\n]+?)\1/);
     if (italicM) {
       push(
@@ -257,7 +257,7 @@ function renderInline(text: string, baseKey = ""): React.ReactNode[] {
       continue;
     }
 
-    // Strikethrough
+    
     const strikeM = rest.match(/^~~(.+?)~~/);
     if (strikeM) {
       push(
@@ -269,7 +269,7 @@ function renderInline(text: string, baseKey = ""): React.ReactNode[] {
       continue;
     }
 
-    // Markdown link
+    
     const linkM = rest.match(/^\[([^\]]+)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/);
     if (linkM) {
       push(
@@ -286,7 +286,7 @@ function renderInline(text: string, baseKey = ""): React.ReactNode[] {
       continue;
     }
 
-    // Auto-link
+    
     const urlM = rest.match(/^https?:\/\/[^\s<>()]+[^\s<>().,!?;:'"]/);
     if (urlM) {
       push(
@@ -310,7 +310,7 @@ function renderInline(text: string, baseKey = ""): React.ReactNode[] {
   return out;
 }
 
-/** Render a single list item, handling [ ] / [x] task list prefixes. */
+
 function renderListItem(item: string, key: string): React.ReactNode {
   const taskMatch = item.match(/^\[([ xX])\]\s+(.*)$/s);
   if (taskMatch) {
@@ -334,7 +334,7 @@ function renderListItem(item: string, key: string): React.ReactNode {
 
 interface MarkdownContentProps {
   text: string;
-  /** Tighter spacing for nested contexts (list items, quotes). */
+  
   dense?: boolean;
 }
 

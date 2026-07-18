@@ -1,8 +1,8 @@
-/**
- * @file Analytics.tsx
- * @description Provides a comprehensive analytics dashboard for monitoring Claude Code sessions, agents, token usage, and events in real-time. Features include an activity heatmap, token distribution charts, session outcome breakdowns, and more, all with interactive tooltips and live updates via WebSocket.
 
- */
+
+
+
+
 
 import { useEffect, useState, useCallback, useMemo, useSyncExternalStore } from "react";
 import { useTranslation } from "react-i18next";
@@ -26,7 +26,7 @@ interface SystemInfo {
   server: { ws_connections: number };
 }
 
-// ── Tooltip ───────────────────────────────────────────────────────────────────
+
 
 function ChartTooltip({ x, y, children }: { x: number; y: number; children: React.ReactNode }) {
   const nearRight = x > window.innerWidth - 200;
@@ -68,19 +68,19 @@ function useTooltip() {
   return { show, move, hide, node };
 }
 
-// ── Heatmap ──────────────────────────────────────────────────────────────────
+
 
 function cellColor(count: number, max: number) {
   if (count === 0) return "#161625";
-  // Log scale + RGB interpolation across a wide color ramp for maximum perceptual range
+  
   const t = Math.log(count + 1) / Math.log(Math.max(max, 1) + 1);
-  // Ramp: near-black indigo → deep indigo → bright indigo → lavender
+  
   type RGB = [number, number, number];
   const stops: RGB[] = [
-    [22, 20, 60], // near-black indigo
-    [55, 48, 163], // deep indigo
-    [99, 102, 241], // bright indigo
-    [199, 210, 254], // lavender
+    [22, 20, 60], 
+    [55, 48, 163], 
+    [99, 102, 241], 
+    [199, 210, 254], 
   ];
   const scaled = t * (stops.length - 1);
   const lo = Math.min(Math.floor(scaled), stops.length - 2);
@@ -110,23 +110,23 @@ function Heatmap({ weeks }: { weeks: Array<Array<{ date: string; count: number }
     () =>
       Array.from({ length: 7 }, (_, day) =>
         new Intl.DateTimeFormat(locale, { weekday: "short" }).format(
-          new Date(2026, 0, 4 + day) // Jan 4, 2026 is Sunday
+          new Date(2026, 0, 4 + day) 
         )
       ),
     [locale]
   );
 
-  // Labels on the left: Sun (0), Tue (2), Thu (4)
+  
   const dayLabels = [dayNames[0], "", dayNames[2], "", dayNames[4], "", ""];
   const maxCount = Math.max(...weeks.flatMap((w) => w.map((c) => c.count)), 1);
 
-  // Compute month label positions accurately. A label is ~3 columns wide (each
-  // column is 16px, a 3-letter month ≈ 22px). The very first month is often a
-  // stub - the 52-week window starts mid-month, so e.g. "May" sits at col 0 and
-  // "Jun" at col 1 and they overlap. Drop the *stub* (the earlier, partial one)
-  // rather than the full month after it, so the next label isn't pushed away.
+  
+  
+  
+  
+  
   const monthPositions = useMemo(() => {
-    const MIN_LABEL_GAP = 3; // columns a label needs to itself
+    const MIN_LABEL_GAP = 3; 
     const starts: Array<{ label: string; col: number }> = [];
     let prevMonth = -1;
 
@@ -134,16 +134,16 @@ function Heatmap({ weeks }: { weeks: Array<Array<{ date: string; count: number }
       const firstCell = week[0];
       if (!firstCell) return;
       const parts = firstCell.date.split("-").map(Number);
-      const m = (parts[1] || 1) - 1; // 0-indexed month
+      const m = (parts[1] || 1) - 1; 
       if (m !== prevMonth) {
         starts.push({ label: monthLabels[m] ?? "", col: wi });
         prevMonth = m;
       }
     });
 
-    // Drop a label when the *next* month starts too soon after it (it would
-    // collide). Suppressing the earlier label leaves the later, full month in
-    // place - no gap is introduced.
+    
+    
+    
     return starts.filter((s, i) => {
       const next = starts[i + 1];
       return !next || next.col - s.col >= MIN_LABEL_GAP;
@@ -153,7 +153,6 @@ function Heatmap({ weeks }: { weeks: Array<Array<{ date: string; count: number }
   return (
     <div className="relative">
       {node}
-      {/* Month labels */}
       <div className="flex mb-2 ml-[32px] relative h-4">
         {monthPositions.map((mp, i) => (
           <div
@@ -166,7 +165,6 @@ function Heatmap({ weeks }: { weeks: Array<Array<{ date: string; count: number }
         ))}
       </div>
       <div className="flex" style={{ gap: "3px" }}>
-        {/* Day labels */}
         <div className="flex flex-col mr-1 w-7" style={{ gap: "3px" }}>
           {dayLabels.map((d, i) => (
             <div
@@ -178,7 +176,6 @@ function Heatmap({ weeks }: { weeks: Array<Array<{ date: string; count: number }
             </div>
           ))}
         </div>
-        {/* Cells */}
         {weeks.map((week, wi) => (
           <div key={wi} className="flex flex-col" style={{ gap: "3px" }}>
             {week.map((cell) => (
@@ -219,7 +216,6 @@ function Heatmap({ weeks }: { weeks: Array<Array<{ date: string; count: number }
           </div>
         ))}
       </div>
-      {/* Legend */}
       <div className="flex items-center gap-2 mt-3 text-[11px] text-gray-600">
         <span>{t("less")}</span>
         {[0, 0.25, 0.5, 0.75, 1].map((f) => {
@@ -243,7 +239,7 @@ function Heatmap({ weeks }: { weeks: Array<Array<{ date: string; count: number }
   );
 }
 
-// ── Sparkline bar chart ───────────────────────────────────────────────────────
+
 
 function Sparkline({
   data,
@@ -288,7 +284,7 @@ function Sparkline({
 
 
 
-// ── Bar row ───────────────────────────────────────────────────────────────────
+
 
 function BarRow({
   label,
@@ -324,7 +320,7 @@ function BarRow({
 
 
 
-// ── Donut segment via SVG ─────────────────────────────────────────────────────
+
 
 function DonutChart({
   segments,
@@ -344,8 +340,8 @@ function DonutChart({
   const stroke = 18;
   const circumference = 2 * Math.PI * r;
 
-  // offset starts at circumference/4 (top of circle) and decrements by each segment's arc.
-  // strokeDashoffset = offset (not negated) is the correct formula for starting at 12 o'clock.
+  
+  
   let offset = circumference / 4;
   return (
     <div className="flex items-center justify-center gap-6 w-full">
@@ -426,9 +422,9 @@ function ChartCardSkeleton({
   );
 }
 
-/** Pulsing placeholder for the Analytics chart region (heatmap + sparkline row,
- *  tab bar, and the three-up chart grid) shown while the analytics payload is
- *  still being fetched. */
+
+
+
 function AnalyticsChartsSkeleton() {
   return (
     <div className="space-y-6" aria-busy="true" aria-label="Loading analytics charts">
@@ -446,7 +442,7 @@ function AnalyticsChartsSkeleton() {
   );
 }
 
-// ── Main page ─────────────────────────────────────────────────────────────────
+
 
 export function Analytics() {
   const { t } = useTranslation("analytics");
@@ -479,7 +475,7 @@ export function Analytics() {
     try {
       const res = await api.settings.info();
       setSysInfo(res as any);
-    } catch { /* silent */ }
+    } catch {  }
   }, []);
 
   useEffect(() => {
@@ -501,7 +497,7 @@ export function Analytics() {
     });
   }, [load]);
 
-  // Format a local Date object as a YYYY-MM-DD string for heatmap lookups
+  
   function localDateStr(d: Date): string {
     const y = d.getFullYear();
     const m = String(d.getMonth() + 1).padStart(2, "0");
@@ -509,21 +505,21 @@ export function Analytics() {
     return `${y}-${m}-${day}`;
   }
 
-  // Server now returns dates grouped by the user's local timezone (via tz_offset),
-  // so we can use them directly without conversion.
+  
+  
   const dailyMap: Record<string, number> = {};
   for (const d of data?.daily_events ?? []) {
     dailyMap[d.date] = (dailyMap[d.date] ?? 0) + d.count;
   }
 
-  // Build heatmap: 52 weeks × 7 days
-  // Align start to Sunday (day 0) so row indices match day-of-week labels correctly.
+  
+  
   const today = new Date();
-  today.setHours(12, 0, 0, 0); // Normalize to noon
+  today.setHours(12, 0, 0, 0); 
 
   const startDate = new Date(today);
-  startDate.setDate(today.getDate() - 364); // Exactly 52 weeks ago
-  // Roll back to the previous Sunday
+  startDate.setDate(today.getDate() - 364); 
+  
   const startDow = startDate.getDay();
   startDate.setDate(startDate.getDate() - startDow);
 
@@ -540,7 +536,7 @@ export function Analytics() {
     if (week.length > 0) weeks.push(week);
   }
 
-  // Last 30 days for sparkline
+  
   const last30 = Array.from({ length: 30 }, (_, i) => {
     const d = new Date(today);
     d.setDate(today.getDate() - (29 - i));
@@ -548,7 +544,7 @@ export function Analytics() {
     return { date: dateStr, count: dailyMap[dateStr] ?? 0 };
   });
 
-  // Convert daily_sessions - server already returns local dates
+  
   const dailySessionsLocal: Array<{ date: string; count: number }> = [];
   const sessMap: Record<string, number> = {};
   for (const d of data?.daily_sessions ?? []) {
@@ -650,7 +646,6 @@ export function Analytics() {
 
   return (
     <div className="animate-fade-in space-y-8">
-      {/* Header */}
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex items-center gap-3 mb-1">
@@ -694,7 +689,6 @@ export function Analytics() {
         <AnalyticsChartsSkeleton />
       ) : (
         <>
-          {/* Activity heatmap + 30-day sparkline */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="card p-5 lg:col-span-2">
               <h3 className="text-sm font-medium text-gray-300 mb-4">{t("eventActivity")}</h3>
@@ -735,7 +729,6 @@ export function Analytics() {
             </div>
           </div>
 
-          {/* Tabs */}
           <div>
             <div className="flex gap-1 bg-surface-2 rounded-lg p-1 mb-6 w-fit">
               {(
@@ -761,7 +754,6 @@ export function Analytics() {
 
             {activeTab === "tokens" && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/* Token Usage by Model */}
                 <div className="card p-5">
                   <h3 className="text-sm font-medium text-gray-300 mb-5">{t("modelTokenUsage")}</h3>
                   {modelTokenRows.length === 0 ? (
@@ -816,7 +808,6 @@ export function Analytics() {
                   )}
                 </div>
 
-                {/* Token summary */}
                 <div className="card p-5">
                   <h3 className="text-sm font-medium text-gray-300 mb-5">{t("tokenBreakdown")}</h3>
                   <div className="space-y-3">
@@ -859,7 +850,6 @@ export function Analytics() {
                   )}
                 </div>
 
-                {/* Token mix donut */}
                 <div className="card p-5">
                   <h3 className="text-sm font-medium text-gray-300 mb-5">{t("tokenMix")}</h3>
                   {tokenMixSegments.length === 0 ? (
@@ -887,7 +877,6 @@ export function Analytics() {
 
             {activeTab === "workflow" && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/* Integration Gateway */}
                 <div className="card p-5 flex flex-col gap-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -948,7 +937,6 @@ export function Analytics() {
                   )}
                 </div>
 
-                {/* Agent status donut */}
                 <div className="card p-5">
                   <h3 className="text-sm font-medium text-gray-300 mb-5">{t("agentStatus")}</h3>
                   <DonutChart segments={agentStatusSegments} />
@@ -981,7 +969,6 @@ export function Analytics() {
                   </div>
                 </div>
 
-                {/* Event type breakdown */}
                 <div className="card p-5">
                   <h3 className="text-sm font-medium text-gray-300 mb-5">{t("eventTypes")}</h3>
                   {(data?.event_types ?? []).length === 0 ? (
@@ -1005,7 +992,6 @@ export function Analytics() {
 
             {activeTab === "productivity" && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/* Tool Usage */}
                 <div className="card p-5">
                   <h3 className="text-sm font-medium text-gray-300 mb-5">{t("toolUsage")}</h3>
                   {(data?.tool_usage ?? []).length === 0 ? (
@@ -1054,7 +1040,6 @@ export function Analytics() {
                   )}
                 </div>
 
-                {/* Session outcomes donut */}
                 <div className="card p-5">
                   <h3 className="text-sm font-medium text-gray-300 mb-5">{t("sessionOutcomes")}</h3>
                   <DonutChart segments={sessionOutcomeSegments} />
@@ -1087,7 +1072,6 @@ export function Analytics() {
                   </div>
                 </div>
 
-                {/* Daily session trends */}
                 <div className="card p-5">
                   <h3 className="text-sm font-medium text-gray-300 mb-5">
                     {t("dailySessionTrends")}

@@ -1,8 +1,8 @@
-/**
- * @file StatCard.tsx
- * @description A reusable React component that displays a statistic with a label, value, icon, and optional trend information. It is designed to be used in dashboards or analytics pages to present key metrics in a visually appealing way. The component also supports showing raw values as tooltips on hover for more detailed information.
 
- */
+
+
+
+
 
 import type { LucideIcon } from "lucide-react";
 import { Tip } from "./Tip";
@@ -14,10 +14,10 @@ interface StatCardProps {
   icon: LucideIcon;
   trend?: string;
   accentColor?: string;
-  /** Raw value shown as custom tooltip on hover */
+  
   raw?: string;
-  /** When true, render skeletons in place of value/trend so the UI never
-   *  flashes "-" or "0" before real data arrives. */
+  
+
   loading?: boolean;
 }
 
