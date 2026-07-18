@@ -1,9 +1,3 @@
-
-
-
-
-
-
 import { useEffect, useState, useCallback, useSyncExternalStore } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -24,10 +18,6 @@ import { fmt, getCurrentLocale } from "../lib/format";
 import { Tip } from "../components/Tip";
 import { Skeleton } from "../components/Skeleton";
 import type { WSMessage } from "../lib/types";
-
-
-
-
 
 interface SystemInfo {
   db: { path: string; size: number; counts: Record<string, number> };
@@ -62,8 +52,6 @@ function formatUptime(seconds: number): string {
   if (h > 0) return `${h}h ${m}m`;
   return `${m}m`;
 }
-
-
 
 function Toggle({
   checked,
@@ -100,8 +88,6 @@ function Toggle({
     </label>
   );
 }
-
-
 
 export function Settings() {
   const { t } = useTranslation("settings");
@@ -167,7 +153,6 @@ export function Settings() {
     const timeout = setTimeout(() => setActionResult(null), 5000);
     return () => clearTimeout(timeout);
   }, [actionResult]);
-
 
   const runAction = async (key: string, fn: () => Promise<string>) => {
     setActionLoading(key);
@@ -298,9 +283,6 @@ export function Settings() {
           </button>
         </div>
       </div>
-
-
-
 
       <section id="hooks" className="scroll-mt-24">
         <h3 className="text-sm font-medium text-gray-300 flex items-center gap-2 mb-1">

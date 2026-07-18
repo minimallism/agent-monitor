@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Search, X, Filter } from "lucide-react";
@@ -49,10 +39,6 @@ export function isEmptyFilters(f: EventFiltersValue): boolean {
   );
 }
 
-
-
-
-
 export const STATUS_TO_EVENT_TYPES: Record<string, string[]> = {
   working: ["PreToolUse"],
   waiting: ["PostToolUse", "Stop"],
@@ -61,10 +47,6 @@ export const STATUS_TO_EVENT_TYPES: Record<string, string[]> = {
 };
 
 export const STATUS_OPTIONS = ["working", "waiting", "completed", "error"] as const;
-
-
-
-
 
 export function expandStatusToEventTypes(statuses: string[]): string[] {
   const out = new Set<string>();

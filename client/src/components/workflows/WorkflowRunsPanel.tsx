@@ -1,18 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -55,9 +40,6 @@ function statusClass(status: string): string {
   return STATUS_STYLES[status] || "bg-gray-500/15 text-gray-400 border-gray-500/30";
 }
 
-
-
-
 const PHASE_PALETTE = [
   "bg-violet-500/15 text-violet-300 border-violet-500/40",
   "bg-sky-500/15 text-sky-300 border-sky-500/40",
@@ -81,12 +63,6 @@ function hashStr(s: string): number {
   return h;
 }
 
-
-
-
-
-
-
 export function friendlyPreview(raw: unknown): string {
   if (!raw) return "";
   const s = String(raw).trim();
@@ -105,7 +81,6 @@ export function friendlyPreview(raw: unknown): string {
   return s;
 }
 
-
 export function fullPreview(raw: unknown): string {
   if (raw == null) return "";
   const s = String(raw);
@@ -116,7 +91,6 @@ export function fullPreview(raw: unknown): string {
   }
 }
 
-
 function messageText(m: TranscriptMessage): string {
   return (m.content || [])
     .filter((b) => b.type === "text" && b.text)
@@ -124,13 +98,6 @@ function messageText(m: TranscriptMessage): string {
     .join("\n\n")
     .trim();
 }
-
-
-
-
-
-
-
 
 export function extractPromptResult(messages: TranscriptMessage[]): {
   prompt: string;
@@ -149,7 +116,6 @@ export function extractPromptResult(messages: TranscriptMessage[]): {
   }
   return { prompt, result };
 }
-
 
 interface AgentTranscriptState {
   loading: boolean;

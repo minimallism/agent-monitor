@@ -1,17 +1,4 @@
-
-
-
-
-
-
-
-
-
-
-
 import type { DashboardEvent } from "./types";
-
-
 
 export type EventSummary = {
   
@@ -40,7 +27,6 @@ function trunc(text: string, max: number): string {
   return text.length > max ? text.slice(0, max) + "..." : text;
 }
 
-
 function parseData(event: DashboardEvent): Record<string, unknown> | null {
   if (!event.data) return null;
   try {
@@ -50,7 +36,6 @@ function parseData(event: DashboardEvent): Record<string, unknown> | null {
     return null;
   }
 }
-
 
 function countHunks(structuredPatch: unknown): { hunks: number; added: number; removed: number } {
   if (!Array.isArray(structuredPatch)) return { hunks: 0, added: 0, removed: 0 };
@@ -67,8 +52,6 @@ function countHunks(structuredPatch: unknown): { hunks: number; added: number; r
   }
   return { hunks: structuredPatch.length, added, removed };
 }
-
-
 
 function firstEnclosingContext(structuredPatch: unknown): string | null {
   
@@ -87,29 +70,16 @@ function firstEnclosingContext(structuredPatch: unknown): string | null {
   return null;
 }
 
-
 function lineCount(text: string): number {
   if (!text) return 0;
   return text.split(/\r?\n/).length;
 }
-
 
 function formatDuration(ms: number): string {
   if (ms < 1000) return `${ms}ms`;
   if (ms < 60_000) return `${(ms / 1000).toFixed(1)}s`;
   return `${Math.floor(ms / 60_000)}m ${Math.floor((ms % 60_000) / 1000)}s`;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 export function buildEventSummary(event: DashboardEvent): EventSummary | null {
   const data = parseData(event);
@@ -377,9 +347,6 @@ export function buildEventSummary(event: DashboardEvent): EventSummary | null {
   }
 }
 
-
-
-
 function humanizeMcp(toolName: string): string {
   const parts = toolName.split("__").filter(Boolean);
   if (parts.length < 3) return toolName;
@@ -395,13 +362,10 @@ function humanizeMcp(toolName: string): string {
   return `${server} · ${toolPart}`;
 }
 
-
 function firstWord(command: string): string {
   const m = command.trim().match(/^(\S+)/);
   return m ? (m[1] ?? command) : command;
 }
-
-
 
 function firstStringField(obj: Record<string, unknown>, priority: string[]): string | null {
   for (const k of priority) {
@@ -410,8 +374,6 @@ function firstStringField(obj: Record<string, unknown>, priority: string[]): str
   }
   return null;
 }
-
-
 
 function countGrepMatches(response: unknown): number | null {
   if (!response) return null;
@@ -424,7 +386,6 @@ function countGrepMatches(response: unknown): number | null {
   if (typeof r.numFiles === "number") return r.numFiles;
   return null;
 }
-
 
 function countFiles(response: unknown): number | null {
   if (Array.isArray(response)) return response.length;

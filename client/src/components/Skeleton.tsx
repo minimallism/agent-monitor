@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 import type { CSSProperties } from "react";
 
 interface SkeletonProps {
@@ -26,10 +16,6 @@ const ROUNDED_CLASS = {
   full: "rounded-full",
 } as const;
 
-
-
-
-
 export function Skeleton({
   className = "",
   style,
@@ -47,16 +33,9 @@ export function Skeleton({
   );
 }
 
-
-
-
-
 export function StatValueSkeleton({ className = "" }: { className?: string }) {
   return <Skeleton className={`h-7 w-20 align-middle ${className}`} />;
 }
-
-
-
 
 export function TextSkeleton({
   className = "",
@@ -67,10 +46,6 @@ export function TextSkeleton({
 }) {
   return <Skeleton className={`h-3 ${width} align-middle ${className}`} />;
 }
-
-
-
-
 
 export function TableRowSkeleton({ columns, widths }: { columns: number; widths?: string[] }) {
   return (
@@ -83,9 +58,6 @@ export function TableRowSkeleton({ columns, widths }: { columns: number; widths?
     </tr>
   );
 }
-
-
-
 
 export function CardSkeleton({ className = "" }: { className?: string }) {
   return (

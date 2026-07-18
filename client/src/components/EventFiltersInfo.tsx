@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 import { useTranslation } from "react-i18next";
 import { Info } from "lucide-react";
 import { AgentStatusBadge } from "./StatusBadge";

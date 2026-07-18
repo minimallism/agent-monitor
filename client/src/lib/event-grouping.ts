@@ -1,20 +1,4 @@
-
-
-
-
-
-
-
-
-
-
-
 import type { DashboardEvent } from "./types";
-
-
-
-
-
 
 export function statusFromEventType(type: string): "working" | "waiting" | "completed" | "error" {
   switch (type) {
@@ -37,10 +21,6 @@ export function statusFromEventType(type: string): "working" | "waiting" | "comp
   }
 }
 
-
-
-
-
 function humanizeMcpServer(raw: string): string {
   const tokens = raw.split(/[_-]+/).filter(Boolean);
   const dedup: string[] = [];
@@ -51,13 +31,9 @@ function humanizeMcpServer(raw: string): string {
   return last.toLowerCase() === last ? last.charAt(0).toUpperCase() + last.slice(1) : last;
 }
 
-
 function humanizeMcpTool(raw: string): string {
   return raw.replace(/_+/g, " ").trim().toLowerCase();
 }
-
-
-
 
 function parseMcpToolName(tool: string): { server: string; tool: string } | null {
   if (!tool.startsWith("mcp__")) return null;
@@ -71,9 +47,6 @@ function parseMcpToolName(tool: string): { server: string; tool: string } | null
     tool: humanizeMcpTool(rest.join("_")),
   };
 }
-
-
-
 
 const CONTEXT_FIELDS = [
   "description",
@@ -89,9 +62,6 @@ const CONTEXT_FIELDS = [
   "command",
 ];
 
-
-
-
 function buildContextHeadline(input: Record<string, unknown>): string | null {
   for (const field of CONTEXT_FIELDS) {
     const v = input[field];
@@ -102,9 +72,6 @@ function buildContextHeadline(input: Record<string, unknown>): string | null {
   }
   return null;
 }
-
-
-
 
 const SUBCOMMAND_BINARIES = new Set([
   "git",
@@ -162,24 +129,16 @@ function parseShellHeadline(command: string): string | null {
   return bin;
 }
 
-
-
 function basename(path: string): string {
   const parts = path.split(/[/\\]/).filter(Boolean);
   return parts.length > 0 ? (parts[parts.length - 1] ?? path) : path;
 }
-
-
-
-
 
 function shortPath(path: string): string {
   const parts = path.split(/[/\\]/).filter(Boolean);
   if (parts.length <= 1) return parts[0] ?? path;
   return parts.slice(-2).join("/");
 }
-
-
 
 function hostFromUrl(url: string): string {
   try {
@@ -188,9 +147,6 @@ function hostFromUrl(url: string): string {
     return url;
   }
 }
-
-
-
 
 function extractToolInput(event: DashboardEvent): Record<string, unknown> | null {
   if (!event.data) return null;
@@ -205,14 +161,6 @@ function extractToolInput(event: DashboardEvent): Record<string, unknown> | null
   }
   return null;
 }
-
-
-
-
-
-
-
-
 
 export function buildEventTitle(event: DashboardEvent): string {
   if (!event.tool_name) return event.summary || event.event_type;
@@ -343,17 +291,12 @@ export function buildEventTitle(event: DashboardEvent): string {
   return `${event.tool_name}${event.summary ? ` · ${event.summary}` : ""}`;
 }
 
-
-
 export function shortAgentLabel(agentId: string | null): string | null {
   if (!agentId) return null;
   if (agentId.endsWith("-main")) return null;
   
   return agentId.length > 8 ? agentId.slice(-8) : agentId;
 }
-
-
-
 
 export type AgentInfo = {
   type: "main" | "subagent";
@@ -362,18 +305,12 @@ export type AgentInfo = {
   parent_agent_id?: string | null;
 };
 
-
-
 function singleAgentSegment(info: AgentInfo): string | null {
   if (info.type === "main") return null;
   if (info.subagent_type && info.subagent_type.length > 0) return info.subagent_type;
   if (info.name && info.name.length > 0) return info.name;
   return null;
 }
-
-
-
-
 
 export function agentPillLabel(agentId: string | null, info: AgentInfo | undefined): string | null {
   if (!agentId) return null;
@@ -384,24 +321,6 @@ export function agentPillLabel(agentId: string | null, info: AgentInfo | undefin
   }
   return shortAgentLabel(agentId);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 export function agentOriginLabel(
   agentId: string | null,
@@ -447,12 +366,6 @@ export function agentOriginLabel(
   return segments.join(" › ");
 }
 
-
-
-
-
-
-
 export function buildOriginLabel(
   projectName: string | null | undefined,
   sessionName: string | null | undefined,
@@ -465,18 +378,10 @@ export function buildOriginLabel(
   return parts.length > 0 ? parts.join(" › ") : null;
 }
 
-
-
-
-
 export function projectFromCwd(cwd: string | null | undefined): string | null {
   if (typeof cwd !== "string" || cwd.length === 0) return null;
   return basename(cwd);
 }
-
-
-
-
 
 export function projectFromEvent(event: DashboardEvent): string | null {
   if (!event.data) return null;

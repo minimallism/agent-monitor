@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Activity,
@@ -30,9 +20,7 @@ interface SessionOverviewProps {
   agents: Agent[];
 }
 
-
 const REFRESH_DEBOUNCE_MS = 600;
-
 
 function StatTile({
   label,
@@ -322,15 +310,6 @@ export function SessionOverview({ session, agents }: SessionOverviewProps) {
         </div>
 
         {
-
-
-
-
-
-
-
-
-
 
 }
         <div className="rounded-lg border border-surface-3 bg-surface-2/60 p-3.5">

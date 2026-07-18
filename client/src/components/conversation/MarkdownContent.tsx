@@ -1,18 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React from "react";
 import { CodeBlock } from "./CodeBlock";
 
@@ -203,7 +188,6 @@ function parseBlocks(src: string): Block[] {
   return blocks;
 }
 
-
 function renderInline(text: string, baseKey = ""): React.ReactNode[] {
   const out: React.ReactNode[] = [];
   let i = 0;
@@ -309,7 +293,6 @@ function renderInline(text: string, baseKey = ""): React.ReactNode[] {
   flush();
   return out;
 }
-
 
 function renderListItem(item: string, key: string): React.ReactNode {
   const taskMatch = item.match(/^\[([ xX])\]\s+(.*)$/s);

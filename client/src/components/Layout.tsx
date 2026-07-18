@@ -1,9 +1,3 @@
-
-
-
-
-
-
 import { useState, useCallback } from "react";
 import { Outlet } from "react-router-dom";
 import { Sidebar, SIDEBAR_STORAGE_KEY, loadCollapsed } from "./Sidebar";

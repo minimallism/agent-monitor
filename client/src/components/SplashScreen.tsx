@@ -1,22 +1,9 @@
-
-
-
-
-
-
-
-
-
-
-
-
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const SESSION_KEY = "splash-shown-v1";
 const HOLD_MS = 2500; 
 const EXIT_MS = 600; 
-
 
 function greetingKey(hour: number): "morning" | "afternoon" | "evening" | "night" {
   if (hour >= 5 && hour < 12) return "morning";
@@ -119,8 +106,6 @@ export function SplashScreen() {
   );
 }
 
-
-
 function BrandMark() {
   return (
     <svg viewBox="0 0 32 32" width="96" height="96" className="splash-svg">
@@ -189,8 +174,6 @@ function BrandMark() {
   );
 }
 
-
-
 function ConstellationField() {
   return (
     <svg
@@ -247,7 +230,6 @@ const SPLASH_CSS = `
   background: #06060a;
   cursor: pointer;
   
-
 
 }
 .splash-root.splash-exit {

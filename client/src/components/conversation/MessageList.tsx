@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 import { useState, useMemo } from "react";
 import {
   ChevronDown,
@@ -23,10 +14,6 @@ import {
   Cog,
 } from "lucide-react";
 import type { TranscriptMessage, TranscriptContent, TranscriptSender } from "../../lib/types";
-
-
-
-
 
 const SENDER_STYLES: Record<
   TranscriptSender,
@@ -83,7 +70,6 @@ interface MessageListProps {
   loading: boolean;
 }
 
-
 function buildToolResultMap(messages: TranscriptMessage[]): Map<string, TranscriptContent> {
   const map = new Map<string, TranscriptContent>();
   for (const msg of messages) {
@@ -97,16 +83,13 @@ function buildToolResultMap(messages: TranscriptMessage[]): Map<string, Transcri
   return map;
 }
 
-
 function isSkillContent(text: string): boolean {
   return text.startsWith("Base directory for this skill:");
 }
 
-
 function isTaskNotification(text: string): boolean {
   return text.includes("<task-notification>") || text.includes("<task-id>");
 }
-
 
 function formatLocalTime(iso: string): string {
   try {
@@ -115,9 +98,6 @@ function formatLocalTime(iso: string): string {
     return "";
   }
 }
-
-
-
 
 function SessionEventRow({ title, timestamp }: { title?: string; timestamp: string | null }) {
   return (
@@ -136,7 +116,6 @@ function SessionEventRow({ title, timestamp }: { title?: string; timestamp: stri
   );
 }
 
-
 function CommandPill({ display }: { display: string }) {
   return (
     <div className="inline-flex items-center gap-2 text-sm text-emerald-300 font-mono bg-emerald-500/10 border border-emerald-500/20 rounded-md px-3 py-1.5 max-w-full">
@@ -145,7 +124,6 @@ function CommandPill({ display }: { display: string }) {
     </div>
   );
 }
-
 
 function TerminalBlock({ text, stream }: { text: string; stream: "stdout" | "stderr" }) {
   const cleaned = stripAnsi(text).replace(/^\n+|\n+$/g, "");
@@ -169,7 +147,6 @@ function TerminalBlock({ text, stream }: { text: string; stream: "stdout" | "std
   );
 }
 
-
 function CaveatBlock({ text }: { text: string }) {
   return (
     <div className="flex items-start gap-2 rounded-md border border-amber-500/15 bg-amber-500/[0.05] px-3 py-1.5 text-[11px] text-amber-200/70">
@@ -178,7 +155,6 @@ function CaveatBlock({ text }: { text: string }) {
     </div>
   );
 }
-
 
 function renderSegment(seg: TuiSegment, key: number): React.ReactNode {
   switch (seg.kind) {
@@ -225,7 +201,6 @@ function renderSegment(seg: TuiSegment, key: number): React.ReactNode {
     }
   }
 }
-
 
 function CollapsibleBlock({
   text,

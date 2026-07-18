@@ -1,11 +1,4 @@
-
-
-
-
-
-
 import type { WSMessage } from "./types";
-
 
 type Handler = (msg: WSMessage) => void;
 
@@ -15,20 +8,8 @@ const handlers = new Set<Handler>();
 const connectionHandlers = new Set<ConnectionHandler>();
 let wsConnected = false;
 
-
-
-
-
-
-
-
-
 export const eventBus = {
   
-
-
-
-
 
   subscribe(handler: Handler): () => void {
     handlers.add(handler);
@@ -36,7 +17,6 @@ export const eventBus = {
   },
 
   
-
 
   publish(msg: WSMessage): void {
     handlers.forEach((handler) => handler(msg));
@@ -55,10 +35,6 @@ export const eventBus = {
   },
 
   
-
-
-
-
 
   onConnection(handler: ConnectionHandler): () => void {
     connectionHandlers.add(handler);

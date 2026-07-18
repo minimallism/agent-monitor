@@ -1,25 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import {
   FileList,
   KeyValueCard,
@@ -30,8 +8,6 @@ import {
   UnifiedDiff,
 } from "./primitives";
 import type { DiffHunk, GrepMatch } from "./primitives";
-
-
 
 function str(v: unknown): string {
   return typeof v === "string" ? v : "";
@@ -44,9 +20,6 @@ function obj(v: unknown): Record<string, unknown> | null {
 function isMcp(toolName: string): boolean {
   return toolName.startsWith("mcp__");
 }
-
-
-
 
 function diffFromStrings(oldStr: string, newStr: string): DiffHunk[] {
   if (!oldStr && !newStr) return [];
@@ -65,8 +38,6 @@ function diffFromStrings(oldStr: string, newStr: string): DiffHunk[] {
     },
   ];
 }
-
-
 
 function parseStructuredPatch(value: unknown): DiffHunk[] {
   if (!Array.isArray(value)) return [];
@@ -87,9 +58,6 @@ function parseStructuredPatch(value: unknown): DiffHunk[] {
   }
   return hunks;
 }
-
-
-
 
 function parseGrepMatches(value: unknown): GrepMatch[] {
   if (Array.isArray(value)) return value.map(toMatch).filter(Boolean) as GrepMatch[];
@@ -132,10 +100,6 @@ function parseFileList(value: unknown): string[] {
     return (o.paths as unknown[]).filter((v): v is string => typeof v === "string");
   return [];
 }
-
-
-
-
 
 export function ToolInputView({
   toolName,
@@ -283,8 +247,6 @@ export function ToolInputView({
       return null;
   }
 }
-
-
 
 export function ToolResponseView({
   toolName,

@@ -1,34 +1,12 @@
-
-
-
-
-
-
-
-
 export type SessionStatus = "active" | "completed" | "error" | "abandoned";
-
 
 export type AgentStatus = "working" | "waiting" | "completed" | "error";
 
-
 export type AgentType = "main" | "subagent";
-
-
-
-
-
-
 
 export const AWAITING_STATUS = "waiting" as const;
 export type EffectiveAgentStatus = AgentStatus | typeof AWAITING_STATUS;
 export type EffectiveSessionStatus = SessionStatus | typeof AWAITING_STATUS;
-
-
-
-
-
-
 
 export interface Session {
   
@@ -58,14 +36,8 @@ export interface Session {
   cost?: number;
   
 
-
   awaiting_input_since?: string | null;
 }
-
-
-
-
-
 
 export interface Agent {
   
@@ -102,27 +74,12 @@ export interface Agent {
   awaiting_input_since?: string | null;
   
 
-
-
-
   cost?: number;
 }
-
-
-
-
-
-
 
 export function isSessionAwaitingInput(session: Session | undefined | null): boolean {
   return !!session?.awaiting_input_since && session.status === "active";
 }
-
-
-
-
-
-
 
 export function isAgentAwaitingInput(agent: Agent | undefined | null): boolean {
   if (!agent?.awaiting_input_since) return false;
@@ -130,23 +87,13 @@ export function isAgentAwaitingInput(agent: Agent | undefined | null): boolean {
   return agent.status !== "completed" && agent.status !== "error";
 }
 
-
-
 export function effectiveAgentStatus(agent: Agent): EffectiveAgentStatus {
   return isAgentAwaitingInput(agent) ? AWAITING_STATUS : agent.status;
 }
 
-
-
 export function effectiveSessionStatus(session: Session): EffectiveSessionStatus {
   return isSessionAwaitingInput(session) ? AWAITING_STATUS : session.status;
 }
-
-
-
-
-
-
 
 export interface DashboardEvent {
   
@@ -157,7 +104,6 @@ export interface DashboardEvent {
 
   agent_id: string | null;
   
-
 
   event_type: string;
   
@@ -172,9 +118,6 @@ export interface DashboardEvent {
   
   created_at: string;
 }
-
-
-
 
 export interface Stats {
   total_sessions: number;
@@ -193,12 +136,6 @@ export interface Stats {
   
   sessions_by_status: Record<string, number>;
 }
-
-
-
-
-
-
 
 export interface Analytics {
   
@@ -242,11 +179,6 @@ export interface Analytics {
   sessions_by_status: Record<string, number>;
 }
 
-
-
-
-
-
 export interface CostBreakdown {
   model: string;
   
@@ -276,8 +208,6 @@ export interface CostBreakdown {
   matched_rule: string | null;
 }
 
-
-
 export interface CostFeatureCosts {
   
   web_search_cost: number;
@@ -291,9 +221,6 @@ export interface CostFeatureCosts {
   code_execution_free_hours: number;
 }
 
-
-
-
 export interface UnpricedModel {
   model: string;
   input_tokens: number;
@@ -301,7 +228,6 @@ export interface UnpricedModel {
   cache_read_tokens: number;
   cache_write_tokens: number;
 }
-
 
 export interface CostResult {
   
@@ -314,17 +240,8 @@ export interface CostResult {
   unpriced_models?: UnpricedModel[];
 }
 
-
-
-
-
-
-
-
-
 export interface WSMessage {
   
-
 
   type:
     | "session_created"
@@ -342,10 +259,6 @@ export interface WSMessage {
 
   timestamp: string;
 }
-
-
-
-
 
 export interface SessionStats {
   session_id: string;
@@ -383,17 +296,11 @@ export interface SessionStats {
   };
 }
 
-
-
-
-
 export interface OrchestrationEdge {
   source: string;
   target: string;
   weight: number;
 }
-
-
 
 export interface OrchestrationData {
   sessionCount: number;
@@ -408,24 +315,17 @@ export interface OrchestrationData {
   compactions: { total: number; sessions: number };
 }
 
-
-
 export interface ToolFlowTransition {
   source: string;
   target: string;
   value: number;
 }
 
-
-
-
 export interface ToolFlowData {
   transitions: ToolFlowTransition[];
   
   toolCounts: Array<{ tool_name: string; count: number }>;
 }
-
-
 
 export interface SubagentEffectivenessItem {
   subagent_type: string;
@@ -443,8 +343,6 @@ export interface SubagentEffectivenessItem {
   trend: number[];
 }
 
-
-
 export interface WorkflowPattern {
   
   steps: string[];
@@ -454,8 +352,6 @@ export interface WorkflowPattern {
   percentage: number;
 }
 
-
-
 export interface WorkflowPatternsData {
   patterns: WorkflowPattern[];
   
@@ -463,8 +359,6 @@ export interface WorkflowPatternsData {
   
   soloPercentage: number;
 }
-
-
 
 export interface ModelDelegationData {
   
@@ -481,8 +375,6 @@ export interface ModelDelegationData {
   }>;
 }
 
-
-
 export interface ErrorPropagationData {
   
   byDepth: Array<{ depth: number; count: number }>;
@@ -497,8 +389,6 @@ export interface ErrorPropagationData {
   errorRate: number;
 }
 
-
-
 export interface ConcurrencyLane {
   
   name: string;
@@ -510,13 +400,9 @@ export interface ConcurrencyLane {
   count: number;
 }
 
-
-
 export interface ConcurrencyData {
   aggregateLanes: ConcurrencyLane[];
 }
-
-
 
 export interface SessionComplexityItem {
   id: string;
@@ -533,8 +419,6 @@ export interface SessionComplexityItem {
   model: string | null;
 }
 
-
-
 export interface CompactionImpactData {
   totalCompactions: number;
   
@@ -545,9 +429,6 @@ export interface CompactionImpactData {
   sessionsWithCompactions: number;
   totalSessions: number;
 }
-
-
-
 
 export interface WorkflowData {
   orchestration: OrchestrationData;
@@ -564,13 +445,6 @@ export interface WorkflowData {
   cooccurrence: Array<{ source: string; target: string; weight: number }>;
 }
 
-
-
-
-
-
-
-
 export interface WorkflowPhase {
   
   title?: string;
@@ -580,13 +454,10 @@ export interface WorkflowPhase {
   [key: string]: unknown;
 }
 
-
-
 export interface WorkflowProgressEntry {
   
   type?: string;
   
-
 
   agentId?: string;
   
@@ -618,13 +489,6 @@ export interface WorkflowProgressEntry {
   
   [key: string]: unknown;
 }
-
-
-
-
-
-
-
 
 export interface WorkflowRun {
   
@@ -666,8 +530,6 @@ export interface WorkflowRun {
   updated_at: string;
 }
 
-
-
 export interface WorkflowRunsResponse {
   runs: WorkflowRun[];
   
@@ -678,8 +540,6 @@ export interface WorkflowRunsResponse {
   offset: number;
 }
 
-
-
 export interface WorkflowRunDetail {
   workflow: WorkflowRun;
   
@@ -687,11 +547,6 @@ export interface WorkflowRunDetail {
   
   events: DashboardEvent[];
 }
-
-
-
-
-
 
 export const STATUS_CONFIG: Record<
   EffectiveAgentStatus,
@@ -723,11 +578,6 @@ export const STATUS_CONFIG: Record<
   },
 };
 
-
-
-
-
-
 export interface TranscriptContent {
   type: "text" | "tool_use" | "tool_result" | "thinking";
   
@@ -745,15 +595,7 @@ export interface TranscriptContent {
   is_error?: boolean;
 }
 
-
-
-
 export type TranscriptSender = "user" | "assistant" | "orchestrator" | "system" | "tool";
-
-
-
-
-
 
 export interface TranscriptMessage {
   
@@ -782,9 +624,6 @@ export interface TranscriptMessage {
   title?: string;
 }
 
-
-
-
 export interface TranscriptResult {
   messages: TranscriptMessage[];
   
@@ -798,8 +637,6 @@ export interface TranscriptResult {
   
   first_line: number;
 }
-
-
 
 export interface TranscriptInfo {
   
@@ -817,13 +654,9 @@ export interface TranscriptInfo {
   db_agent_id?: string | null;
 }
 
-
 export interface TranscriptListResult {
   transcripts: TranscriptInfo[];
 }
-
-
-
 
 export const SESSION_STATUS_CONFIG: Record<
   EffectiveSessionStatus,

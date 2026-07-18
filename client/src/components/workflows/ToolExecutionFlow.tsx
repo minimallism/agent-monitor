@@ -1,17 +1,9 @@
-
-
-
-
-
-
 import { useRef, useEffect, useState, useCallback } from "react";
 import * as d3 from "d3";
 import { sankey, sankeyLinkHorizontal } from "d3-sankey";
 import type { SankeyGraph, SankeyNode, SankeyLink } from "d3-sankey";
 import { useTranslation } from "react-i18next";
 import type { ToolFlowData } from "../../lib/types";
-
-
 
 const MARGIN = { top: 24, right: 140, bottom: 24, left: 140 };
 const NODE_WIDTH = 14;
@@ -40,8 +32,6 @@ function toolColor(name: string): string {
 function toolLabel(name: string): string {
   return name.replace(/_(source|target)$/, "");
 }
-
-
 
 interface NodeExtra {
   id: string;
@@ -73,24 +63,10 @@ interface LinkTipPayload {
 
 type TipPayload = NodeTipPayload | LinkTipPayload;
 
-
-
 interface ToolExecutionFlowProps {
   data: ToolFlowData;
   filterAgentType?: string | null;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 function buildSankeyInput(data: ToolFlowData): {
   nodes: NodeExtra[];
@@ -134,8 +110,6 @@ function buildSankeyInput(data: ToolFlowData): {
 
   return { nodes, links };
 }
-
-
 
 export function ToolExecutionFlow({
   data,
@@ -496,8 +470,6 @@ export function ToolExecutionFlow({
   );
 }
 
-
-
 function fmtPct(v: number): string {
   if (v <= 0) return "-";
   if (v < 0.01) return "<1%";
@@ -592,8 +564,6 @@ function buildToolFlowTooltip(
   desc.textContent = t("toolFlow.tooltip.linkDescFmt", { source: src, target: tgt });
   el.appendChild(desc);
 }
-
-
 
 const LEGEND_ITEMS: Array<{ key: string; color: string }> = [
   { key: "read", color: "#3b82f6" },

@@ -1,20 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export type TokenType =
   | "plain"
   | "comment"
@@ -34,14 +17,10 @@ export type TokenType =
   | "diff-del"
   | "diff-meta";
 
-
-
 export interface Token {
   type: TokenType;
   text: string;
 }
-
-
 
 interface Rule {
   type: TokenType;
@@ -265,12 +244,9 @@ const SH_BUILTINS = new Set([
   "tee",
 ]);
 
-
 function escapeRegex(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
-
-
 
 function tokenizeWith(source: string, rules: Rule[]): Token[] {
   const tokens: Token[] = [];
@@ -299,7 +275,6 @@ function tokenizeWith(source: string, rules: Rule[]): Token[] {
   return tokens;
 }
 
-
 function tokenizeJS(source: string): Token[] {
   const rules: Rule[] = [
     { type: "comment", pattern: /\/\/[^\n]*|\/\*[\s\S]*?\*\//y },
@@ -317,7 +292,6 @@ function tokenizeJS(source: string): Token[] {
   return refineIdentifiers(tokenizeWith(source, rules), JS_KEYWORDS, JS_BUILTINS, JS_LITERALS);
 }
 
-
 function tokenizePython(source: string): Token[] {
   const rules: Rule[] = [
     { type: "comment", pattern: /#[^\n]*/y },
@@ -333,8 +307,6 @@ function tokenizePython(source: string): Token[] {
   ];
   return refineIdentifiers(tokenizeWith(source, rules), PY_KEYWORDS, PY_BUILTINS, PY_LITERALS);
 }
-
-
 
 function tokenizeJSON(source: string): Token[] {
   const rules: Rule[] = [
@@ -362,7 +334,6 @@ function tokenizeJSON(source: string): Token[] {
   return tokens;
 }
 
-
 function tokenizeShell(source: string): Token[] {
   const rules: Rule[] = [
     { type: "comment", pattern: /#[^\n]*/y },
@@ -386,9 +357,6 @@ function tokenizeShell(source: string): Token[] {
   return tokens;
 }
 
-
-
-
 function tokenizeHTML(source: string): Token[] {
   const tokens: Token[] = [];
   const re =
@@ -406,8 +374,6 @@ function tokenizeHTML(source: string): Token[] {
   return tokens;
 }
 
-
-
 function tokenizeHTMLAttrs(src: string): Token[] {
   const tokens: Token[] = [];
   const re = /(\s+)([a-zA-Z_:][\w:.-]*)(\s*=\s*)?("[^"]*"|'[^']*'|[^\s>]+)?/g;
@@ -421,7 +387,6 @@ function tokenizeHTMLAttrs(src: string): Token[] {
   return tokens;
 }
 
-
 function tokenizeCSS(source: string): Token[] {
   const rules: Rule[] = [
     { type: "comment", pattern: /\/\*[\s\S]*?\*\//y },
@@ -433,9 +398,6 @@ function tokenizeCSS(source: string): Token[] {
   ];
   return tokenizeWith(source, rules);
 }
-
-
-
 
 function tokenizeSQL(source: string): Token[] {
   const KW = new Set([
@@ -508,9 +470,6 @@ function tokenizeSQL(source: string): Token[] {
   return tokens;
 }
 
-
-
-
 function tokenizeYAML(source: string): Token[] {
   const tokens: Token[] = [];
   const lines = source.split("\n");
@@ -543,8 +502,6 @@ function tokenizeYAML(source: string): Token[] {
   return tokens;
 }
 
-
-
 function tokenizeDiff(source: string): Token[] {
   const tokens: Token[] = [];
   const lines = source.split("\n");
@@ -569,10 +526,6 @@ function tokenizeDiff(source: string): Token[] {
   return tokens;
 }
 
-
-
-
-
 function refineIdentifiers(
   tokens: Token[],
   keywords: Set<string>,
@@ -590,14 +543,6 @@ function refineIdentifiers(
   return tokens;
 }
 
-
-
-
-
-
-
-
-
 export function canonicalLang(lang: string): string {
   const l = lang.toLowerCase().trim();
   if (l === "js" || l === "jsx" || l === "javascript" || l === "mjs" || l === "cjs") return "js";
@@ -612,15 +557,6 @@ export function canonicalLang(lang: string): string {
   if (l === "diff" || l === "patch") return "diff";
   return l || "plain";
 }
-
-
-
-
-
-
-
-
-
 
 export function highlight(source: string, lang: string): Token[] {
   const canon = canonicalLang(lang);
@@ -648,12 +584,6 @@ export function highlight(source: string, lang: string): Token[] {
       return [{ type: "plain", text: source }];
   }
 }
-
-
-
-
-
-
 
 export function tokenClass(type: TokenType): string {
   switch (type) {
@@ -694,6 +624,5 @@ export function tokenClass(type: TokenType): string {
       return "text-gray-200";
   }
 }
-
 
 export { escapeRegex as _escapeRegex };

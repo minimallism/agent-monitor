@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import type { DashboardEvent } from "../lib/types";
@@ -21,19 +11,11 @@ type EventDetailProps = {
   event: DashboardEvent;
   
 
-
-
-
   agentInfoById?: Map<string, AgentInfo>;
   
 
-
   sessionNameById?: Map<string, string>;
 };
-
-
-
-
 
 function agentDisplayLabel(info: AgentInfo): string | null {
   if (info.type === "main") {
@@ -47,13 +29,7 @@ function agentDisplayLabel(info: AgentInfo): string | null {
   return null;
 }
 
-
-
-
 const DUPLICATE_KEYS = new Set(["id", "event_id", "session_id", "agent_id"]);
-
-
-
 
 const PAYLOAD_LABEL_KEYS: Record<string, string> = {
   tool_name: "eventDetail.toolName",
@@ -86,9 +62,6 @@ const PAYLOAD_LABEL_KEYS: Record<string, string> = {
   total_compactions: "eventDetail.totalCompactions",
   last_assistant_message: "eventDetail.lastAssistantMessage",
 };
-
-
-
 
 function humanizeKey(key: string): string {
   return key
@@ -212,8 +185,6 @@ export function EventDetail({ event, agentInfoById, sessionNameById }: EventDeta
   );
 }
 
-
-
 function SummaryBlock({
   summary,
   hasToolInput,
@@ -261,8 +232,6 @@ function SummaryBlock({
     </div>
   );
 }
-
-
 
 function FieldRow({
   rowKey,
@@ -341,8 +310,6 @@ function ScalarValue({ value }: { value: unknown }) {
   }
   return <>{String(value)}</>;
 }
-
-
 
 function CodeView({ value }: { value: unknown }) {
   const text = typeof value === "string" ? value : safeStringify(value);

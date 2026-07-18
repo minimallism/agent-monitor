@@ -1,11 +1,3 @@
-
-
-
-
-
-
-
-
 import type { ReactNode } from "react";
 import { Check } from "lucide-react";
 

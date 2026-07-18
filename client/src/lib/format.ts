@@ -1,16 +1,4 @@
-
-
-
-
-
-
 import i18n from "../i18n";
-
-
-
-
-
-
 
 function parseDate(iso: string): Date {
   
@@ -32,22 +20,16 @@ function getCurrentLanguage(): SupportedLanguage {
   return "en";
 }
 
-
-
-
 export function getCurrentLocale(): string {
   const language = getCurrentLanguage();
   if (language === "zh") return "zh-CN";
   return "en-US";
 }
 
-
 export function formatTime(iso: string): string {
   const d = parseDate(iso);
   return d.toLocaleTimeString(getCurrentLocale(), { hour: "2-digit", minute: "2-digit" });
 }
-
-
 
 export function formatDateTime(iso: string): string {
   const d = parseDate(iso);
@@ -59,15 +41,11 @@ export function formatDateTime(iso: string): string {
   });
 }
 
-
-
 export function formatDateShort(iso: string): string {
   const d = parseDate(iso);
   if (isNaN(d.getTime())) return "";
   return d.toLocaleString(getCurrentLocale(), { month: "short", day: "numeric" });
 }
-
-
 
 export function formatDateTimeFull(iso: string): string {
   const d = parseDate(iso);
@@ -84,15 +62,10 @@ export function formatDateTimeFull(iso: string): string {
   });
 }
 
-
-
-
 export function formatDuration(start: string, end: string): string {
   const ms = parseDate(end).getTime() - parseDate(start).getTime();
   return formatMs(ms);
 }
-
-
 
 export function formatMs(ms: number): string {
   if (ms < 0) return "0s";
@@ -106,8 +79,6 @@ export function formatMs(ms: number): string {
   return `${seconds}s`;
 }
 
-
-
 export function timeAgo(iso: string): string {
   const ms = Date.now() - parseDate(iso).getTime();
   const seconds = Math.floor(ms / 1000);
@@ -120,13 +91,10 @@ export function timeAgo(iso: string): string {
   return i18n.t("common:time.dAgo", { count: days });
 }
 
-
-
 export function truncate(str: string, max: number): string {
   if (str.length <= max) return str;
   return str.slice(0, max - 1) + "\u2026";
 }
-
 
 export function fmt(n: number): string {
   if (!Number.isFinite(n)) return "0";
@@ -136,14 +104,12 @@ export function fmt(n: number): string {
   return String(n);
 }
 
-
 export function fmtCost(n: number): string {
   if (!Number.isFinite(n) || n < 0) return "$0.00";
   if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(2)}M`;
   if (n >= 1_000) return `$${(n / 1_000).toFixed(2)}K`;
   return `$${n.toFixed(2)}`;
 }
-
 
 export function fmtCostFull(n: number, decimals = 2): string {
   if (!Number.isFinite(n) || n < 0) return "$0.00";
@@ -152,9 +118,6 @@ export function fmtCostFull(n: number, decimals = 2): string {
     maximumFractionDigits: decimals,
   })}`;
 }
-
-
-
 
 export function shortModel(model: string | null | undefined): string | null {
   if (!model) return null;
@@ -167,10 +130,6 @@ const MODEL_BRANDS: Record<string, string> = {
   gpt: "GPT",
   gemini: "Gemini",
 };
-
-
-
-
 
 export function formatModelName(model: string | null | undefined): string | null {
   if (!model) return null;
@@ -228,8 +187,6 @@ export function formatModelName(model: string | null | undefined): string | null
 
   return result.join(" ") + ctxSuffix;
 }
-
-
 
 export function pathBasename(p: string | null | undefined): string | null {
   if (!p) return null;

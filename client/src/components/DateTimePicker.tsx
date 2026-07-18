@@ -1,9 +1,3 @@
-
-
-
-
-
-
 import React, { useState, useRef, useEffect } from "react";
 import { Calendar, Clock, ChevronLeft, ChevronRight, X } from "lucide-react";
 

@@ -1,8 +1,3 @@
-
-
-
-
-
 import { useTranslation } from "react-i18next";
 import { Bot, GitBranch, Clock, Wrench, Cpu, Coins } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -10,15 +5,6 @@ import { AgentStatusBadge } from "./StatusBadge";
 import { effectiveAgentStatus, isAgentAwaitingInput } from "../lib/types";
 import type { Agent, Session } from "../lib/types";
 import { formatDuration, timeAgo, formatModelName, pathBasename, fmtCost } from "../lib/format";
-
-
-
-
-
-
-
-
-
 
 function mainAgentDisplayName(agentName: string, realSessionName: string): string {
   if (!realSessionName) return agentName;
@@ -29,7 +15,6 @@ function mainAgentDisplayName(agentName: string, realSessionName: string): strin
 interface AgentCardProps {
   agent: Agent;
   
-
 
   session?: Session;
   label?: string;
@@ -147,7 +132,6 @@ export function AgentCard({ agent, session, label, onClick }: AgentCardProps) {
             <p className="text-sm font-medium text-gray-200 truncate">
               {
 
-
 }
               {isMain ? mainAgentDisplayName(agent.name, realSessionName) : agent.name}
             </p>
@@ -169,7 +153,6 @@ export function AgentCard({ agent, session, label, onClick }: AgentCardProps) {
           </span>
         )}
         {
-
 
 }
         {displayModel && !agent.current_tool && (

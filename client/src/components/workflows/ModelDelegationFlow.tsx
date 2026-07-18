@@ -1,16 +1,8 @@
-
-
-
-
-
-
 import { useRef, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import * as d3 from "d3";
 import type { ModelDelegationData } from "../../lib/types";
 import { formatModelName } from "../../lib/format";
-
-
 
 function modelFamily(name: string): "opus" | "sonnet" | "haiku" | "other" {
   const lower = name.toLowerCase();
@@ -25,10 +17,6 @@ function fmtTokens(n: number): string {
   if (n >= 1_000) return `${(n / 1_000).toFixed(0)}K`;
   return String(n);
 }
-
-
-
-
 
 const FAMILY_COLORS = {
   opus: {
@@ -57,8 +45,6 @@ const FAMILY_COLORS = {
   },
 } as const;
 
-
-
 interface NodeDatum {
   id: string;
   label: string;
@@ -78,8 +64,6 @@ interface EdgeDatum {
 
 type ShowTipFn = (node: NodeDatum, anchor: SVGGraphicsElement) => void;
 type HideTipFn = () => void;
-
-
 
 const NODE_W = 160;
 const NODE_H = 80;
@@ -257,8 +241,6 @@ function renderFlow(
   });
 }
 
-
-
 export interface ModelDelegationFlowProps {
   data: ModelDelegationData;
 }
@@ -396,8 +378,6 @@ export function ModelDelegationFlow({ data }: ModelDelegationFlowProps) {
     </div>
   );
 }
-
-
 
 function countTotalAgents(data: ModelDelegationData): number {
   const mainSum = data.mainModels.reduce((s, m) => s + m.agent_count, 0);

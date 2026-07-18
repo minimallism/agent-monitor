@@ -1,9 +1,3 @@
-
-
-
-
-
-
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ChevronRight, Zap, Code2, Shield, Bug, FileText, Lightbulb, Info } from "lucide-react";
@@ -12,11 +6,7 @@ import type { WorkflowPattern, WorkflowPatternsData } from "../../lib/types";
 
 type TFn = (key: string, options?: Record<string, unknown>) => string;
 
-
-
 const MAX_VISIBLE_STEPS = 4;
-
-
 
 function patternIcon(steps: string[]): LucideIcon {
   const joined = steps.join(" ").toLowerCase();
@@ -27,10 +17,6 @@ function patternIcon(steps: string[]): LucideIcon {
   return Zap;
 }
 
-
-
-
-
 function findRepeatedStep(steps: string[]): string | null {
   for (let i = 0; i < steps.length; i++) {
     const s = steps[i];
@@ -38,11 +24,6 @@ function findRepeatedStep(steps: string[]): string | null {
   }
   return null;
 }
-
-
-
-
-
 
 function describePattern(pattern: WorkflowPattern, t: TFn): string {
   const { steps, percentage } = pattern;
@@ -78,10 +59,6 @@ function describePattern(pattern: WorkflowPattern, t: TFn): string {
   return core + freq;
 }
 
-
-
-
-
 function suggestionForPattern(pattern: WorkflowPattern, t: TFn): string {
   const { steps } = pattern;
   if (findRepeatedStep(steps)) return t("patterns.detail.suggestion.loop");
@@ -90,8 +67,6 @@ function suggestionForPattern(pattern: WorkflowPattern, t: TFn): string {
   if (steps.length <= 6) return t("patterns.detail.suggestion.mediumChain");
   return t("patterns.detail.suggestion.longChain");
 }
-
-
 
 function StepPill({ label }: { label: string }) {
   return (
@@ -293,8 +268,6 @@ function EmptyPatterns() {
     </div>
   );
 }
-
-
 
 interface WorkflowPatternsProps {
   data: WorkflowPatternsData;

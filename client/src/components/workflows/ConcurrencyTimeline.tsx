@@ -1,13 +1,6 @@
-
-
-
-
-
 import { useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import type { ConcurrencyData, ConcurrencyLane } from "../../lib/types";
-
-
 
 const MAIN_COLOR = "#6366f1"; 
 
@@ -21,8 +14,6 @@ const SUBAGENT_PALETTE = [
   "#a855f7", 
   "#84cc16", 
 ];
-
-
 
 interface LaneRowProps {
   lane: ConcurrencyLane;
@@ -157,8 +148,6 @@ function buildLaneTooltip(
   el.appendChild(hint);
 }
 
-
-
 function EmptyState() {
   const { t } = useTranslation("workflows");
   return (
@@ -181,8 +170,6 @@ function EmptyState() {
     </div>
   );
 }
-
-
 
 export interface ConcurrencyTimelineProps {
   data: ConcurrencyData;
@@ -296,7 +283,6 @@ export function ConcurrencyTimeline({ data }: ConcurrencyTimelineProps) {
     </div>
   );
 }
-
 
 export function laneColor(name: string, subagentIndex: number): string {
   if (name === "Main Agent") return MAIN_COLOR;

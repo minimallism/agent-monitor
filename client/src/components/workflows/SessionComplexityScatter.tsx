@@ -1,16 +1,8 @@
-
-
-
-
-
-
 import { useRef, useEffect, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import * as d3 from "d3";
 import type { SessionComplexityItem } from "../../lib/types";
 import { formatModelName } from "../../lib/format";
-
-
 
 const MARGIN = { top: 20, right: 24, bottom: 60, left: 52 };
 const MIN_BUBBLE_R = 4;
@@ -26,8 +18,6 @@ const STATUS_COLOR: Record<string, string> = {
 function statusColor(status: string): string {
   return STATUS_COLOR[status] ?? "#6b7280";
 }
-
-
 
 function formatDurationSec(sec: number): string {
   if (sec < 60) return `${Math.round(sec)}s`;
@@ -52,8 +42,6 @@ function fmtTokens(n: number): string {
   if (n >= 1_000) return `${(n / 1_000).toFixed(0)}K`;
   return String(n);
 }
-
-
 
 interface TooltipState {
   x: number;
@@ -105,8 +93,6 @@ function Tooltip({ state }: { state: TooltipState }) {
   );
 }
 
-
-
 const LEGEND_STATUSES = ["completed", "active", "error", "abandoned"] as const;
 
 function Legend() {
@@ -127,8 +113,6 @@ function Legend() {
     </div>
   );
 }
-
-
 
 function EmptyState() {
   const { t } = useTranslation("workflows");
@@ -152,8 +136,6 @@ function EmptyState() {
     </div>
   );
 }
-
-
 
 export interface SessionComplexityScatterProps {
   data: SessionComplexityItem[];

@@ -1,14 +1,6 @@
-
-
-
-
-
-
 import { useRef, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import * as d3 from "d3";
-
-
 
 export interface AgentCollaborationNetworkProps {
   effectiveness: Array<{
@@ -34,8 +26,6 @@ interface PipelineLink extends d3.SimulationLinkDatum<PipelineNode> {
   weight: number;
   label: string;
 }
-
-
 
 const PALETTE = [
   "#6366f1",
@@ -65,8 +55,6 @@ const STROKE_PALETTE = [
 
 const MIN_R = 20;
 const MAX_R = 44;
-
-
 
 function appendTooltipRow(parent: HTMLElement, label: string, value: string) {
   const row = document.createElement("div");
@@ -148,11 +136,6 @@ function showTooltip(
   positionTooltipAt(el, x, y);
 }
 
-
-
-
-
-
 function positionTooltipAt(el: HTMLDivElement, x: number, y: number) {
   el.style.opacity = "0";
   const w = el.offsetWidth || 280;
@@ -176,8 +159,6 @@ function positionTooltipAt(el: HTMLDivElement, x: number, y: number) {
     el.style.opacity = "1";
   });
 }
-
-
 
 export function AgentCollaborationNetwork({
   effectiveness,

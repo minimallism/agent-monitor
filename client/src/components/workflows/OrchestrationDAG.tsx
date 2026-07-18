@@ -1,15 +1,7 @@
-
-
-
-
-
-
 import { useRef, useEffect, useMemo, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import * as d3 from "d3";
 import type { OrchestrationData } from "../../lib/types";
-
-
 
 interface OrchestrationDAGProps {
   data: OrchestrationData;
@@ -45,8 +37,6 @@ interface DAGEdge {
 
 type TFn = (key: string, options?: Record<string, unknown>) => string;
 
-
-
 const NODE_W = 136;
 const NODE_H = 44;
 const NODE_RX = 8;
@@ -60,8 +50,6 @@ const MAX_EDGE_STROKE = 10;
 const MIN_EDGE_STROKE = 1.5;
 const BADGE_W = 28;
 const BADGE_H = 14;
-
-
 
 const OUTCOME_COLORS: Record<string, { fill: string; stroke: string; text: string }> = {
   completed: { fill: "#052e16", stroke: "#16a34a", text: "#4ade80" },
@@ -110,8 +98,6 @@ const KIND_GRADIENTS: Record<
   },
 };
 
-
-
 function isEmpty(data: OrchestrationData): boolean {
   return (
     data.sessionCount === 0 &&
@@ -129,8 +115,6 @@ function successRate(completed: number, total: number): string {
 function outcomeColorSet(status: string) {
   return OUTCOME_COLORS[status] ?? { fill: "#1a1a28", stroke: "#363650", text: "#9ca3af" };
 }
-
-
 
 function buildGraph(
   data: OrchestrationData,
@@ -388,8 +372,6 @@ function buildGraph(
 
   return { nodes, edges: rawEdges, svgWidth, svgHeight };
 }
-
-
 
 export function OrchestrationDAG({ data, onNodeClick, selectedNode }: OrchestrationDAGProps) {
   const { t } = useTranslation("workflows");
@@ -822,9 +804,6 @@ export function OrchestrationDAG({ data, onNodeClick, selectedNode }: Orchestrat
   );
 }
 
-
-
-
 function buildDAGTooltipContent(el: HTMLDivElement, node: DAGNode, t: TFn) {
   
   while (el.firstChild) el.removeChild(el.firstChild);
@@ -899,11 +878,6 @@ function buildDAGTooltipContent(el: HTMLDivElement, node: DAGNode, t: TFn) {
   el.appendChild(hint);
 }
 
-
-
-
-
-
 function describeNode(node: DAGNode, t: TFn): { layer: string; description: string } {
   switch (node.kind) {
     case "session":
@@ -964,8 +938,6 @@ function describeNode(node: DAGNode, t: TFn): { layer: string; description: stri
   }
 }
 
-
-
 function borderColorForKind(kind: DAGNode["kind"]): string {
   switch (kind) {
     case "session":
@@ -1019,8 +991,6 @@ function fmtCount(n: number): string {
   if (n >= 1_000) return `${(n / 1_000).toFixed(1)}k`;
   return String(Math.round(n));
 }
-
-
 
 const LEGEND_ITEMS = [
   { label: "Sessions", color: "#312e81", border: "#6366f1" },

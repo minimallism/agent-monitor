@@ -1,20 +1,7 @@
-
-
-
-
-
-
-
-
-
-
-
 import { useRef, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import * as d3 from "d3";
 import type { CompactionImpactData } from "../../lib/types";
-
-
 
 function fmtTokens(n: number): string {
   if (n >= 1_000_000_000) return `${(n / 1_000_000_000).toFixed(1)}B`;
@@ -22,8 +9,6 @@ function fmtTokens(n: number): string {
   if (n >= 1_000) return `${(n / 1_000).toFixed(1)}K`;
   return String(n);
 }
-
-
 
 function toHistogram(perSession: CompactionImpactData["perSession"]): Array<{
   count: number;
@@ -37,12 +22,8 @@ function toHistogram(perSession: CompactionImpactData["perSession"]): Array<{
   return buckets;
 }
 
-
-
 const MARGIN = { top: 18, right: 16, bottom: 46, left: 48 };
 const CHART_HEIGHT = 200;
-
-
 
 interface HistogramBucket {
   count: number;
@@ -218,8 +199,6 @@ function renderHistogram(svg: SVGSVGElement, histo: HistogramBucket[], opts: His
   });
 }
 
-
-
 interface StatBoxProps {
   label: string;
   value: string;
@@ -238,8 +217,6 @@ function StatBox({ label, value, sub, accent = "text-accent" }: StatBoxProps) {
     </div>
   );
 }
-
-
 
 export interface CompactionImpactProps {
   data: CompactionImpactData;

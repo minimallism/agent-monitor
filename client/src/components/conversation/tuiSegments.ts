@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 export type TuiSegment =
   | { kind: "caveat"; text: string }
   | { kind: "stdout"; text: string }
@@ -30,9 +20,6 @@ const COMMAND_TAGS = ["command-name", "command-message", "command-args"] as cons
 const KNOWN_TAG_RE = new RegExp(
   `<(?:${[...Object.keys(SIMPLE_TAGS), ...COMMAND_TAGS].join("|")})\\b`
 );
-
-
-
 
 const ANSI_RE = /\[[\d;]*m|\[\d+(?:;\d+)*m/g;
 
@@ -87,11 +74,6 @@ function findCommandBlocks(input: string): MatchSpan[] {
   return out;
 }
 
-
-
-
-
-
 export function parseTuiSegments(input: string): TuiSegment[] {
   if (!KNOWN_TAG_RE.test(input)) {
     return [{ kind: "text", text: input }];
@@ -121,7 +103,6 @@ export function parseTuiSegments(input: string): TuiSegment[] {
 
   return segments.length > 0 ? segments : [{ kind: "text", text: input }];
 }
-
 
 export function hasTuiTags(input: string): boolean {
   return KNOWN_TAG_RE.test(input);

@@ -1,8 +1,3 @@
-
-
-
-
-
 import { useTranslation } from "react-i18next";
 import { STATUS_CONFIG, SESSION_STATUS_CONFIG } from "../lib/types";
 import type { EffectiveAgentStatus, EffectiveSessionStatus } from "../lib/types";

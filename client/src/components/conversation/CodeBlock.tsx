@@ -1,11 +1,3 @@
-
-
-
-
-
-
-
-
 import { useMemo, useState } from "react";
 import { Check, Copy, FileCode } from "lucide-react";
 import { canonicalLang, highlight, tokenClass, type Token } from "../../lib/highlight";
@@ -45,10 +37,6 @@ function langDisplay(lang: string): string {
   const canon = canonicalLang(lang);
   return LANG_DISPLAY[canon] ?? (lang || "Text");
 }
-
-
-
-
 
 function splitTokensByLine(tokens: Token[]): Token[][] {
   const lines: Token[][] = [[]];

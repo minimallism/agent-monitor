@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 import { useState } from "react";
 import { ChevronRight, AlertCircle, FileText, CheckCircle2 } from "lucide-react";
 import type { TranscriptContent } from "../../lib/types";
@@ -17,7 +8,6 @@ interface ToolCallBlockProps {
   toolUse: TranscriptContent;
   toolResult?: TranscriptContent | null;
 }
-
 
 function langFromPath(path: string): string {
   const ext = path.split(".").pop()?.toLowerCase() ?? "";
@@ -48,7 +38,6 @@ function langFromPath(path: string): string {
   return map[ext] ?? "plain";
 }
 
-
 function buildSummary(toolUse: TranscriptContent): string | null {
   const input = toolUse.input;
   if (!input || typeof input !== "object" || "_truncated" in input) return null;
@@ -62,7 +51,6 @@ function buildSummary(toolUse: TranscriptContent): string | null {
   if (typeof obj.description === "string") return obj.description;
   return null;
 }
-
 
 function renderInput(toolUse: TranscriptContent) {
   const input = toolUse.input;
@@ -181,7 +169,6 @@ function renderInput(toolUse: TranscriptContent) {
   
   return <CodeBlock code={JSON.stringify(obj, null, 2)} lang="json" label="Input" />;
 }
-
 
 function renderResult(toolResult: TranscriptContent, toolName: string) {
   const text = toolResult.output ?? "";

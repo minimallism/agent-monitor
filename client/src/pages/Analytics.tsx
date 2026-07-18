@@ -1,9 +1,3 @@
-
-
-
-
-
-
 import { useEffect, useState, useCallback, useMemo, useSyncExternalStore } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -25,8 +19,6 @@ interface SystemInfo {
   hooks: { installed: boolean; path: string; hooks: Record<string, boolean> };
   server: { ws_connections: number };
 }
-
-
 
 function ChartTooltip({ x, y, children }: { x: number; y: number; children: React.ReactNode }) {
   const nearRight = x > window.innerWidth - 200;
@@ -67,8 +59,6 @@ function useTooltip() {
 
   return { show, move, hide, node };
 }
-
-
 
 function cellColor(count: number, max: number) {
   if (count === 0) return "#161625";
@@ -239,8 +229,6 @@ function Heatmap({ weeks }: { weeks: Array<Array<{ date: string; count: number }
   );
 }
 
-
-
 function Sparkline({
   data,
   color = "#6366f1",
@@ -282,10 +270,6 @@ function Sparkline({
   );
 }
 
-
-
-
-
 function BarRow({
   label,
   count,
@@ -317,10 +301,6 @@ function BarRow({
     </div>
   );
 }
-
-
-
-
 
 function DonutChart({
   segments,
@@ -422,9 +402,6 @@ function ChartCardSkeleton({
   );
 }
 
-
-
-
 function AnalyticsChartsSkeleton() {
   return (
     <div className="space-y-6" aria-busy="true" aria-label="Loading analytics charts">
@@ -441,8 +418,6 @@ function AnalyticsChartsSkeleton() {
     </div>
   );
 }
-
-
 
 export function Analytics() {
   const { t } = useTranslation("analytics");
@@ -555,8 +530,6 @@ export function Analytics() {
   }
   dailySessionsLocal.sort((a, b) => a.date.localeCompare(b.date));
 
-
-
   const totalTokens =
     (data?.tokens.total_input ?? 0) +
     (data?.tokens.total_output ?? 0) +
@@ -587,8 +560,6 @@ export function Analytics() {
   const maxModelTotal = modelTokenRows.length > 0
     ? Math.max(...modelTokenRows.map(m => m.input_tokens + m.output_tokens))
     : 1;
-
-
 
   const sessionOutcomeSegments = [
     {
@@ -872,8 +843,6 @@ export function Analytics() {
                 </div>
               </div>
             )}
-
-
 
             {activeTab === "workflow" && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

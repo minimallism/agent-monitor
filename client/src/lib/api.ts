@@ -1,9 +1,3 @@
-
-
-
-
-
-
 import type {
   Agent,
   Analytics,
@@ -22,12 +16,6 @@ import type {
 
 const BASE = "/api";
 
-
-
-
-
-
-
 export function dashboardToken(): string | null {
   try {
     const injected = (globalThis as { __DASHBOARD_TOKEN__?: unknown }).__DASHBOARD_TOKEN__;
@@ -38,16 +26,6 @@ export function dashboardToken(): string | null {
     return null;
   }
 }
-
-
-
-
-
-
-
-
-
-
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const token = dashboardToken();
@@ -63,14 +41,6 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
   }
   return res.json();
 }
-
-
-
-
-
-
-
-
 
 export const api = {
   
@@ -124,9 +94,6 @@ export const api = {
       request<TranscriptListResult>(`/sessions/${encodeURIComponent(id)}/transcripts`),
     
 
-
-
-
     transcript: (
       id: string,
       params?: {
@@ -167,7 +134,6 @@ export const api = {
 
   events: {
     
-
 
     list: (params?: {
       event_type?: string[];
@@ -272,7 +238,6 @@ export const api = {
 
     
 
-
     cleanup: (params: { abandon_hours?: number; purge_days?: number }) =>
       request<{
         ok: boolean;
@@ -318,7 +283,5 @@ export const api = {
         `/pricing/cost/${encodeURIComponent(sessionId)}?tz_offset=${new Date().getTimezoneOffset()}`
       ),
   },
-
-
 
 };

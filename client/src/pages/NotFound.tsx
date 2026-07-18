@@ -1,9 +1,3 @@
-
-
-
-
-
-
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { AlertTriangle, ArrowLeft, Home } from "lucide-react";

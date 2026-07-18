@@ -1,11 +1,3 @@
-
-
-
-
-
-
-
-
 import {
   Wrench,
   Terminal,
@@ -30,7 +22,6 @@ export interface ToolStyle {
 
   chip: string;
   
-
 
   bar: string;
   

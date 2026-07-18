@@ -1,18 +1,6 @@
-
-
-
-
-
-
-
-
-
-
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Copy, Check } from "lucide-react";
-
-
 
 export function CopyButton({ text }: { text: string }) {
   const { t } = useTranslation("common");
@@ -41,8 +29,6 @@ export function CopyButton({ text }: { text: string }) {
   );
 }
 
-
-
 export function Terminal({ command, description }: { command: string; description?: string }) {
   return (
     <div className="relative bg-black/70 border border-border rounded font-mono text-[11px] overflow-hidden">
@@ -60,8 +46,6 @@ export function Terminal({ command, description }: { command: string; descriptio
     </div>
   );
 }
-
-
 
 export function TerminalOutput({
   stdout,
@@ -124,8 +108,6 @@ function OutputBlock({
   );
 }
 
-
-
 export function LineNumberedCode({
   text,
   maxHeight = "24rem",
@@ -163,8 +145,6 @@ export function LineNumberedCode({
     </div>
   );
 }
-
-
 
 export type DiffHunk = {
   oldStart: number;
@@ -231,8 +211,6 @@ function HunkView({ hunk }: { hunk: DiffHunk }) {
     </div>
   );
 }
-
-
 
 export function KeyValueCard({
   data,
@@ -321,8 +299,6 @@ function safeStringify(value: unknown): string {
     return String(value);
   }
 }
-
-
 
 export function FileList({ paths }: { paths: string[] }) {
   if (paths.length === 0) return <p className="text-[11px] text-gray-500 italic">no files</p>;

@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 import { useEffect, useState, useCallback, useRef } from "react";
 import { ChevronDown, Loader2, ArrowDown, MessagesSquare, RefreshCw } from "lucide-react";
 import { api } from "../../lib/api";
@@ -15,13 +5,7 @@ import { eventBus } from "../../lib/eventBus";
 import { MessageList } from "./MessageList";
 import type { TranscriptMessage, TranscriptInfo, WSMessage } from "../../lib/types";
 
-
-
-
-
-
 const POLL_INTERVAL_MS = 3000;
-
 
 const TRANSCRIPTS_REFRESH_MS = 15000;
 

@@ -1,30 +1,9 @@
-
-
-
-
-
-
 import { useEffect, useRef, useCallback, useState } from "react";
 import type { WSMessage } from "../lib/types";
 import { eventBus } from "../lib/eventBus";
 import { dashboardToken } from "../lib/api";
 
-
 type MessageHandler = (msg: WSMessage) => void;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 export function useWebSocket(onMessage: MessageHandler) {
   const wsRef = useRef<WebSocket | null>(null);

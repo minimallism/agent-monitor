@@ -1,9 +1,3 @@
-
-
-
-
-
-
 import type { LucideIcon } from "lucide-react";
 import { Tip } from "./Tip";
 import { StatValueSkeleton } from "./Skeleton";

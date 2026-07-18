@@ -1,9 +1,3 @@
-
-
-
-
-
-
 import {
   useCallback,
   useEffect,
@@ -257,7 +251,6 @@ export function Workflows() {
   );
 }
 
-
 function Section({
   number,
   title,
@@ -300,18 +293,6 @@ function Section({
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 function ChartInfoPopover({ infoKey, title }: { infoKey: string; title: string }) {
   const { t } = useTranslation("workflows");
@@ -410,7 +391,6 @@ function ChartInfoPopover({ infoKey, title }: { infoKey: string; title: string }
     </>
   );
 }
-
 
 function PageHeader({
   statusFilter,

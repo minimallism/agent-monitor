@@ -1,9 +1,3 @@
-
-
-
-
-
-
 import {
   useEffect,
   useState,
@@ -360,12 +354,6 @@ export function Dashboard() {
                             </button>
                           )}
                           {
-
-
-
-
-
-
 
 }
                           {!hasChildren && !isSubagent && (

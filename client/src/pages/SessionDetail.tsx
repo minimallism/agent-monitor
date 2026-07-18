@@ -1,8 +1,3 @@
-
-
-
-
-
 import { useEffect, useState, useCallback, useMemo, useRef, type ReactNode } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -137,7 +132,6 @@ export function SessionDetail() {
       };
     }
   }, [transcriptNotFound]);
-
 
   const load = useCallback(async () => {
     if (!id) return;

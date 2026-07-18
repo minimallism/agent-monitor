@@ -1,9 +1,3 @@
-
-
-
-
-
-
 import { useCallback, useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -126,7 +120,6 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       </div>
 
       {
-
 
 }
       <div className="flex-1 min-h-0 relative flex">

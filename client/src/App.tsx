@@ -1,9 +1,3 @@
-
-
-
-
-
-
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useCallback } from "react";
 import { Layout } from "./components/Layout";
