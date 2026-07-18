@@ -16,9 +16,6 @@
   "data": {
     "title": "数据管理",
     "description": "数据库信息、导出和清理。",
-    "dbOverview": "数据库概览",
-    "dbSize": "数据库大小",
-    "loadingDb": "正在加载数据库信息...",
     "sessionCleanup": "会话清理",
     "cleanupDesc": "废弃过期会话并清除旧数据",
     "abandonAfter": "废弃超过以下时间的活跃会话",
@@ -36,12 +33,6 @@
     "yesClearAll": "是的，清除所有数据",
     "clearAllData": "清除所有数据",
     "clearedResult": "已清除 {{count}} 行"
-  },
-  "tables": {
-    "sessions": "个会话",
-    "agents": "个Agent",
-    "events": "个事件",
-    "sessionsWithCost": "个有费用的会话"
   },
   "messages": {
     "failedLoad": "加载失败",

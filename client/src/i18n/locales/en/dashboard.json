@@ -2,17 +2,16 @@
   "title": "Dashboard",
   "subtitle": "Real-time overview of Claude Code agent activity",
   "totalSessions": "Total Sessions",
+  "activeSessions": "Active Sessions",
   "totalAgents": "Total Agents",
   "activeAgents": "Active Agents",
   "activeSubagents": "Active Subagents",
   "eventsToday": "Events Today",
   "totalEvents": "Total Events",
   "totalTokens": "Total Tokens",
-  "totalCost": "Total Cost",
   "activeAgentsSection": "Active Agents",
   "noAgents": "No active agents",
   "noAgentsDesc": "Agents will appear here when a Claude Code session is running.",
   "failedConnect": "Failed to connect to server",
-  "failedLoad": "Failed to load data",
-  "activeTrend": " active"
+  "failedLoad": "Failed to load data"
 }

@@ -16,10 +16,6 @@ import {
   CheckCircle,
   XCircle,
   Eraser,
-  Activity,
-  Users,
-  Layers,
-  Coins,
   Settings as SettingsIcon,
 } from "lucide-react";
 import { api } from "../lib/api";
@@ -376,74 +372,6 @@ export function Settings() {
         <p className="text-xs text-gray-500 mb-4">{t("data.description")}</p>
 
         <div className="space-y-4">
-          <div className="card p-5 space-y-4">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold flex-shrink-0">
-                {t("data.dbOverview")}
-              </p>
-              {sysInfo && (
-                <div className="flex items-center gap-1.5 text-[11px] text-gray-600 font-mono bg-surface-2 px-2.5 py-1 rounded-md min-w-0">
-                  <HardDrive className="w-3 h-3 flex-shrink-0" />
-                  <span className="truncate">{sysInfo.db.path}</span>
-                </div>
-              )}
-            </div>
-
-            {sysInfo ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
-                {(() => {
-                  const tableIcons: Record<string, React.ReactNode> = {
-                    sessions: <Layers className="w-4 h-4 text-blue-400" />,
-                    agents: <Users className="w-4 h-4 text-emerald-400" />,
-                    events: <Activity className="w-4 h-4 text-violet-400" />,
-                    token_usage: <Coins className="w-4 h-4 text-amber-400" />,
-                  };
-                  const tableLabels: Record<string, string> = {
-                    sessions: t("tables.sessions"),
-                    agents: t("tables.agents"),
-                    events: t("tables.events"),
-                    token_usage: t("tables.sessionsWithCost"),
-                  };
-                  const tableColors: Record<string, string> = {
-                    sessions: "border-blue-500/20",
-                    agents: "border-emerald-500/20",
-                    events: "border-violet-500/20",
-                    token_usage: "border-amber-500/20",
-                  };
-                  return Object.entries(sysInfo.db.counts).map(([table, count]) => (
-                    <div
-                      key={table}
-                      className={`bg-surface-2 rounded-lg px-3 py-3 border-l-2 ${tableColors[table] || "border-gray-500/20"}`}
-                    >
-                      <div className="flex items-center gap-2 mb-1.5">
-                        {tableIcons[table] || <Database className="w-4 h-4 text-gray-500" />}
-                        <p className="text-[11px] text-gray-500 uppercase tracking-wider">
-                          {tableLabels[table] || table.replace(/_/g, " ")}
-                        </p>
-                      </div>
-                      <p className="text-xl font-semibold text-gray-200">
-                        <Tip raw={count.toLocaleString()}>{fmt(count)}</Tip>
-                      </p>
-                    </div>
-                  ));
-                })()}
-                <div className="bg-surface-2 rounded-lg px-3 py-3 border-l-2 border-indigo-500/20">
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <HardDrive className="w-4 h-4 text-indigo-400" />
-                    <p className="text-[11px] text-gray-500 uppercase tracking-wider">
-                      {t("data.dbSize")}
-                    </p>
-                  </div>
-                  <p className="text-xl font-semibold text-gray-200">
-                    {formatBytes(sysInfo.db.size)}
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <p className="text-xs text-gray-500">{t("data.loadingDb")}</p>
-            )}
-          </div>
-
           {/* Session Cleanup */}
           <div className="card p-5 space-y-4">
             <div className="flex items-center gap-3">
@@ -455,6 +383,15 @@ export function Settings() {
                 <p className="text-xs text-gray-500">{t("data.cleanupDesc")}</p>
               </div>
             </div>
+
+            {sysInfo && (
+              <div className="flex items-center gap-2 text-xs text-gray-500 font-mono bg-surface-2 px-3 py-2 rounded-md">
+                <HardDrive className="w-3.5 h-3.5 text-indigo-400 flex-shrink-0" />
+                <span>{formatBytes(sysInfo.db.size)}</span>
+                <span className="text-gray-600">—</span>
+                <span className="truncate">{sysInfo.db.path}</span>
+              </div>
+            )}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="bg-surface-2 rounded-lg px-4 py-3">

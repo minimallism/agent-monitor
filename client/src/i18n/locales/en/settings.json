@@ -16,9 +16,6 @@
   "data": {
     "title": "Data Management",
     "description": "Database info and cleanup.",
-    "dbOverview": "Database Overview",
-    "dbSize": "DB Size",
-    "loadingDb": "Loading database info...",
     "sessionCleanup": "Session Cleanup",
     "cleanupDesc": "Abandon stale sessions and purge old data",
     "abandonAfter": "Abandon stale active sessions older than",
@@ -36,12 +33,6 @@
     "yesClearAll": "Yes, Clear All",
     "clearAllData": "Clear All Data",
     "clearedResult": "Cleared {{count}} rows"
-  },
-  "tables": {
-    "sessions": "sessions",
-    "agents": "agents",
-    "events": "events",
-    "sessionsWithCost": "sessions with cost"
   },
   "messages": {
     "failedLoad": "Failed to load",

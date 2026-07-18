@@ -19,11 +19,13 @@ import {
   LayoutDashboard,
   FolderOpen,
   Bot,
-  Zap,
-  DollarSign,
-  Activity,
-  RefreshCw,
+  Radio,
+  UserCheck,
   GitBranch,
+  Calendar,
+  List,
+  Coins,
+  RefreshCw,
   ChevronDown,
   ChevronRight,
   CircleDot,
@@ -34,7 +36,7 @@ import { StatCard } from "../components/StatCard";
 import { AgentCard } from "../components/AgentCard";
 import { EmptyState } from "../components/EmptyState";
 import { Tip } from "../components/Tip";
-import { fmt, fmtCost } from "../lib/format";
+import { fmt } from "../lib/format";
 import type { Stats, Agent, WSMessage, Session, Analytics } from "../lib/types";
 
 export function Dashboard() {
@@ -43,7 +45,6 @@ export function Dashboard() {
 
   const [stats, setStats] = useState<Stats | null>(null);
   const [activeAgents, setActiveAgents] = useState<Agent[]>([]);
-  const [totalCost, setTotalCost] = useState<number | null>(null);
   const [allSubagents, setAllSubagents] = useState<Agent[]>([]);
   const [sessionsById, setSessionsById] = useState<Map<string, Session>>(new Map());
   const [expandedAgents, setExpandedAgents] = useState<Set<string>>(new Set());
@@ -74,12 +75,11 @@ export function Dashboard() {
 
   const load = useCallback(async () => {
     try {
-      const [statsRes, workingRes, waitingRes, costRes, sessionsRes, analyticsRes] = await Promise.all(
+      const [statsRes, workingRes, waitingRes, sessionsRes, analyticsRes] = await Promise.all(
         [
           api.stats.get(),
           api.agents.list({ status: "working", limit: 20 }),
           api.agents.list({ status: "waiting", limit: 20 }),
-          api.cost.total(),
           api.sessions.list({ status: "active", limit: 100 }),
           api.analytics.get(),
         ]
@@ -87,7 +87,6 @@ export function Dashboard() {
       setStats(statsRes);
       const active = [...workingRes.agents, ...waitingRes.agents];
       setActiveAgents(active);
-      setTotalCost(costRes.total_cost);
       setSessionsById(new Map(sessionsRes.sessions.map((s) => [s.id, s])));
       setAnalytics(analyticsRes);
       setError(null);
@@ -251,7 +250,13 @@ export function Dashboard() {
               value={stats ? fmt(stats.total_sessions) : ""}
               raw={stats ? stats.total_sessions.toLocaleString() : undefined}
               icon={FolderOpen}
-              trend={stats ? `${stats.active_sessions}${t("activeTrend")}` : undefined}
+              loading={!stats}
+            />
+            <StatCard
+              label={t("activeSessions")}
+              value={stats ? stats.active_sessions : ""}
+              icon={Radio}
+              accentColor="text-amber-400"
               loading={!stats}
             />
             <StatCard
@@ -265,7 +270,7 @@ export function Dashboard() {
             <StatCard
               label={t("activeAgents")}
               value={stats ? activeAgents.filter(a => a.type === "main").length : ""}
-              icon={Bot}
+              icon={UserCheck}
               accentColor="text-violet-400"
               loading={!stats}
             />
@@ -280,7 +285,7 @@ export function Dashboard() {
               label={t("eventsToday")}
               value={stats ? fmt(stats.events_today) : ""}
               raw={stats ? stats.events_today.toLocaleString() : undefined}
-              icon={Zap}
+              icon={Calendar}
               accentColor="text-yellow-400"
               loading={!stats}
             />
@@ -288,7 +293,7 @@ export function Dashboard() {
               label={t("totalEvents")}
               value={stats ? fmt(stats.total_events) : ""}
               raw={stats ? stats.total_events.toLocaleString() : undefined}
-              icon={Activity}
+              icon={List}
               accentColor="text-violet-400"
               loading={!stats}
             />
@@ -296,21 +301,9 @@ export function Dashboard() {
               label={t("totalTokens")}
               value={analytics ? fmt(totalTokens) : ""}
               raw={analytics ? totalTokens.toLocaleString() : undefined}
-              icon={Zap}
+              icon={Coins}
               accentColor="text-blue-400"
               loading={!analytics}
-            />
-            <StatCard
-              label={t("totalCost")}
-              value={totalCost !== null ? fmtCost(totalCost) : ""}
-              raw={
-                totalCost !== null
-                  ? `$${totalCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-                  : undefined
-              }
-              icon={DollarSign}
-              accentColor="text-emerald-400"
-              loading={totalCost === null}
             />
           </div>
 

@@ -2,17 +2,16 @@
   "title": "仪表盘",
   "subtitle": "Claude Code Agent活动实时概览",
   "totalSessions": "总会话数",
+  "activeSessions": "活跃会话",
   "totalAgents": "总Agent数",
   "activeAgents": "活跃Agent",
   "activeSubagents": "活跃Subagent",
   "eventsToday": "今日事件",
   "totalEvents": "总事件数",
   "totalTokens": "总 Token 数",
-  "totalCost": "总费用",
   "activeAgentsSection": "活跃Agent",
   "noAgents": "暂无活跃Agent",
   "noAgentsDesc": "当 Claude Code 会话运行时，Agent将显示在此处。",
   "failedConnect": "无法连接到服务器",
-  "failedLoad": "数据加载失败",
-  "activeTrend": " 活跃"
+  "failedLoad": "数据加载失败"
 }

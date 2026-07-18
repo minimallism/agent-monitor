@@ -13,7 +13,7 @@ import {
   useSyncExternalStore,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { Workflow, RefreshCw, Download, AlertCircle, Info } from "lucide-react";
+import { Workflow, RefreshCw, AlertCircle, Info } from "lucide-react";
 import { api } from "../lib/api";
 import { eventBus } from "../lib/eventBus";
 import type { WorkflowData, WSMessage } from "../lib/types";
@@ -77,17 +77,6 @@ export function Workflows() {
     fetchData();
   };
 
-  const handleExport = () => {
-    if (!data) return;
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `workflows-${new Date().toISOString().slice(0, 10)}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
   if (loading && !data) {
     return (
       <div className="space-y-6">
@@ -95,7 +84,6 @@ export function Workflows() {
           statusFilter={statusFilter}
           onStatusFilterChange={setStatusFilter}
           onRefresh={handleRefresh}
-          onExport={handleExport}
           lastUpdated={null}
         />
         <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-3">
@@ -117,7 +105,6 @@ export function Workflows() {
           statusFilter={statusFilter}
           onStatusFilterChange={setStatusFilter}
           onRefresh={handleRefresh}
-          onExport={handleExport}
           lastUpdated={null}
         />
         <div className="card flex flex-col items-center justify-center py-16 gap-4">
@@ -140,7 +127,6 @@ export function Workflows() {
         statusFilter={statusFilter}
         onStatusFilterChange={setStatusFilter}
         onRefresh={handleRefresh}
-        onExport={handleExport}
         lastUpdated={lastUpdated}
       />
 
@@ -439,13 +425,11 @@ function PageHeader({
   statusFilter,
   onStatusFilterChange,
   onRefresh,
-  onExport,
   lastUpdated,
 }: {
   statusFilter: StatusFilter;
   onStatusFilterChange: (f: StatusFilter) => void;
   onRefresh: () => void;
-  onExport: () => void;
   lastUpdated: Date | null;
 }) {
   const { t } = useTranslation("workflows");
@@ -506,13 +490,6 @@ function PageHeader({
           title={t("refreshData")}
         >
           <RefreshCw className="w-4 h-4" />
-        </button>
-        <button
-          onClick={onExport}
-          className="p-2 rounded-lg text-gray-500 hover:text-gray-300 hover:bg-surface-3 transition-colors"
-          title={t("exportJson")}
-        >
-          <Download className="w-4 h-4" />
         </button>
 
         {lastUpdated && (
