@@ -4,13 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <title>Claude Code Agent Monitor - real-time dashboard for Claude Code</title>
-    <meta
-      name="description"
-      content="Real-time local dashboard for Claude Code: sessions, kanban, analytics, cost tracking, run / resume Claude from your browser, and a 12-tab inspector for every plugin, skill, hook, and setting."
-    />
     <meta name="theme-color" content="#6366f1" />
 
     <link rel="stylesheet" href="fonts/fonts.css" />
@@ -457,42 +451,6 @@
         animation-duration: 72s;
       }
 
-      .stats {
-        padding: 56px 0 24px;
-      }
-      .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 1px;
-        background: var(--border);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        overflow: hidden;
-      }
-      .stat {
-        background: var(--surface-1);
-        padding: 28px 24px;
-        text-align: center;
-        transition: background 0.2s;
-      }
-      .stat:hover { background: var(--surface-2); }
-      .stat-num {
-        font-size: 34px;
-        font-weight: 800;
-        letter-spacing: -0.025em;
-        background: linear-gradient(135deg, #fff, var(--accent));
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-        margin-bottom: 4px;
-      }
-      .stat-label {
-        font-size: 12px;
-        color: var(--text-muted);
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        font-weight: 600;
-      }
       section {
         padding-top: 96px;
         padding-bottom: 96px;
@@ -776,10 +734,7 @@
         .marquee.reverse .marquee-track { animation-duration: 46s; }
         .marquee.slow .marquee-track { animation-duration: 56s; }
         .traffic { width: 10px; height: 10px; }
-        .stats { padding: 40px 0 12px; }
-        .stat { padding: 22px 16px; }
-        .stat-num { font-size: 28px; }
-        .stat-label { font-size: 11px; letter-spacing: 0.06em; }
+
         .section-eyebrow { font-size: 11px; letter-spacing: 0.14em; margin-bottom: 10px; }
         .section-title { letter-spacing: -0.02em; }
         .section-lead { font-size: 15.5px; margin-bottom: 36px; }
@@ -837,12 +792,6 @@
           font-size: 14.5px;
         }
         .badge { font-size: 11.5px; padding: 5px 11px; margin-bottom: 18px; }
-        .stats { padding: 32px 0 8px; }
-        .stats-grid {
-          grid-template-columns: repeat(2, 1fr);
-        }
-        .stat { padding: 20px 12px; }
-        .stat-num { font-size: 26px; }
         .section-title { font-size: clamp(26px, 7vw, 34px); }
         .section-lead { font-size: 15px; margin-bottom: 28px; }
         .features-grid {
@@ -909,7 +858,6 @@
         .hero p { font-size: 14.5px; }
         .container { padding-left: 14px; padding-right: 14px; }
         section { padding-top: 48px; padding-bottom: 48px; }
-        .stats-grid { grid-template-columns: 1fr; }
         .stack-grid { grid-template-columns: 1fr; }
         .install { padding: 18px 14px; }
         .code-block { padding: 14px 12px; font-size: 11.5px; }
@@ -1181,36 +1129,6 @@
           </div>
         </div>
 
-      </section>
-
-      
-      <section class="stats container" aria-label="Key metrics">
-        <div class="stats-grid reveal-stagger">
-          <div class="stat">
-            <div class="stat-num" data-count="13">13</div>
-            <div class="stat-label">Pages</div>
-          </div>
-          <div class="stat">
-            <div class="stat-num" data-count="192">192</div>
-            <div class="stat-label">Server tests</div>
-          </div>
-          <div class="stat">
-            <div class="stat-num" data-count="148">148</div>
-            <div class="stat-label">Client tests</div>
-          </div>
-          <div class="stat">
-            <div class="stat-num" data-count="25">25</div>
-            <div class="stat-label">MCP tools</div>
-          </div>
-          <div class="stat">
-            <div class="stat-num" data-count="11">11</div>
-            <div class="stat-label">Workflow datasets</div>
-          </div>
-          <div class="stat">
-            <div class="stat-num" data-count="3">3</div>
-            <div class="stat-label">Languages (en/zh)</div>
-          </div>
-        </div>
       </section>
 
       
@@ -1718,7 +1636,6 @@
           <div class="stack-item"><div class="stack-item-icon">🗜️</div><div class="stack-item-name">tar / zip</div><div class="stack-item-desc">safe archive extract</div></div>
           <div class="stack-item"><div class="stack-item-icon">🔍</div><div class="stack-item-name">ESLint</div><div class="stack-item-desc">+ Prettier</div></div>
           <div class="stack-item"><div class="stack-item-icon">🎬</div><div class="stack-item-name">PostCSS</div><div class="stack-item-desc">+ Autoprefixer</div></div>
-          <div class="stack-item"><div class="stack-item-icon">🔄</div><div class="stack-item-name">workbox</div><div class="stack-item-desc">service worker (planned)</div></div>
           <div class="stack-item"><div class="stack-item-icon">🐙</div><div class="stack-item-name">GitHub Actions</div><div class="stack-item-desc">CI / release</div></div>
           <div class="stack-item"><div class="stack-item-icon">🦊</div><div class="stack-item-name">GitLab CI</div><div class="stack-item-desc">pipelines</div></div>
           <div class="stack-item"><div class="stack-item-icon">☁️</div><div class="stack-item-name">Coralogix</div><div class="stack-item-desc">observability</div></div>
@@ -2012,38 +1929,7 @@
         );
         stackIo.observe(stackGrid);
       }
-      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const easeOut = (t) => 1 - Math.pow(1 - t, 3);
-      function animateCount(el, target, duration = 1400) {
-        if (reducedMotion) {
-          el.textContent = String(target);
-          return;
-        }
-        const start = performance.now();
-        const startVal = 0;
-        function tick(now) {
-          const elapsed = now - start;
-          const t = Math.min(1, elapsed / duration);
-          const value = Math.round(startVal + (target - startVal) * easeOut(t));
-          el.textContent = String(value);
-          if (t < 1) requestAnimationFrame(tick);
-        }
-        requestAnimationFrame(tick);
-      }
-      const countIo = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((e) => {
-            if (e.isIntersecting) {
-              const target = parseInt(e.target.dataset.count || "0", 10);
-              e.target.textContent = "0";
-              animateCount(e.target, target);
-              countIo.unobserve(e.target);
-            }
-          });
-        },
-        { threshold: 0.5 }
-      );
-      document.querySelectorAll("[data-count]").forEach((el) => countIo.observe(el));
+
       document.querySelectorAll(".feature-card").forEach((card) => {
         card.addEventListener("mousemove", (e) => {
           const r = card.getBoundingClientRect();
